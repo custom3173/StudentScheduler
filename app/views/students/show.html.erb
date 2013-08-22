@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<div class="profile-info">
+    <p>
+      <b>Name:</b>
+      <%= "#{@student.first_name} #{@student.last_name}" %>
+    </p>
+
+    <p>
+      <b>Username:</b>
+      <%= @student.username %>
+    </p>
+
+    <p>
+      <b>Email:</b>
+      <%= @student.email %>
+    </p>
+
+    <p>
+      <b>Department:</b>
+      <%= @student.department %>
+    </p>
+
+    <p>
+      <b>Administrator?:</b>
+      <%= @student.admin %>
+    </p>
+</div>
+
+<%= link_to 'New Schedule', new_student_schedule_path(@student.id), :class => 'student-links' %>
+<%= link_to 'Call Out', "#{@student.id}/mark_tomorrow_absent", :class => 'student-links'%>
+<%= link_to 'Purge', "#{@student.id}/purge", data: {confirm: 'Delete all expired schedules?'}, :class => 'student-links'%>
+
+<h2>Active Schedules:</h2>
+<div class="schedule-accordion">
+    <%= render :partial => 'students/schedule', :collection => @schedules %>
+</div>
+
+<h2>Upcoming Schedules:</h2>
+<div class="schedule-accordion">
+  <%= render :partial => 'students/schedule', :collection => @upcoming_schedules %>
+</div>
+
+<h2>Expired Schedules:</h2>
+<div class="schedule-accordion">
+  <%= render :partial => 'students/schedule', :collection => @expired_schedules %>
+</div>

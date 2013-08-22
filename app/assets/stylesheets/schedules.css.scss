@@ -1,0 +1,59 @@
+// Place all the styles related to the Schedules controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@mixin adjacent-fields {
+  .field {
+    width: 35%;
+    display: inline-block;
+  }
+}
+
+@mixin adjacent-checkboxes {
+  .field {
+    width: 14%;
+    display: inline-block;
+    text-align: left;
+  }
+}
+
+#schedule-form {
+
+  label {
+    font-size: 18px;
+  }
+
+  // the children divs
+  div {
+    margin-bottom: 1em;
+  }
+
+  //start and end dates
+  #date-fields {
+    @include adjacent-fields;
+  }
+
+  #time-fields {
+    @include adjacent-fields;
+  }
+
+  // the the days that the schedule is valid
+  #effective-day-fields {
+
+    #weekdays {
+      @include adjacent-checkboxes;
+      margin-bottom: -0.5em;
+    }
+
+    #weekends {
+      @include adjacent-checkboxes;
+    }
+  }
+
+  #schedule-flags {
+    @include adjacent-checkboxes;
+  }
+
+  #description {
+  }
+}

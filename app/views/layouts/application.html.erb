@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Studentscheduler</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= stylesheet_link_tag    "default", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<!-- start header -->
+<div id="header">
+	<div id="logo">
+		<h1><%= link_to 'LITS Student Schedule', calendar_path %></h1>
+		<h2>by David Bassett</h2>
+	</div>
+	<div id="menu">
+		<ul>
+          <li><%= link_to 'Calendar', calendar_path %></li>
+          <% if session[:admin] %>
+              <li><%= link_to 'Students', students_path %></li>
+              <li><%= link_to 'Admins', administrators_path %></li>
+          <% end %>
+          <% if session[:registered] and not session[:admin] %>
+              <li><%= link_to 'My Schedules', student_path(session[:user_id]) %></li>
+              <li><%= link_to 'New Schedule', new_student_schedule_path(session[:user_id]) %></li>
+          <% end %>
+          <li><%= link_to 'Logout', logout_path %></li>
+		</ul>
+	</div>
+</div>
+<!-- end header -->
+
+<div id='page'>
+    <%= yield %>
+</div>
+
+<!-- start footer -->
+<div id="footer">
+	<div class="wrap">
+
+	</div>
+	<p id="legal">&copy; 2013 University of Maryland, Baltimore County.</p>
+</div>
+<!-- end footer -->
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+
+<div id="calendar-options">
+
+    <!-- Self-referring date select -->
+    <%= form_tag({:controller => 'students', :action => 'calendar'}, :method => 'get') do %>
+      <%= text_field_tag :date, @date, :id => 'calendar-date' %>
+      <%= submit_tag 'Change Date' %>
+    <% end %>
+
+    <!-- hide Sat/Sun option -->
+    <div>
+      <%= label_tag 'Show weekend schedules' %>
+      <%= check_box_tag 'Show weekend schedules'%>
+    </div>
+
+</div>
+
+<br />
+
+<div id="calendar-table">
+  <div id="title-bar">
+    <% tmp_class = nil %>
+    <% for day in @days_of_week do %>
+        <% tmp_class = 'weekend' if day == 'Saturday' %>
+        <%= content_tag :span, day, class: tmp_class %>
+    <% end %>
+  </div>
+
+  <% color_toggle = true %>
+  <div id="rows-container">
+    <% for row in process_schedules_for_display @schedules_by_day, @date do %>
+      <div class="<%= color_toggle ? "shaded" : "unshaded" %>">
+        <% color_toggle = !color_toggle %>
+        <div class="time-label">
+          <%= row.flatten.compact.first.time.strftime('%-I:%M %p') %>
+        </div>
+        <% tmp_class = nil %>
+        <% _ctr = 0 %>
+        <% for day in row do %>
+          <% tmp_class = 'weekend' if _ctr >= 5 %>
+          <div class="<%= tmp_class %>">
+            <% for schedule in day do %>
+              <%= content_tag :div, schedule.to_s, :class => [schedule.css_classes, 'calender-field'], :title => schedule.description %>
+            <% end %>
+          </div>
+          <% _ctr += 1 %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+</div>

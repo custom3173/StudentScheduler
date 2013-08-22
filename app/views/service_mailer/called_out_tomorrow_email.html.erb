@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+</head>
+<body>
+<%= content_tag :h2, (@self_edited ? "#{@student.username} has called out of work tomorrow" : "#{@editor.username} has cancelled #{@student.username}'s shift tomorrow'") %>
+
+<h3>New Schedule</h3>
+<%= render :partial => 'schedule_email', :locals => {:schedule => @schedule} %>
+
+<p>
+  This email was automatically generated. Please do not reply.
+</p>
+</body>
+</html>
