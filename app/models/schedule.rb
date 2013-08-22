@@ -1,0 +1,93 @@
+class Schedule < ActiveRecord::Base
+  attr_accessible :absent, :description, :end_date, :end_time, :friday, :monday, :permanent, :saturday, :start_date, :start_time, :student_id, :sunday, :thursday, :tuesday, :wednesday
+
+  belongs_to :student
+
+  validates_presence_of :start_date, :end_date, :start_time, :end_time
+  validates :description, :presence => true, :length => {maximum: 300}
+  validate :end_date_after_start_date, :end_time_after_start_time,
+           :at_least_one_day_selected, :permanent_and_absent_not_both_selected
+
+  # validate end_date > start_date
+  def end_date_after_start_date
+    if end_date < start_date
+      errors.add :end_date, "can't be before the Start date"
+    end
+  end
+
+  # validate end_time > start_time and at least 1 hour
+  def end_time_after_start_time
+    if end_time < start_time
+      errors.add :end_time, "can't be before the Start time"
+    end
+  end
+
+  # validate at least one date M-Su is selected
+  def at_least_one_day_selected
+    unless monday or tuesday or wednesday or thursday or friday or saturday or sunday
+      errors.add :base, "At least one day (Mon-Sun) must be selected"
+    end
+  end
+
+  # validate both Permanent and Absent aren't both selected
+  def permanent_and_absent_not_both_selected
+    if permanent and absent
+      errors.add :base, "You cannot select both Permanent and Absent"
+    end
+  end
+
+  # virtual attribute for cleaning up the days booleans
+  def days_of_week
+
+    # create an array for processing
+    days_array = [sunday, monday, tuesday, wednesday, thursday, friday, saturday]
+    int_array = Array.new
+    for day in days_array
+        day ? int_array.push(1) : int_array.push(0)
+    end
+
+    # process with little recursive function
+    r(int_array, 0)
+    # fix first value, see note below
+    int_array[0] == -1 ? int_array[0] = 1 : nil
+
+    # final passes, change values into useable string
+    int_array[0] == 1 ? int_array[0] = 'Su' : nil
+    int_array[1] == 1 ? int_array[1] = 'M' : nil
+    int_array[2] == 1 ? int_array[2] = 'Tu' : nil
+    int_array[3] == 1 ? int_array[3] = 'W' : nil
+    int_array[4] == 1 ? int_array[4] = 'Th' : nil
+    int_array[5] == 1 ? int_array[5] = 'F' : nil
+    int_array[6] == 1 ? int_array[6] = 'Sa' : nil
+
+    int_array.delete(0)
+    int_array.map{ |x| x == -1 ? '-' : x}.uniq.join
+
+  end
+
+  private
+  
+  # this little recursive function processes an array of "day booleans"
+  # and determines which days should be replaced by a hyphen. helps the
+  # days_of_week virtual attribute. 
+  #
+  # in : [0,1,1,1,0,1,0]
+  # out: [0,1,-1,1,0,1,0]
+  # Note: the fist value, x[0], will need to be set to positive after processing
+  #        in some cases. i.e. [1,1,1,0,0,0,0] -> [-1,-1,1,0,0,0,0]
+  def r (x, i)
+      unless x[i] == nil
+        tmp = r(x, i+1)
+      else return 0
+      end
+      
+      if tmp != 0
+          if tmp == -1 and x[i] == 0
+              x[i+1] = 1
+              return x[i]
+          else return x[i] = x[i] * -1
+          end
+      else return x[i]
+      end
+  end
+end

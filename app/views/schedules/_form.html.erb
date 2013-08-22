@@ -1,0 +1,93 @@
+<%= form_for([@student, @schedule]) do |f| %>
+  <% if @schedule.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@schedule.errors.count, "error") %> prohibited this schedule from being saved:</h2>
+
+      <ul>
+      <% @schedule.errors.full_messages.each do |msg| %>
+        <div class="field"><%= msg %></div>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div id="schedule-form">
+
+    <div id="date-fields">
+      <div class="field">
+        <%= f.label :start_date %>
+        <%= f.date_select :start_date, {start_year: Time.now.year, end_year: Time.now.year + 2, default: Time.now} %>
+      </div>
+      <div class="field">
+        <%= f.label :end_date %>
+        <%= f.date_select :end_date, {start_year: Time.now.year, end_year: Time.now.year + 2, default: Time.now} %>
+      </div>
+    </div>
+
+    <div id="time-fields">
+      <div class="field">
+        <%= f.label :start_time %>
+        <%= f.time_select :start_time, {default: Time.now.change(hour: 8, min: 0), minute_step: 5, ampm: true} %>
+      </div>
+      <div class="field">
+        <%= f.label :end_time %>
+        <%= f.time_select :end_time, {default: Time.now.change(hour: 8, min: 0), minute_step: 5, ampm: true} %>
+      </div>
+    </div>
+
+    <div id="effective-day-fields">
+      <div id="weekdays">
+        <div class="field">
+          <%= f.check_box :monday %>
+          <%= f.label :monday %>
+        </div>
+        <div class="field">
+          <%= f.check_box :tuesday %>
+          <%= f.label :tuesday %>
+        </div>
+        <div class="field">
+          <%= f.check_box :wednesday %>
+          <%= f.label :wednesday %>
+        </div>
+        <div class="field">
+          <%= f.check_box :thursday %>
+          <%= f.label :thursday %>
+        </div>
+        <div class="field">
+          <%= f.check_box :friday %>
+          <%= f.label :friday %>
+        </div>
+      </div>
+      <div id="weekends">
+        <div class="field">
+          <%= f.check_box :saturday %>
+          <%= f.label :saturday %>
+        </div>
+        <div class="field">
+          <%= f.check_box :sunday %>
+          <%= f.label :sunday %>
+        </div>
+      </div>
+    </div>
+
+    <div id="schedule-flags">
+      <div class="field" id="permanent-flag">
+        <%= f.check_box :permanent %>
+        <%= f.label :permanent %>
+      </div>
+      <div class="field" id="absent-flag">
+        <%= f.check_box :absent %>
+        <%= f.label :absent %>
+      </div>
+    </div>
+
+    <div class="field" id="description">
+      <%= f.label :description %><br />
+      <%= f.text_area :description, :size => '60x5' %>
+    </div>
+    <%= f.hidden_field :student_id %>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+  </div>
+<% end %>

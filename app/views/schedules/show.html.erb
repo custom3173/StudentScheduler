@@ -1,0 +1,80 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Start time:</b>
+  <%= @schedule.start_time %>
+</p>
+
+<p>
+  <b>End time:</b>
+  <%= @schedule.end_time %>
+</p>
+
+<p>
+  <b>Start date:</b>
+  <%= @schedule.start_date %>
+</p>
+
+<p>
+  <b>End date:</b>
+  <%= @schedule.end_date %>
+</p>
+
+<p>
+  <b>Sunday:</b>
+  <%= @schedule.sunday %>
+</p>
+
+<p>
+  <b>Monday:</b>
+  <%= @schedule.monday %>
+</p>
+
+<p>
+  <b>Tuesday:</b>
+  <%= @schedule.tuesday %>
+</p>
+
+<p>
+  <b>Wednesday:</b>
+  <%= @schedule.wednesday %>
+</p>
+
+<p>
+  <b>Thursday:</b>
+  <%= @schedule.thursday %>
+</p>
+
+<p>
+  <b>Friday:</b>
+  <%= @schedule.friday %>
+</p>
+
+<p>
+  <b>Saturday:</b>
+  <%= @schedule.saturday %>
+</p>
+
+<p>
+  <b>Permanent:</b>
+  <%= @schedule.permanent %>
+</p>
+
+<p>
+  <b>Absent:</b>
+  <%= @schedule.absent %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @schedule.description %>
+</p>
+
+<p>
+  <b>Student:</b>
+  <%= @schedule.student_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_student_schedule_path(@student, @schedule) %> |
+<%= link_to 'Back', student_path(@student) %>

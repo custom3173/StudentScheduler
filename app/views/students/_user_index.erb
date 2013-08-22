@@ -1,0 +1,18 @@
+<div id="user-index-table">
+  <div id="index-header">
+    <span>Username</span>
+    <span>Full Name</span>
+  </div>
+  <% shaded_toggle = true %>
+  <% @students.each do |student| %>
+      <div class="index-row <%= "shaded" if shaded_toggle %>">
+        <span><%= student.username %></span>
+        <span><%= student.fullname %></span>
+        <span class="links"><%= link_to 'Show', student %></span>
+        <span class="links"><%= link_to 'Edit', edit_student_path(student) %></span>
+        <span class="links"><%= link_to 'New Schedule', new_student_schedule_path(student) %></span>
+        <span class="links"><%= link_to 'Delete User', student, method: :delete, data: { confirm: 'Are you sure?' } %></span>
+      </div>
+      <% shaded_toggle = !shaded_toggle %>
+  <% end %>
+</div>

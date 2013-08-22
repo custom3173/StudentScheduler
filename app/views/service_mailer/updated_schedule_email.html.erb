@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+</head>
+<body>
+<%= content_tag :h2, (@self_edited ? "#{@student.username} changed a schedule" : "#{@editor.username} changed a schedule for #{@student.username}") %>
+
+<h3>New Schedule</h3>
+<%= render :partial => 'schedule_email', :locals => {:schedule => @new_schedule} %>
+
+<h3>Old Schedule</h3>
+<%= render :partial => 'schedule_email', :locals => {:schedule => @old_schedule} %>
+<p>
+  This email was automatically generated. Please do not reply.
+</p>
+</body>
+</html>
