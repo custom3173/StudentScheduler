@@ -39,14 +39,10 @@ Studentscheduler::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
       address:              'smtp.umbc.edu',
-      port:                 587,
-      domain:               'umbc.edu',
-      user_name:            'lits-notifications',
-      password:             '&@Lisade7165',
-      authentication:       'plain',
-      enable_starttls_auto: true  }
+      enable_starttls_auto: true
+  }
 
   # don't deliver in dev mode
-  #config.action_mailer.perform_deliveries = false
+  config.action_mailer.perform_deliveries = false
 
 end
