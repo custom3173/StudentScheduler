@@ -26,5 +26,8 @@
 # ignore documentation
 /doc
 
+# ignore intellij ide config
+/.idea
+
 # ignore text editor backups
 *~
