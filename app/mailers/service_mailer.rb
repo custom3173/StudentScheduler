@@ -1,5 +1,5 @@
 class ServiceMailer < ActionMailer::Base
-  default from: "lits.notifications@gmail.com"
+  default from: "lits-notifications@umbc.edu"
 
   def test_email(recipient)
     @recipient = recipient
