@@ -20,9 +20,6 @@
 /log/*.log
 /tmp
 
-# ignore environments until I find a better way to hide the smtp config
-/environments
-
 # ignore documentation
 /doc
 

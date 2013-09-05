@@ -68,6 +68,6 @@ Studentscheduler::Application.configure do
   # Action Mailer setup
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-      address:              'smtp.gmail.com',
+      address:              'smtp.umbc.edu',
       enable_starttls_auto: true  }
 end
