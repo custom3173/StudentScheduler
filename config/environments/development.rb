@@ -39,6 +39,10 @@ Studentscheduler::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
       address:              'smtp.umbc.edu',
-      enable_starttls_auto: true  }
-  config.action_mailer.perform_deliveries = :false
+      enable_starttls_auto: true
+  }
+
+  # don't deliver in dev mode
+  config.action_mailer.perform_deliveries = false
+
 end
