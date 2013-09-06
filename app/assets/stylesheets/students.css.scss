@@ -25,6 +25,7 @@ a.student-links {
 .schedule-accordion {
   margin-bottom: 3em;
   width: 50%;
+  word-wrap: break-word;
 
   // all accordian rows
   .accordion-field {
@@ -115,4 +116,9 @@ p.notice {
 .absent-label {
   color: #f0827a;
   font-weight: bold;
+}
+
+// fix word wrap issues on accordions
+.ui-accordion-header {
+
 }
