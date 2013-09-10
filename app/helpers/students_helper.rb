@@ -6,7 +6,7 @@ module StudentsHelper
 
     include Comparable
 
-    attr_accessor :name, :time, :sibling, :description
+    attr_accessor :name, :time, :sibling, :description, :visible
 
     def initialize(name, time, arriving, permanent, absent, current_day=false, starting_schedule, description)
       @name = name               # the student's name (shortened)
@@ -58,20 +58,32 @@ module StudentsHelper
         # _starting_schedule is the first schedule of a matched pair
         self.starting_schedule? ? _starting_schedule = self : _starting_schedule = self.sibling
 
+        # the schedules have intersecting time slots, i.e the absent schedule exists inside the normal schedule
+        #    outside the normal if block so it doesn't grab more specific staggered schedules
+        if absent_schedule > _starting_schedule and absent_schedule < _starting_schedule.sibling
+          absent_schedule.absent_toggle
+        end
+
         # the schedules fall on the same time slot
         #  mark the original schedule as invisible
         #  and display only the absent schedule
         if self == absent_schedule
           @visible = false
 
-        # the schedules have intersecting time slots, i.e the absent schedule exists inside the normal schedule
-        elsif absent_schedule > _starting_schedule and absent_schedule < _starting_schedule.sibling
-          absent_schedule.absent_toggle
-
         # a normal schedule exists inside of an absent schedule
         # mark the normal schedule as invisible
         elsif absent_schedule < _starting_schedule and absent_schedule.sibling > _starting_schedule.sibling
           @visible = false
+
+        # staggered schedule, absence begins before regular schedule, ends before the end of regular schedule
+        #  only sets the beginning regular schedule invisible, absence already toggled (reversed) by intersection calc.
+        elsif absent_schedule < _starting_schedule and absent_schedule.sibling > _starting_schedule and absent_schedule.sibling < _starting_schedule.sibling
+          _starting_schedule.visible = false
+
+        # staggered schedule, absence begins after regular schedule, ends after the end of regular schedule
+        #  only sets the ending regular schedule invisible, absence already toggled (reversed) by intersection calc.
+        elsif absent_schedule > _starting_schedule and absent_schedule < _starting_schedule.sibling and absent_schedule.sibling > _starting_schedule.sibling
+          _starting_schedule.sibling.visible = false
         end
       end
     end
@@ -181,5 +193,4 @@ module StudentsHelper
       row1.flatten.compact.first.time <=> row2.flatten.compact.first.time
     end
   end
-
 end
