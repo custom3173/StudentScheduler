@@ -86,7 +86,7 @@ class StudentsController < ApplicationController
   # POST /students
   # POST /students.json
   def create
-    @student = Student.new(params[:student])
+    @student = Student.new(student_params)
 
     respond_to do |format|
       if @student.save
@@ -105,7 +105,7 @@ class StudentsController < ApplicationController
     @student = Student.find(params[:id])
 
     respond_to do |format|
-      if @student.update_attributes(params[:student])
+      if @student.update_attributes(student_params)
         format.html { redirect_to @student, notice: 'User was successfully updated.' }
         format.json { head :no_content }
       else
@@ -136,6 +136,12 @@ class StudentsController < ApplicationController
     _schedules.each {|s| s.destroy}
 
     redirect_to @student
+  end
+
+  private
+
+  def student_params
+    params.require(:student).permit(:first_name, :last_name, :username, :email, :department, :lims, :admin)
   end
 
   # takes a questionable date string and attempts to parse it

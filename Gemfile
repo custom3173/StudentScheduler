@@ -12,5 +12,3 @@ gem 'uglifier'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-
-gem 'protected_attributes'

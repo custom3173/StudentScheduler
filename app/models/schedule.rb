@@ -1,6 +1,4 @@
 class Schedule < ActiveRecord::Base
-  attr_accessible :absent, :description, :end_date, :end_time, :friday, :monday, :permanent, :saturday, :start_date, :start_time, :student_id, :sunday, :thursday, :tuesday, :wednesday
-
   belongs_to :student
 
   validates_presence_of :start_date, :end_date, :start_time, :end_time

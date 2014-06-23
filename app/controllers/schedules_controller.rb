@@ -44,7 +44,7 @@ class SchedulesController < ApplicationController
   # POST /schedules
   # POST /schedules.json
   def create
-    @schedule = @student.schedules.new(params[:schedule])
+    @schedule = @student.schedules.new(schedule_params)
 
     respond_to do |format|
       if @schedule.save
@@ -71,7 +71,7 @@ class SchedulesController < ApplicationController
     old_schedule = @schedule.dup # save the old schedule before it updates to send it to the mailer
 
     respond_to do |format|
-      if @schedule.update_attributes(params[:schedule])
+      if @schedule.update_attributes(schedule_params)
 
         # send notification email
         editor = Student.find_by_username(session[:username])
@@ -116,7 +116,7 @@ class SchedulesController < ApplicationController
   # post /students/1/mark_tomorrow_absent
   def mark_tomorrow_absent
     @student = Student.find(params[:id])
-    @schedule = @student.schedules.new(params[:schedule])
+    @schedule = @student.schedules.new(schedule_params)
 
     # set the rest of the schedule accordingly
     @schedule.start_date = Date.tomorrow
@@ -148,6 +148,12 @@ class SchedulesController < ApplicationController
   end
 
   private
+
+  def schedule_params
+    params.require(:schedule).permit(:absent, :description, :end_date, :end_time,
+      :friday, :monday, :permanent, :saturday, :start_date, :start_time,
+      :student_id, :sunday, :thursday, :tuesday, :wednesday)
+  end
 
   def load_student
     if params[:student_id]
