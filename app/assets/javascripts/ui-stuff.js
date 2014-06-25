@@ -6,7 +6,7 @@ $(function() {
     /* UI related JS below here */
 
     // initialize jquery ui elements
-    $('button, input:submit').button();
+    $('button, input:submit, .button').button();
 
     // accordionize the students' schedules lists
     $(".schedule-accordion").accordion({
