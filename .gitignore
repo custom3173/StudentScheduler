@@ -13,6 +13,9 @@
 # Ignore all databases config to save mysql passwords
 /config/database.yml
 
+# bye bye cap references to deployment locations
+/config/deploy
+
 # same for secret_token
 /config/initializers/secret_token.rb
 

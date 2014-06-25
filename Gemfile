@@ -12,3 +12,7 @@ gem 'uglifier'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+
+group :development do
+  gem 'capistrano'
+end
