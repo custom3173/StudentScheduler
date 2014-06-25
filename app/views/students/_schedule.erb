@@ -17,7 +17,10 @@
   </div>
 
   <div class="schedule-links">
-      <%= link_to 'Edit', edit_student_schedule_path(@student, schedule) %>
-      <%= link_to 'Delete', student_schedule_path(@student, schedule), method: :delete, data: { confirm: 'Are you sure?' } %>
+    <%= link_to 'Edit', edit_student_schedule_path(@student, schedule),
+      class: 'button' %>
+    <%= link_to 'Delete', student_schedule_path(@student, schedule),
+      method: :delete, data: { confirm: 'Permanently delete this schedule?' },
+      class: 'button' %>
   </div>
 </div>

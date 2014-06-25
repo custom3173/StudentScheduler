@@ -56,43 +56,42 @@
 
 // student and admin index table
 
-$table-column-width: 140px;
+$table-column-width: 160px;
 
 #user-index-table {
   margin-top: 1.5em;
 
   #index-header {
     margin-bottom: 10px;
-    font-size: 1.5em;
+    font-size: 1.2rem;
     font-weight: bold;
+
+    >span {
+      display: inline-block;
+      width: $table-column-width;
+    }
   }
 
   .index-row {
     padding-left: 5px;
-    width: 59%;
+    width: 68%;
     padding-bottom: 10px;
     padding-top: 10px;
-  }
+    border-bottom: 3px dotted #cfdfff;
 
-  .shaded {
-    background-color: #cfdfff;
-    border-radius: 10px;
-  }
-
-  div span {
-
-    display: inline-block;
-    width: $table-column-width;
-    font-size: 1.2em;
-  }
-
-  div .links {
-    width: auto;
-    font-size: 14px;
-
-    a {
-      padding-right: 7px;
+    &:last-of-type {
+      border: none;
     }
+
+    >span {
+      display: inline-block;
+      width: $table-column-width;
+      font-size: 1rem;
+    }
+  }
+
+  .button {
+    font-size: 14px;
   }
 }
 

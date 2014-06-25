@@ -126,25 +126,14 @@ input, textarea, select {
   float: right;
 }
 
-#menu ul {
+#menu {
   margin: 0;
   padding: 15px 0 0 0;
-  list-style: none;
-}
 
-#menu li {
-  display: inline;
-}
-
-#menu a {
-  display: block;
-  float: left;
-  margin-left: 20px;
-  padding: 7px;
-}
-
-#menu .active a {
-  background: url(img02.gif) repeat-x left bottom;
+  span {
+    margin: 0.2rem 0;
+    font-size: 1.2rem;
+  }
 }
 
 /* Page */

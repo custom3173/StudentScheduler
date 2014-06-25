@@ -10,24 +10,22 @@
 <body>
 <!-- start header -->
 <div id="header">
-	<div id="logo">
-		<h1><%= link_to 'LITS Student Schedule', calendar_path %></h1>
-		<h2>by David Bassett</h2>
-	</div>
-	<div id="menu">
-		<ul>
-          <li><%= link_to 'Calendar', calendar_path %></li>
-          <% if session[:admin] %>
-              <li><%= link_to 'Students', students_path %></li>
-              <li><%= link_to 'Admins', administrators_path %></li>
-          <% end %>
-          <% if session[:registered] and not session[:admin] %>
-              <li><%= link_to 'My Schedules', student_path(session[:user_id]) %></li>
-              <li><%= link_to 'New Schedule', new_student_schedule_path(session[:user_id]) %></li>
-          <% end %>
-          <li><%= link_to 'Logout', logout_path %></li>
-		</ul>
-	</div>
+  <div id="logo">
+    <h1><%= link_to 'LITS Student Schedule', calendar_path %></h1>
+    <h2>by David Bassett</h2>
+  </div>
+  <div id="menu">
+    <span><%= link_to 'Calendar', calendar_path, class: 'button' %></span>
+    <% if session[:admin] %>
+        <span><%= link_to 'Students', students_path, class: 'button' %></span>
+        <span><%= link_to 'Admins', administrators_path, class: 'button' %></span>
+    <% end %>
+    <% if session[:registered] and not session[:admin] %>
+        <span><%= link_to 'My Schedules', student_path(session[:user_id]), class: 'button' %></span>
+        <span><%= link_to 'New Schedule', new_student_schedule_path(session[:user_id]), class: 'button' %></span>
+    <% end %>
+    <span><%= link_to 'Logout', logout_path, class: 'button' %></span>
+  </div>
 </div>
 <!-- end header -->
 
@@ -37,10 +35,10 @@
 
 <!-- start footer -->
 <div id="footer">
-	<div class="wrap">
+  <div class="wrap">
 
-	</div>
-	<p id="legal">&copy; 2013 University of Maryland, Baltimore County.</p>
+  </div>
+  <p id="legal">&copy; 2013 University of Maryland, Baltimore County.</p>
 </div>
 <!-- end footer -->
 

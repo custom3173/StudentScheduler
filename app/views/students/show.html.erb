@@ -27,9 +27,13 @@
     </p>
 </div>
 
-<%= link_to 'New Schedule', new_student_schedule_path(@student.id) %>
-<%= link_to 'Call Out', "#{@student.id}/mark_tomorrow_absent" %>
-<%= link_to 'Purge', "#{@student.id}/purge", data: {confirm: 'Delete all expired schedules?'} %>
+<%= link_to 'New Schedule', new_student_schedule_path(@student.id),
+  :class => 'button' %>
+<%= link_to 'Call Out', "#{@student.id}/mark_tomorrow_absent",
+  :class => 'button'%>
+<%= link_to 'Purge', "#{@student.id}/purge",
+  data: {confirm: 'Delete all expired schedules?'},
+  :class => 'button'%>
 
 <h2>Active Schedules:</h2>
 <div class="schedule-accordion">
