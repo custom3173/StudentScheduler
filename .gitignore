@@ -23,9 +23,6 @@
 /log/*.log
 /tmp
 
-# leave restart for simplicity
-/tmp/!restart.txt
-
 # ignore documentation
 /doc
 

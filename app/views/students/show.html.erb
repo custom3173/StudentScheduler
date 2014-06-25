@@ -20,11 +20,6 @@
       <b>Department:</b>
       <%= @student.department %>
     </p>
-
-    <p>
-      <b>Administrator?:</b>
-      <%= @student.admin %>
-    </p>
 </div>
 
 <%= link_to 'New Schedule', new_student_schedule_path(@student.id),
