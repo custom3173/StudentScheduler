@@ -29,4 +29,5 @@ group :test do
   gem 'factory_girl_rails'
   gem 'launchy'
   gem 'timecop'
+  gem 'fuubar'
 end
