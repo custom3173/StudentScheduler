@@ -11,6 +11,8 @@ Studentscheduler::Application.routes.draw do
 
   get 'calendar', to: 'students#calendar'
 
+  get 'calendar2', to: 'schedules#calendar'
+
   get 'students/:id/purge', to: 'students#purge_expired_schedules'
 
   get 'administrators', to: 'students#administrators'

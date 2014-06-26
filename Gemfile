@@ -9,6 +9,7 @@ gem 'therubyracer'
 gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
+gem 'slim-rails'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'

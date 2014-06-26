@@ -3,15 +3,25 @@ class SchedulesController < ApplicationController
   before_filter :load_student
   before_filter :user_verification
 
-  # GET /schedules
-  # GET /schedules.json
-  def index
-    @schedules = Schedule.where(:student_id => @student.id)
+  # get|post /calendar
+  def calendar
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @schedules }
+    @date = Date.today
+
+    @schedules = Schedule.where('start_date <= :d AND end_date >= :d', {d: @date})
+
+    # narrow down to only currently valid schedules by
+    # iterating from the beginning of the week (the current or previous monday)
+    @schedules_by_day = Array.new        # store arrays of schedules
+    _date = @date.beginning_of_week - 1  # date for iteration
+    until _date == @date.end_of_week do
+      _date += 1
+      # gets each schedule that is valid for the date AND has the appropriate day boolean set
+      @schedules_by_day << Schedule.where('start_date <= :current_date AND end_date >= :current_date AND ' + _date.strftime('%A').downcase + ' = 1',
+                                          {:current_date => _date, })
     end
+
+    render
   end
 
   # GET /schedules/1
