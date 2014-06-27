@@ -784,7 +784,7 @@ body .ui-tooltip {
 ----------------------------------*/
 .ui-widget {
 	font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;;
-	font-size: 1.2em;
+	font-size: 1em;
 }
 .ui-widget .ui-widget {
 	font-size: 1em;
@@ -819,7 +819,7 @@ body .ui-tooltip {
 .ui-state-default,
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
-	border: 1px solid #ffffff;
+	border: none;
 	background: #cfdfff url("../assets/jquery-ui/ui-bg_flat_75_cfdfff_40x100.png") 50% 50% repeat-x;
 	font-weight: normal;
 	color: #555555;
@@ -836,7 +836,7 @@ body .ui-tooltip {
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
-	border: 1px solid #ffffff;
+	border: none;
 	background: #3876a5 url("../assets/jquery-ui/ui-bg_diagonals-thick_25_3876a5_40x40.png") 50% 50% repeat;
 	font-weight: normal;
 	color: #ffffff;
@@ -855,7 +855,7 @@ body .ui-tooltip {
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
-	border: 1px solid #ffffff;
+	border: none;
 	background: #fff9d8 url("../assets/jquery-ui/ui-bg_flat_65_fff9d8_40x100.png") 50% 50% repeat-x;
 	font-weight: normal;
 	color: #212121;

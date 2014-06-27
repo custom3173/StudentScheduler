@@ -9,18 +9,10 @@
   }
 }
 
-@mixin adjacent-checkboxes {
-  .field {
-    width: 14%;
-    display: inline-block;
-    text-align: left;
-  }
-}
-
 #schedule-form {
 
   label {
-    font-size: 18px;
+    //font-size: 18px;
   }
 
   // the children divs
@@ -35,23 +27,6 @@
 
   #time-fields {
     @include adjacent-fields;
-  }
-
-  // the the days that the schedule is valid
-  #effective-day-fields {
-
-    #weekdays {
-      @include adjacent-checkboxes;
-      margin-bottom: -0.5em;
-    }
-
-    #weekends {
-      @include adjacent-checkboxes;
-    }
-  }
-
-  #schedule-flags {
-    @include adjacent-checkboxes;
   }
 
   #description {

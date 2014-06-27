@@ -8,6 +8,11 @@ $(function() {
     // initialize jquery ui elements
     $('button, input:submit, .button').button();
 
+    // buttonsetify form elements (schedule form)
+    $('.jq-buttonset').buttonset();
+
+    // buttonsetify days on schedule form
+
     // accordionize the students' schedules lists
     $(".schedule-accordion").accordion({
         collapsible: true,
@@ -21,7 +26,6 @@ $(function() {
 
     // add tooltips to the calendar
     $(document).tooltip();
-
 
     // hide the weekend schedules in the calendar
     $('.weekend').hide();

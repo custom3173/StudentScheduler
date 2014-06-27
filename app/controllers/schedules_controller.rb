@@ -160,8 +160,8 @@ class SchedulesController < ApplicationController
   private
 
   def schedule_params
-    params.require(:schedule).permit(:absent, :description, :end_date, :end_time,
-      :friday, :monday, :permanent, :saturday, :start_date, :start_time,
+    params.require(:schedule).permit(:description, :end_date, :end_time,
+      :friday, :monday, :saturday, :start_date, :start_time, :group,
       :student_id, :sunday, :thursday, :tuesday, :wednesday)
   end
 

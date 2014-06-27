@@ -13,6 +13,11 @@
 
   <div id="schedule-form">
 
+    <div class="field jq-buttonset">
+      <%= f.label :group, 'Type' %>
+      <%= f.collection_radio_buttons :group, Schedule.groups, :first, ->(x){x.first.humanize} %>
+    </div>
+
     <div id="date-fields">
       <div class="field">
         <%= f.label :start_date %>
@@ -35,45 +40,22 @@
       </div>
     </div>
 
-    <div id="effective-day-fields">
-      <div id="weekdays">
-        <div class="field">
-          <%= f.check_box :monday %>
-          <%= f.label :monday %>
-        </div>
-        <div class="field">
-          <%= f.check_box :tuesday %>
-          <%= f.label :tuesday %>
-        </div>
-        <div class="field">
-          <%= f.check_box :wednesday %>
-          <%= f.label :wednesday %>
-        </div>
-        <div class="field">
-          <%= f.check_box :thursday %>
-          <%= f.label :thursday %>
-        </div>
-        <div class="field">
-          <%= f.check_box :friday %>
-          <%= f.label :friday %>
-        </div>
-      </div>
-      <div id="weekends">
-        <div class="field">
-          <%= f.check_box :saturday %>
-          <%= f.label :saturday %>
-        </div>
-        <div class="field">
-          <%= f.check_box :sunday %>
-          <%= f.label :sunday %>
-        </div>
-      </div>
-    </div>
-
-    <div id="schedule-flags">
-      <div class="field">
-        <%= f.text_field :group %>
-        <%= f.label :group %>
+      <div class="jq-buttonset">
+        <%= f.label 'Days' %>
+        <%= f.check_box :monday %>
+        <%= f.label :monday %>
+        <%= f.check_box :tuesday %>
+        <%= f.label :tuesday %>
+        <%= f.check_box :wednesday %>
+        <%= f.label :wednesday %>
+        <%= f.check_box :thursday %>
+        <%= f.label :thursday %>
+        <%= f.check_box :friday %>
+        <%= f.label :friday %>
+        <%= f.check_box :saturday %>
+        <%= f.label :saturday %>
+        <%= f.check_box :sunday %>
+        <%= f.label :sunday %>
       </div>
     </div>
 
