@@ -71,13 +71,9 @@
     </div>
 
     <div id="schedule-flags">
-      <div class="field" id="permanent-flag">
-        <%= f.check_box :permanent %>
-        <%= f.label :permanent %>
-      </div>
-      <div class="field" id="absent-flag">
-        <%= f.check_box :absent %>
-        <%= f.label :absent %>
+      <div class="field">
+        <%= f.text_field :group %>
+        <%= f.label :group %>
       </div>
     </div>
 

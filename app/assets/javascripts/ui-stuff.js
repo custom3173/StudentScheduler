@@ -35,18 +35,4 @@ $(function() {
             $('#rows-container').width('770px');
         }
     });
-
-    // don't allow permanant and absent checkboxes
-    // to both be selected in new schedule form
-    $('#schedule_permanent').change(function() {
-        if (this.checked) {
-            $('#schedule_absent').prop('checked', false);
-        }
-    });
-    $('#schedule_absent').change(function() {
-        if (this.checked) {
-            $('#schedule_permanent').prop('checked', false);
-        }
-    });
-
 });

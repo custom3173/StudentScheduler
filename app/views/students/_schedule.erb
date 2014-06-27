@@ -1,14 +1,14 @@
 <h3>
-  <%= schedule.permanent ? '<span class="permanent-label">Permanent</span> &middot'.html_safe : nil %>
-  <%= schedule.absent ? '<span class="absent-label">Absent</span> &middot'.html_safe : nil %>
+  <%= schedule.regular? ? '<span class="permanent-label">Regular</span> &middot'.html_safe : nil %>
+  <%= schedule.absent? ? '<span class="absent-label">Absent</span> &middot'.html_safe : nil %>
   <%= schedule.description %>
 </h3>
 <div class="accordion-field">
   <div class="schedule-effective-days"><span>On Days: </span><%=schedule.days_of_week %></div>
 
   <div class="schedule-times">
-    <div><span><%= schedule.absent ? 'Absent From: ' : 'Shift Begins: ' %></span><%= schedule.start_time.strftime "%-I:%M %p" %></div>
-    <div><span><%= schedule.absent ? 'Absent Until: ' : 'Shift Ends: ' %></span><%= schedule.end_time.strftime "%-I:%M %p" %></div>
+    <div><span><%= schedule.absent? ? 'Absent From: ' : 'Shift Begins: ' %></span><%= schedule.start_time.strftime "%-I:%M %p" %></div>
+    <div><span><%= schedule.absent? ? 'Absent Until: ' : 'Shift Ends: ' %></span><%= schedule.end_time.strftime "%-I:%M %p" %></div>
   </div>
 
   <div class="schedule-dates">
