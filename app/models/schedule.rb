@@ -1,10 +1,13 @@
 class Schedule < ActiveRecord::Base
   belongs_to :student
 
-  validates_presence_of :start_date, :end_date, :start_time, :end_time
-  validates :description, :presence => true, :length => {maximum: 300}
+  # important! maintain order
+  enum group: [:regular, :temporary, :absent]
+
+  validates_presence_of :start_date, :end_date, :start_time, :end_time, :group
+  validates :description, :length => {maximum: 300}
   validate :end_date_after_start_date, :end_time_after_start_time,
-           :at_least_one_day_selected, :permanent_and_absent_not_both_selected
+           :at_least_one_day_selected
 
   # validate end_date > start_date
   def end_date_after_start_date
@@ -24,13 +27,6 @@ class Schedule < ActiveRecord::Base
   def at_least_one_day_selected
     unless monday or tuesday or wednesday or thursday or friday or saturday or sunday
       errors.add :base, "At least one day (Mon-Sun) must be selected"
-    end
-  end
-
-  # validate both Permanent and Absent aren't both selected
-  def permanent_and_absent_not_both_selected
-    if permanent and absent
-      errors.add :base, "You cannot select both Permanent and Absent"
     end
   end
 

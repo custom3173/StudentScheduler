@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130726165809) do
+ActiveRecord::Schema.define(version: 20140627150013) do
 
   create_table "schedules", force: true do |t|
     t.time     "start_time"
@@ -25,12 +25,11 @@ ActiveRecord::Schema.define(version: 20130726165809) do
     t.boolean  "thursday"
     t.boolean  "friday"
     t.boolean  "saturday"
-    t.boolean  "permanent"
-    t.boolean  "absent"
     t.text     "description"
     t.integer  "student_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "group",       default: 0
   end
 
   create_table "students", force: true do |t|
