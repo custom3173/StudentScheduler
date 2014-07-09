@@ -40,6 +40,11 @@ class SchedulesController < ApplicationController
   def new
     @schedule = @student.schedules.new
 
+    # sensible defaults
+    @schedule.start_date = Date.today
+    @schedule.start_time = Time.new(2001,1,1,9) # 8:00 AM
+    @schedule.end_time = Time.new(2001,1,1,12)  # 12:00 PM
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @schedule }
