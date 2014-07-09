@@ -11,14 +11,14 @@ class Schedule < ActiveRecord::Base
 
   # validate end_date > start_date
   def end_date_after_start_date
-    if end_date < start_date
+    if start_date && end_date && end_date < start_date
       errors.add :end_date, "can't be before the Start date"
     end
   end
 
   # validate end_time > start_time and at least 1 hour
   def end_time_after_start_time
-    if end_time < start_time
+    if start_time && end_time && end_time < start_time
       errors.add :end_time, "can't be before the Start time"
     end
   end
