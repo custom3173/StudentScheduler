@@ -109,6 +109,12 @@ p.notice {
     &.temporary { color: #14B406; }
     &.absent { color: #f0827a; }
   }
+
   // override on hover to keep consistent with jqui
-  .ui-accordion-header:hover span { color: #fff; }
+  .ui-accordion-header:hover {
+    span.regular, span.temporary, span.absent { color: #fff; }
+    &.ui-state-active {
+      span.regular, span.temporary, span.absent { color: #000; }
+    }
+  }
 }
