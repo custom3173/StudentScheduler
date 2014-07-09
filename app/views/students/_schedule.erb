@@ -17,9 +17,9 @@
 
   <div class="schedule-links">
     <%= link_to 'Edit', edit_student_schedule_path(@student, schedule),
-      class: 'button' %>
+      class: 'edit' %>
     <%= link_to 'Delete', student_schedule_path(@student, schedule),
       method: :delete, data: { confirm: 'Permanently delete this schedule?' },
-      class: 'button' %>
+      class: 'delete' %>
   </div>
 </div>
