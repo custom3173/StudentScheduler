@@ -100,18 +100,15 @@ p.notice {
   color: #696969;
 }
 
-// on students#show and _schedule
-.permanent-label {
-  color: #7e94db;
-  font-weight: bold;
-}
+// on _schedule
+.schedule-accordion {
+  span {
+    font-weight: bold;
 
-.absent-label {
-  color: #f0827a;
-  font-weight: bold;
-}
-
-// fix word wrap issues on accordions
-.ui-accordion-header {
-
+    &.regular { color: #837bdb; }
+    &.temporary { color: #14B406; }
+    &.absent { color: #f0827a; }
+  }
+  // override on hover to keep consistent with jqui
+  .ui-accordion-header:hover span { color: #fff; }
 }

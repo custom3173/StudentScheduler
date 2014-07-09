@@ -1,7 +1,6 @@
 <h3>
-  <%= schedule.regular? ? '<span class="permanent-label">Regular</span> &middot'.html_safe : nil %>
-  <%= schedule.absent? ? '<span class="absent-label">Absent</span> &middot'.html_safe : nil %>
-  <%= schedule.description %>
+  <%= "<span class=\"#{schedule.group}\">#{schedule.group.humanize}</span>".html_safe %>
+  <%= "<span> &middot #{schedule.description}</span>".html_safe unless schedule.description.blank? %>
 </h3>
 <div class="accordion-field">
   <div class="schedule-effective-days"><span>On Days: </span><%=schedule.days_of_week %></div>
