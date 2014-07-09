@@ -27,7 +27,6 @@ $(function() {
   // use datepickers for schedule form dates
   $( "#schedule_start_date" ).datepicker({
     dateFormat: "yy-mm-dd",
-    defaultDate: "+1w",
     changeMonth: true,
     numberOfMonths: 3,
     onClose: function( selectedDate ) {
@@ -36,7 +35,6 @@ $(function() {
   });
   $( "#schedule_end_date" ).datepicker({
     dateFormat: "yy-mm-dd",
-    defaultDate: "+1w",
     changeMonth: true,
     numberOfMonths: 3,
     onClose: function( selectedDate ) {
