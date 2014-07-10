@@ -1,59 +1,27 @@
-= form_for([@student, @schedule]) do |f|
-  - if @schedule.errors.any?
-    #error_explanation
-      h2
-        #{pluralize(@schedule.errors.count, "error")} prohibited this schedule from being saved:
-
-      ul
-        - @schedule.errors.full_messages.each do |msg|
-          li = msg
+= simple_form_for [@student, @schedule] do |f|
+  = f.error_notification
 
   #schedule-form
-
-    div class="field jq-buttonset"
-      = f.label :group, 'Type'
+    .jq-buttonset
+      = f.label :group, label: 'Type'
       = f.collection_radio_buttons :group, Schedule.groups, :first, ->(x){x.first.humanize}
 
-    #date-fields
-      .field
-        = f.label :start_date
-        = f.text_field :start_date
-      
-      .field
-        = f.label :end_date
-        = f.text_field :end_date
+    = f.input :start_date, as: :string
+    = f.input :end_date, as: :string, placeholder: Date.today.to_s
+    = f.input :start_time
+    = f.input :end_time
 
-    #time-fields
-      .field
-        = f.label :start_time
-        = f.time_select :start_time, {default: Time.now.change(hour: 8, min: 0), minute_step: 5, ampm: true}
-      
-      .field
-        = f.label :end_time
-        = f.time_select :end_time, {default: Time.now.change(hour: 8, min: 0), minute_step: 5, ampm: true}
+    .jq-buttonset
+      = f.label :on_days, label: 'On Days'
+      = f.input :monday
+      = f.input :tuesday
+      = f.input :wednesday
+      = f.input :thursday
+      = f.input :friday
+      = f.input :saturday
+      = f.input :sunday
 
-      .jq-buttonset
-        = f.label 'Days'
-        = f.check_box :monday
-        = f.label :monday
-        = f.check_box :tuesday
-        = f.label :tuesday
-        = f.check_box :wednesday
-        = f.label :wednesday
-        = f.check_box :thursday
-        = f.label :thursday
-        = f.check_box :friday
-        = f.label :friday
-        = f.check_box :saturday
-        = f.label :saturday
-        = f.check_box :sunday
-        = f.label :sunday
-
-    #description.field
-      = f.label :description
-      br
-      = f.text_area :description, :size => '60x5'
+    = f.input :description
     
     = f.hidden_field :student_id
-    .actions
-      = f.submit
+    = f.button :submit

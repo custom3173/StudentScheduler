@@ -10,6 +10,7 @@ gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
 gem 'slim-rails'
+gem 'simple_form'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
