@@ -12,21 +12,23 @@ class Schedule < ActiveRecord::Base
   # validate end_date > start_date
   def end_date_after_start_date
     if start_date && end_date && end_date < start_date
-      errors.add :end_date, "can't be before the Start date"
+      errors.add :end_date, "must be after the Start date"
+      errors.add :start_date, "must be before the End date"
     end
   end
 
   # validate end_time > start_time and at least 1 hour
   def end_time_after_start_time
     if start_time && end_time && end_time < start_time
-      errors.add :end_time, "can't be before the Start time"
+      errors.add :end_time, "must be after the Start time"
+      errors.add :start_time, "must be before the End time"
     end
   end
 
   # validate at least one date M-Su is selected
   def at_least_one_day_selected
     unless monday or tuesday or wednesday or thursday or friday or saturday or sunday
-      errors.add :base, "At least one day (Mon-Sun) must be selected"
+      errors.add :on_days, "At least one day (Mon-Sun) must be selected"
     end
   end
 

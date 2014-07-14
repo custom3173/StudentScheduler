@@ -45,6 +45,17 @@ SimpleForm.setup do |config|
     b.use :error, wrap_with: { tag: :span, class: :error }
   end
 
+  config.wrappers :buttonset do |b|
+    b.use :html5
+    b.use :placeholder
+
+    b.wrapper tag: :div, class: 'jq-buttonset' do |component|
+      component.use :label
+      component.use :hint,  wrap_with: { tag: :span, class: :hint }
+      component.use :error, wrap_with: { tag: :span, class: :error }
+    end
+  end
+
   # The default wrapper to be used by the FormBuilder.
   config.default_wrapper = :default
 

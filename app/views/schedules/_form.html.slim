@@ -1,6 +1,4 @@
 = simple_form_for [@student, @schedule] do |f|
-  = f.error_notification
-
   #schedule-form
     .jq-buttonset
       = f.label :group, label: 'Type'
@@ -11,17 +9,18 @@
     = f.input :start_time
     = f.input :end_time
 
-    .jq-buttonset
-      = f.label :on_days, label: 'On Days'
-      = f.input :monday
-      = f.input :tuesday
-      = f.input :wednesday
-      = f.input :thursday
-      = f.input :friday
-      = f.input :saturday
-      = f.input :sunday
+    /.jq-buttonset
+      /= f.error :base
+    = f.label :on_days, label: 'On Days', wrapper: :buttonset, required: true
+    = f.input :monday
+    = f.input :tuesday
+    = f.input :wednesday
+    = f.input :thursday
+    = f.input :friday
+    = f.input :saturday
+    = f.input :sunday
 
-    = f.input :description
+    = f.input :description, maxlength: :lookup
     
     = f.hidden_field :student_id
     = f.button :submit
