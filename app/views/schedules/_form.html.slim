@@ -12,13 +12,13 @@
     /.jq-buttonset
       /= f.error :base
     = f.label :on_days, label: 'On Days', wrapper: :buttonset, required: true
-    = f.input :monday
-    = f.input :tuesday
-    = f.input :wednesday
-    = f.input :thursday
-    = f.input :friday
-    = f.input :saturday
-    = f.input :sunday
+      = f.input :monday, label: 'M'
+      = f.input :tuesday, label: 'Tu'
+      = f.input :wednesday, label: 'W'
+      = f.input :thursday, label: 'Th'
+      = f.input :friday, label: 'F'
+      = f.input :saturday, label: 'Sa'
+      = f.input :sunday, label: 'Su'
 
     = f.input :description, maxlength: :lookup
     
