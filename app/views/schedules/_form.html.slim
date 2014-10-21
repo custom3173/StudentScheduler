@@ -5,10 +5,9 @@
       = f.collection_radio_buttons :group, Schedule.groups, :first, ->(x){x.first.humanize}
 
     = f.input :start_date, as: :string
-    = f.input :end_date, as: :string, placeholder: Date.today.to_s
-    = f.input :start_time
-    = f.input :end_time
-
+    = f.input :end_date,   as: :string, placeholder: Date.today.to_s
+    = f.input :start_time, as: :string, input_html: { value: l(f.object.start_time) }
+    = f.input :end_time,   as: :string, input_html: { value: l(f.object.end_time) }
 
     = f.input :on_days, wrapper_html: {class: 'jq-buttonset'}
       = f.input :monday,    label: 'M'

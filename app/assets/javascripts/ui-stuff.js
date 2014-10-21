@@ -42,6 +42,16 @@ $(function() {
     }
   });
 
+  // timepicker for schedule form times
+  $( "#schedule_start_time" ).timepicker({
+    timeFormat: "hh:mm tt",
+    stepMinute: 5
+  });
+  $( "#schedule_end_time" ).timepicker({
+    timeFormat: "hh:mm tt",
+    stepMinute: 5
+  });
+
   // accordionize the students' schedules lists
   $(".schedule-accordion").accordion({
     collapsible: true,
