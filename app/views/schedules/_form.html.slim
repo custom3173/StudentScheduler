@@ -9,16 +9,15 @@
     = f.input :start_time
     = f.input :end_time
 
-    /.jq-buttonset
-      /= f.error :base
-    = f.label :on_days, label: 'On Days', wrapper: :buttonset, required: true
-      = f.input :monday, label: 'M'
-      = f.input :tuesday, label: 'Tu'
+
+    = f.input :on_days, wrapper_html: {class: 'jq-buttonset'}
+      = f.input :monday,    label: 'M'
+      = f.input :tuesday,   label: 'Tu'
       = f.input :wednesday, label: 'W'
-      = f.input :thursday, label: 'Th'
-      = f.input :friday, label: 'F'
-      = f.input :saturday, label: 'Sa'
-      = f.input :sunday, label: 'Su'
+      = f.input :thursday,  label: 'Th'
+      = f.input :friday,    label: 'F'
+      = f.input :saturday,  label: 'Sa'
+      = f.input :sunday,    label: 'Su'
 
     = f.input :description, maxlength: :lookup
     
