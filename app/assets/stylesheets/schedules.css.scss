@@ -10,6 +10,8 @@
 }
 
 #schedule-form {
+  float: left;
+
   // Bolds all jq buttonset elements as well, fix this!
   label { font-weight: bold; }
 
@@ -52,5 +54,20 @@
   }
 
   #description {
+  }
+}
+
+#help-section {
+  float: right;
+  width: 530px;
+
+  h5 {
+    font-size: 1rem;
+  }
+
+  p {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+    margin-bottom: 1rem;
   }
 }

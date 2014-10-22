@@ -32,13 +32,14 @@ label.collection_radio_buttons {
 }
 
 .field_with_errors {
-  background-color: #ff3333;
+  // see in scaffolds.css.scss
 }
 
 .simple_form {
   .error {
     clear: left;
-    color: black;
+    color: #fe4040;
+    font-weight: bold;
     display: block;
     margin-left: 120px;
   }

@@ -5,30 +5,30 @@ class Schedule < ActiveRecord::Base
   enum group: [:regular, :temporary, :absent]
 
   validates_presence_of :start_date, :end_date, :start_time, :end_time, :group
-  validates :description, :length => {maximum: 300}
+  validates :description, :length => {maximum: 500}
   validate :end_date_after_start_date, :end_time_after_start_time,
            :at_least_one_day_selected
 
   # validate end_date > start_date
   def end_date_after_start_date
     if start_date && end_date && end_date < start_date
-      errors.add :end_date, "must be after the Start date"
-      errors.add :start_date, "must be before the End date"
+      errors.add :end_date, "must be after the start date"
+      errors.add :start_date, "must be before the end date"
     end
   end
 
-  # validate end_time > start_time and at least 1 hour
+  # validate end_time > start_time
   def end_time_after_start_time
     if start_time && end_time && end_time < start_time
-      errors.add :end_time, "must be after the Start time"
-      errors.add :start_time, "must be before the End time"
+      errors.add :end_time, "must be after the start of shift"
+      errors.add :start_time, "must be before the end of shift"
     end
   end
 
   # validate at least one date M-Su is selected
   def at_least_one_day_selected
     unless monday or tuesday or wednesday or thursday or friday or saturday or sunday
-      errors.add :on_days, "At least one day (Mon-Sun) must be selected"
+      errors.add :on_days, "At least one day must be selected"
     end
   end
 

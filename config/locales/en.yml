@@ -8,3 +8,15 @@ en:
   date:
     formats:
       default: "%D"
+  simple_form:
+    labels:
+      schedule:
+        on_days: 'On days'
+        group: 'Type'
+        start_time: 'Shift starts'
+        end_time: 'Shift ends'
+    hints:
+      schedule:
+    placeholders:
+      schedule:
+        end_date: 'Pick a date'

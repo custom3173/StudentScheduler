@@ -2,15 +2,15 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.profile-info {
+#profile-info {
   width: 50%;
   float: right;
   margin-top: 2.27em;
 
   p {
     margin-left: 2em;
-    margin-bottom: 1em;
-    padding: 0.5em 0 0.5em 0.5em;
+    margin-bottom: 2px;
+    padding-left:10px;
     background-color: #cfdfff;
     border-radius: 5px;
   }
@@ -22,14 +22,14 @@
   width: 50%;
   word-wrap: break-word;
 
+  // Schedule type colors
+  .regular { color: #837bdb; }
+  .temporary { color: #14B406; }
+  .absent { color: #f0827a; }
+
   // all accordian rows
   .accordion-field {
     background: #eee;
-
-    // the labels
-    div div span {
-      font-weight: bold;
-    }
 
     // the schedule dates label ie MWF
     .schedule-effective-days {
@@ -50,6 +50,14 @@
       clear: both;
       float: right;
       margin-top: 1em;
+    }
+  }
+
+  // override on hover to keep consistent with jqui
+  .ui-accordion-header:hover {
+    span.regular, span.temporary, span.absent { color: #fff; }
+    &.ui-state-active {
+      span.regular, span.temporary, span.absent { color: #000; }
     }
   }
 }
@@ -98,23 +106,4 @@ $table-column-width: 160px;
 p.notice {
   width: 400px;
   color: #696969;
-}
-
-// on _schedule
-.schedule-accordion {
-  span {
-    font-weight: bold;
-
-    &.regular { color: #837bdb; }
-    &.temporary { color: #14B406; }
-    &.absent { color: #f0827a; }
-  }
-
-  // override on hover to keep consistent with jqui
-  .ui-accordion-header:hover {
-    span.regular, span.temporary, span.absent { color: #fff; }
-    &.ui-state-active {
-      span.regular, span.temporary, span.absent { color: #000; }
-    }
-  }
 }

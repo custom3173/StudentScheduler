@@ -1,6 +1,6 @@
-
 /*
-Design by David Bassett 2012
+  Design by David Bassett 2012
+  updated - 2014
 */
 
 body {
@@ -8,7 +8,7 @@ body {
   padding: 0;
   background: #fff url(img01.gif) repeat-x;
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 16px;
   color: #333333;
 }
 
@@ -19,20 +19,26 @@ h1, h2, h3 {
 
 h1 {
   margin: 0;
-  font-size: 32px;
-  padding-bottom: 1em;
+  font-size: 2rem;
+  padding-bottom: 1rem;
 }
 
 h2 {
-  font-size: 23px;
+  font-size: 1.5rem;
   margin-bottom: 0.5em;
 }
 
+h5 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin:  0 0 0.6rem 0;
+  color: #666;
+}
+
 p, ul, ol {
-  margin: 0 0 2em 0;
+  margin: 0 0 2rem 0;
   text-align: justify;
-  line-height: 26px;
-  font-size: 16px;
+  line-height: 2rem;
 }
 
 a {
@@ -79,8 +85,6 @@ input, textarea, select {
   color: #555;
 }
 
-/* Header */
-
 #header {
   width: 1024px;
   height: 82px;
@@ -90,53 +94,44 @@ input, textarea, select {
 
 #logo {
   float: left;
-}
 
-#logo h1 {
-  font-size: 38px;
-  padding: 0;
-  color: #494949;
-}
+  h1 {
+    font-size: 38px;
+    padding: 0;
+    color: #494949;
 
-#logo h1 sup {
-  vertical-align: text-top;
-  font-size: 24px;
-}
+    sup {
+      vertical-align: text-top;
+      font-size: 24px;
+    }
 
-#logo h1 a {
-  color: #494949;
-  background: none;
-  border: none;
-}
+    a {
+      color: #494949;
+      background: none;
+      border: none;
+    }
+  }
 
-#logo h2 {
-  margin-top: 10px;
-  margin-left: 5px;
-  font-size: 12px;
-  color: #A0A0A0;
-}
+  h2 {
+    margin-top: 10px;
+    margin-left: 5px;
+    font-size: 12px;
+    color: #A0A0A0;
+  }
 
-#logo a {
-  text-decoration: none;
-}
-
-/* Menu */
-
-#menu {
-  float: right;
+  a { text-decoration: none; }
 }
 
 #menu {
   margin: 0;
   padding: 15px 0 0 0;
+  float: right;
 
   span {
     margin: 0.2rem 0;
     font-size: 1.2rem;
   }
 }
-
-/* Page */
 
 #page {
   width: 1024px;
