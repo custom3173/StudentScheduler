@@ -32,6 +32,16 @@ class Schedule < ActiveRecord::Base
     end
   end
 
+
+  # scope for active schedules in a date range
+  #  r1: starting date in the range
+  #  r2: end date in the range
+  def self.in_date_range (d1, d2=nil)
+    d2 ||= d1
+    where(active: true).where("start_date <= ? AND end_date >= ?", d2, d1)
+  end
+
+
   # virtual attribute for cleaning up the days booleans
   def days_of_week
 

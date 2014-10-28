@@ -1,4 +1,7 @@
-/* Design by David Bassett 2013 */
+/* 
+ * Design by David Bassett 2013 
+ * updated 2014
+ */
 
 $x-axis-margin:   120px;
 $x-axis-padding:  15px;
@@ -6,102 +9,9 @@ $column-width:    120px;
 $row-height:      2em;
 $label-font-size: 1.7em;
 
-#calendar-options {
-  float: right;
-  margin: 0 20em 2em 0;
+#calendar {
 
-  div {
-    float:right;
-    margin-top: 0.5em;
-  }
-}
-
-#calendar-table {
-  clear: both;
-
-  #title-bar {
-    //border: 1px green solid;
-    margin-left: $x-axis-margin + $x-axis-padding;
-
-    span { // days table head
-      //border: 1px red solid;
-      display: inline-block;
-      width: $column-width;
-      font-weight: bold;
-      font-size: $label-font-size;
-      text-align: center;
-    }
-  }
-
-  #rows-container {
-
-    div.time-label {
-      //border: 1px brown solid;
-      font-weight: bold;
-      font-size: $label-font-size;
-      width: $x-axis-margin;
-      padding-left: $x-axis-padding;
-    }
-
-    div.shaded {
-      background-color: #cfdfff;
-      border-radius: 10px;
-    }
-
-    div { // the time slot container
-      padding: 0.3em 0;
-
-      div { // the day container
-        display: inline-block;
-        width: $column-width;
-
-        div { // the individual schedules
-          display: block;
-          width: $column-width;
-          text-align: center;
-          font-size: 1.3em;
-          opacity: 0.5;
-        }
-
-        div.current-day {
-          opacity: 1.0;
-          //color: #3f6fff;
-        }
-
-        div.invisible {
-          display: none;
-        }
-
-        div.arriving.permanent {
-          background:url(in_arrow_permanent.gif);
-          background-size: 100% 100%;
-        }
-
-        div.leaving.permanent {
-          background:url(out_arrow_permanent.gif);
-          background-size: 100% 100%;
-        }
-
-        div.arriving.temporary {
-          background:url(in_arrow.gif);
-          background-size: 100% 100%;
-        }
-
-        div.leaving.temporary {
-          background:url(out_arrow.gif);
-          background-size: 100% 100%;
-        }
-
-        div.arriving.absent {
-          background:url(in_arrow_absent.gif);
-          background-size: 100% 100%;
-        }
-
-        div.leaving.absent {
-          background:url(out_arrow_absent.gif);
-          background-size: 100% 100%;
-        }
-      }
-    }
-  }
+  .cal_day {}
+  .cal_week {}
+  .cal_month {}
 }
