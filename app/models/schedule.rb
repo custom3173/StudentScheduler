@@ -43,6 +43,7 @@ class Schedule < ActiveRecord::Base
 
 
   # virtual attribute for cleaning up the days booleans
+  # todo goes in the presenter
   def days_of_week
 
     # create an array for processing

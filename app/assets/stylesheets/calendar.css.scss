@@ -11,7 +11,19 @@ $label-font-size: 1.7em;
 
 #calendar {
 
-  .cal_day {}
-  .cal_week {}
-  .cal_month {}
+  .cal-day {
+    .schedule {
+      // todo: probably need absolute positioning
+      position: relative;
+      border: 1px solid black;
+
+      .name {
+        background-color: ligthblue;
+      }
+      .shift-begin {}
+      .shift-end {}
+    }
+  }
+  .cal-week {}
+  .cal-month {}
 }

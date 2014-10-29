@@ -5,8 +5,8 @@ class SchedulesController < ApplicationController
 
   # get|post /calendar
   def calendar
-
-    @calendar = CalendarSchedule.new
+    @calendar = ScheduleCalendar.new
+    @schedules = @calendar.schedules_by_date
   end
 
   # GET /schedules/1

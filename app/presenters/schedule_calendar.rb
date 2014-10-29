@@ -24,11 +24,10 @@ class ScheduleCalendar
       raise StandardError, "Set valid date and type first"
     end
 
-    raw_schedules = Schedule.in_date_range(@cal_begin, @cal_end).to_a
-    raw_schedules.map! { |schedule| SchedulePresenter.new(schedule) }
+    raw = SchedulePresenter.wrap(Schedule.in_date_range(@cal_begin, @cal_end))
 
     (@cal_begin..@cal_end).each do |date|
-      @schedules_by_date[date] = raw_schedules.select do |schedule|
+      @schedules_by_date[date] = raw.select do |schedule|
        schedule.shift_on_date? date
       end
     end
