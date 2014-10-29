@@ -9,12 +9,12 @@ body {
   background: #fff url(img01.gif) repeat-x;
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   font-size: 16px;
-  color: #333333;
+  color: #212121;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h5 {
   font-weight: normal;
-  color: #3e3e3e;
+  color: #676767;
 }
 
 h1 {
@@ -28,11 +28,25 @@ h2 {
   margin-bottom: 0.5em;
 }
 
-h5 {
+h3 {
   font-size: 1.2rem;
   font-weight: bold;
   margin:  0 0 0.6rem 0;
-  color: #666;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #343434;
+}
+
+h5 {
+  font-size: 0.9rem;
+}
+
+h6 {
+  font-weight: lighter;
+  color: #343434;
 }
 
 p, ul, ol {
@@ -77,12 +91,6 @@ form {
 fieldset {
   margin: 0;
   padding: 20px;
-}
-
-input, textarea, select {
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-  font-size: 13px;
-  color: #555;
 }
 
 #header {
@@ -137,6 +145,10 @@ input, textarea, select {
   width: 1024px;
   margin: 0 auto;
   min-height: 510px;
+}
+
+#notice {
+  color: green;
 }
 
 /* Footer */
