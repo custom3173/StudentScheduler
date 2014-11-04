@@ -1,0 +1,69 @@
+/* 
+ * Design by David Bassett 2013 
+ * updated 2014
+ */
+
+// todo: don't know how many of these are needed
+$time-increment:   5; //minutes
+$px-per-hour:      48;
+$increment-offset: 4; //4 pixels per 5 minute increment
+
+$x-axis-margin:   120px;
+$x-axis-padding:  15px;
+$column-width:    140px;
+$row-height:      2em;
+$label-font-size: 1.7em;
+
+#calendar {
+  
+  #controls {}
+
+  .hourly-view {
+
+    .schedule {
+      background-color: #eee;
+
+      // note: this will have to switch back to absolute
+      //  when more fine tuned control is needed
+      position: relative;
+      border: 1px solid black;
+
+      width: 100%;
+      height: 150px;
+
+      .name, .shift-begin, .shift-end {
+        color: $schedule-regular;
+      }
+
+      .name {
+        background-color: #eee;
+        border-bottom: 2px solid $schedule-regular;
+      }
+
+      .shift-begin {
+        position: relative;
+        top: 3px;
+      }
+
+      .shift-end {
+        position: absolute;
+        bottom: 0px;
+      }
+      .b-line {
+        position: relative;
+        left: 10px;
+        top: 5px;
+        border-left: 1px solid $schedule-regular;
+        height: 90px;
+      }
+    }
+  }
+
+  .cal-day {
+    float: left;
+    width: $column-width;
+  }
+
+  .cal-week {}
+  .cal-month {}
+}
