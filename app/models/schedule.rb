@@ -32,15 +32,35 @@ class Schedule < ActiveRecord::Base
     end
   end
 
-
   # scope for active schedules in a date range
-  #  r1: starting date in the range
-  #  r2: end date in the range
-  def self.in_date_range (d1, d2=nil)
-    d2 ||= d1
-    where(active: true).where("start_date <= ? AND end_date >= ?", d2, d1)
+  #  ordered by start_time
+  def self.in_date_range (d_start, d_end=nil)
+    d_end ||= d_start
+    where("start_date <= ? AND end_date >= ?", d_end, d_start)
+      .where(active: true)
+      .order(:start_time)
   end
 
+  # true when two schedules' shift times overlap each other
+  #  does not consider dates, only times
+  def overlaps?( other, options={} )
+    # require that the schedules belong to the same person
+    options[:match_owner] ||= false
+
+    # add buffer to ensure that schedules have
+    #  adequate time between them (in minutes)
+    buf = options[:buffer] || 0
+
+    if options[:match_owner]
+      return false unless self.student.id == other.student.id
+    end
+
+    if self.start_time <= (other.end_time + buf.minutes) &&
+      (self.end_time + buf.minutes) >= other.start_time
+      true
+    else false
+    end
+  end
 
   # virtual attribute for cleaning up the days booleans
   # todo goes in the presenter
