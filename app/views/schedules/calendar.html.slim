@@ -1,10 +1,26 @@
 #calendar
-  .cal-day
-    - @schedules[Date.today].each do |schedule|
-      .schedule id="sched-#{schedule.id}"
-        span.name
-          = schedule.student.short_name
-        span.shift-begin
-          = schedule.shift_begin
-        span.shift-end
-          = schedule.shift_end
+  = content_tag :div, nil, id: 'schedule-data', data: {schedules: @schedules}
+
+  #controls
+    #today
+      = link_to 'Today', {date: Date.today}, {class: 'button'}
+    #date
+    #type
+
+
+  .cal-week
+    - (@today.beginning_of_week-1..@today.end_of_week-1).each do |date|
+
+      .cal-day
+        h3.day-label = date.to_s(:cal)
+
+        .hourly-view
+          - @schedules[date].each do |schedule|
+            .schedule id="sched-#{schedule.id}"
+              h4.name
+                = schedule.student.short_name
+              h5.shift-begin
+                = schedule.shift_begin
+              .b-line
+              h5.shift-end
+                = schedule.shift_end

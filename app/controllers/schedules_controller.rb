@@ -5,6 +5,7 @@ class SchedulesController < ApplicationController
 
   # get|post /calendar
   def calendar
+    @today = Date.today #todo this should be responsive to the user
     @calendar = ScheduleCalendar.new
     @schedules = @calendar.schedules_by_date
   end

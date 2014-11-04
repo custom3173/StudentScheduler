@@ -3,6 +3,7 @@
 #  sense to leave it here for now.
 
 class ScheduleCalendar
+
   attr_accessor :schedules_by_date
   attr_reader   :type, :date
 
@@ -12,12 +13,14 @@ class ScheduleCalendar
     self.date = options[:date]
     self.type = options[:type] || :week
     @schedules_by_date = {}
+    @count = 0
 
     load!
   end
 
   # get the appropriate schedules from model
   def load!
+    @count = 0
 
     # check for valid setup before making queries
     unless @cal_begin.acts_like?(:date) && @cal_end.acts_like?(:date)
