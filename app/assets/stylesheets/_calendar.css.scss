@@ -8,31 +8,36 @@ $time-increment:   5; //minutes
 $px-per-hour:      48;
 $increment-offset: 4; //4 pixels per 5 minute increment
 
-$x-axis-margin:   120px;
-$x-axis-padding:  15px;
-$column-width:    140px;
-$row-height:      2em;
-$label-font-size: 1.7em;
+$column-width: 140px;
+$default-schedule-width: 130px;
 
 #calendar {
   
   #controls {}
 
   .hourly-view {
+    position: relative;
+    height: 650px; //todo: replace fixed height a dynamic one, maybe need clearfix?
 
     .schedule {
       background-color: #eee;
 
-      // note: this will have to switch back to absolute
-      //  when more fine tuned control is needed
+      // JS switches to absolute positioning and changes
+      //  the schedule offsets. If it fails then the schedules
+      //  will still be visible with relative positioning
       position: relative;
-      border: 1px solid black;
-
-      width: 100%;
       height: 150px;
+
+      width: $default-schedule-width;
+      overflow: hidden;
+      border: 1px solid black;
 
       .name, .shift-begin, .shift-end {
         color: $schedule-regular;
+      }
+
+      .shift-begin,.shift-end {
+        line-height: 20px;
       }
 
       .name {
@@ -40,21 +45,12 @@ $label-font-size: 1.7em;
         border-bottom: 2px solid $schedule-regular;
       }
 
-      .shift-begin {
-        position: relative;
-        top: 3px;
-      }
 
-      .shift-end {
-        position: absolute;
-        bottom: 0px;
-      }
       .b-line {
         position: relative;
         left: 10px;
-        top: 5px;
-        border-left: 1px solid $schedule-regular;
         height: 90px;
+        border-left: 1px solid $schedule-regular;
       }
     }
   }

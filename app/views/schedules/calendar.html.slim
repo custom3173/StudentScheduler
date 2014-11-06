@@ -1,5 +1,6 @@
 #calendar
-  = content_tag :div, nil, id: 'schedule-data', data: {schedules: @schedules}
+  = data_tag 'schedule-data',
+             {schedules: @schedules, offset: @calendar.offset}
 
   #controls
     #today
@@ -16,7 +17,7 @@
 
         .hourly-view
           - @schedules[date].each do |schedule|
-            .schedule id="sched-#{schedule.id}"
+            .schedule id="sched-#{schedule.cid}"
               h4.name
                 = schedule.student.short_name
               h5.shift-begin

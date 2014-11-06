@@ -4,9 +4,8 @@ class SchedulePresenter < ApplicationPresenter
 
   attr_accessor :visible, :cid
 
-  def initialize( sched, cid, options={} )
+  def initialize( sched, options={} )
     @visible = options[:visible] || true
-    @cid = cid # the calendar's id
     super(sched)
   end
 
@@ -33,10 +32,31 @@ class SchedulePresenter < ApplicationPresenter
     && schedule.send(date.strftime('%A').downcase)
   end
 
+  # true when two schedules' shift times overlap each other
+  #  does not consider dates, only times
+  def overlaps?( other, options={} )
+    # require that the schedules belong to the same person
+    options[:match_owner] ||= false
+
+    # add buffer to ensure that schedules have
+    #  adequate time between them (in minutes)
+    buf = options[:buffer] || 0
+
+    if options[:match_owner]
+      return false unless self.student.id == other.student.id
+    end
+
+    if self.start_time <= (other.end_time + buf.minutes) &&
+      (self.end_time + buf.minutes) >= other.start_time
+      true
+    else false
+    end
+  end
+
   # only render JSON elements that the view cares about
   def as_json( options={} )
-
-    super( only: [:id] )
+    super( only: [:start_time, :end_time, :id] )
+    .merge(visible: self.visible, cid: self.cid)
   end
 
   def schedule
