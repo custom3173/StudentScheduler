@@ -17,11 +17,11 @@
 
         .hourly-view
           - @schedules[date].each do |schedule|
-            .schedule id="sched-#{schedule.cid}"
+            .schedule id="sched-#{schedule.object_id}"
               h4.name
                 = schedule.student.short_name
-              h5.shift-begin
-                = schedule.shift_begin
-              .b-line
-              h5.shift-end
-                = schedule.shift_end
+              - schedule.shifts.each do |shift|
+                h5.time
+                  = shift[:time]
+                - unless shift[:type] == :end
+                  .b-line

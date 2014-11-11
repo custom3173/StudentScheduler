@@ -2,7 +2,7 @@
 #  display friendly format
 class SchedulePresenter < ApplicationPresenter
 
-  attr_accessor :visible, :cid
+  attr_accessor :visible
 
   def initialize( sched, options={} )
     @visible = options[:visible] || true
@@ -11,13 +11,13 @@ class SchedulePresenter < ApplicationPresenter
 
   # human readable shift printouts
   def shift_begin
-    format = (start_time.min == 0 ? :hour : :short)
-    "#{start_time.to_s(format)}"
+    format = (@start_time.min == 0 ? :hour : :short)
+    "#{@start_time.to_s(format)}"
   end
 
   def shift_end
-    format = (end_time.min == 0 ? :hour : :short)
-    "#{end_time.to_s(format)}"
+    format = (@end_time.min == 0 ? :hour : :short)
+    "#{@end_time.to_s(format)}"
   end
 
   def shift_time
@@ -56,7 +56,7 @@ class SchedulePresenter < ApplicationPresenter
   # only render JSON elements that the view cares about
   def as_json( options={} )
     super( only: [:start_time, :end_time, :id] )
-    .merge(visible: self.visible, cid: self.cid)
+    .merge(visible: self.visible)
   end
 
   def schedule

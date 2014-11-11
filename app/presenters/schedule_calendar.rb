@@ -12,13 +12,13 @@ class ScheduleCalendar
   def initialize( options = {} )
     self.date = options[:date]
     self.type = options[:type] || :week
-    @schedules_by_date = {}
 
     load!
   end
 
   # get the appropriate schedules from model
   def load!
+    @schedules_by_date = {}
 
     # check for valid setup before making queries
     unless @cal_begin.acts_like?(:date) && @cal_end.acts_like?(:date)
@@ -31,19 +31,14 @@ class ScheduleCalendar
     #  so the view can eliminate excess whitespace
     earliest_time = raw.min_by(&:start_time).start_time
     @offset = earliest_time.hour*60 + earliest_time.min
-
-    # group by each date and assign ids
-    cntr = 0
-    (@cal_begin..@cal_end).each do |date|
-      @schedules_by_date[date] = raw.select { |s| s.shift_on_date? date }
-      @schedules_by_date[date].map! do |s| 
-        s.cid = (cntr += 1) # schedules need unique ids
-        s.clone             # deep copy, again for unique ids
-      end
-    end
-
-    # group overlapping schedules belonging to the same user
     
+    # wrap schedules into ScheduleGroups and
+    #  further group by date
+    (@cal_begin..@cal_end).each do |date|
+      @schedules_by_date[date] = ScheduleGroup.group( raw.select do |s|
+        s.shift_on_date? date 
+      end ) || []
+    end
   end
 
   # depends on date being set
