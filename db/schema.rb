@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141023191625) do
+ActiveRecord::Schema.define(version: 20141114171228) do
 
   create_table "schedules", force: true do |t|
     t.time     "start_time"
@@ -44,6 +44,8 @@ ActiveRecord::Schema.define(version: 20141023191625) do
     t.string   "department"
     t.string   "lims"
     t.boolean  "admin"
+    t.string   "nickname"
+    t.string   "color"
   end
 
 end
