@@ -32,8 +32,8 @@ class ScheduleCalendar
     earliest_time = raw.min_by(&:start_time).start_time
     @offset = earliest_time.hour*60 + earliest_time.min
     
-    # wrap schedules into ScheduleGroups and
-    #  further group by date
+    # wrap schedules into ScheduleGroups, group by date,
+    #  and calculate their overlap values
     (@cal_begin..@cal_end).each do |date|
       @schedules_by_date[date] = ScheduleGroup.group( raw.select do |s|
         s.shift_on_date? date 

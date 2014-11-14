@@ -9,7 +9,7 @@ $px-per-hour:      48;
 $increment-offset: 4; //4 pixels per 5 minute increment
 
 $column-width: 140px;
-$default-schedule-width: 130px;
+$default-schedule-width: 133px;
 
 #calendar {
   
@@ -20,17 +20,20 @@ $default-schedule-width: 130px;
     height: 650px; //todo: replace fixed height a dynamic one, maybe need clearfix?
 
     .schedule {
-      background-color: #eee;
+      @include hover-highlight;
+
+      overflow: hidden;
 
       // JS switches to absolute positioning and changes
       //  the schedule offsets. If it fails then the schedules
       //  will still be visible with relative positioning
       position: relative;
       height: 150px;
-
       width: $default-schedule-width;
-      overflow: hidden;
-      border: 1px solid black;
+
+      background-color: #eee;
+      border: 1px solid transparent;
+      border-radius: 2px;
 
       .name, .shift-begin, .shift-end {
         color: $schedule-regular;

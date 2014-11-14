@@ -1,4 +1,4 @@
-// for stiewide sass variables
+// for stiewide sass variables and effects
 
 //colors
 $primary-blue:   #cfdfff;
@@ -8,3 +8,18 @@ $active:         #fff9d8;
 $schedule-regular:   #837bdb;
 $schedule-temporary: #14B406;
 $schedule-absent:    #f0827a;
+
+
+// effects
+@mixin hover-highlight {
+  -webkit-transition: border 0.30s, box-shadow 0.30s ease-in-out;
+  -moz-transition: border 0.30s, box-shadow 0.30s ease-in-out;
+  -ms-transition: border 0.30s, box-shadow 0.30s ease-in-out;
+  -o-transition: border 0.30s, box-shadow 0.30s ease-in-out;
+  outline: none;
+
+  &:hover {
+    box-shadow: 0 0 5px $schedule-regular;
+    border: 1px solid $schedule-regular;
+  }
+}

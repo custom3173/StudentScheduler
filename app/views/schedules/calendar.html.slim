@@ -17,11 +17,11 @@
 
         .hourly-view
           - @schedules[date].each do |schedule|
-            .schedule id="sched-#{schedule.object_id}"
+            .schedule data-start_time=schedule.start_time data-overlapping=schedule.overlapping data-overlapped_by=schedule.overlapped_by
               h4.name
                 = schedule.student.short_name
               - schedule.shifts.each do |shift|
                 h5.time
                   = shift[:time]
                 - unless shift[:type] == :end
-                  .b-line
+                  .b-line data-length=shift[:length]

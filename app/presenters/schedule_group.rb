@@ -4,39 +4,51 @@
 #  always belong to a single user. They are given a unique
 #  id at creation for js and css styling
 class ScheduleGroup
+  include Schedulable
+  include ActiveModel::Serializers::JSON
 
   Shift = Struct.new( :time, :group, :type )
 
+  attr_accessor :overlapping, :overlapped_by
   attr_reader :schedules, :student, :start_time, :end_time
 
   def initialize( *schedules )
-    @schedules = Array(schedules)
-    @student = @schedules.first.student
-    @start_time = schedules.min_by(&:start_time).start_time
-    @end_time = schedules.max_by(&:end_time).end_time
-    @shifts = nil
+    @schedules  = Array(schedules)
+    @student    = @schedules.first.student
     _check_owner schedules
+
+    @start_time = schedules.min_by(&:start_time).start_time
+    @end_time   = schedules.max_by(&:end_time).end_time
+    @shifts     = nil
+    @overlapping   = 0
+    @overlapped_by = 0
   end
 
   # take a list of schedules and return a sorted
   #  list of ScheduleGroups
   def self.group( schedules )
     # handle nil and empty arrays
-    unless Enumerable === schedules && schedules.length > 0
-      return nil
-    end
+    return nil unless Enumerable === schedules && schedules.length > 0
 
     schedules.sort_by!(&:start_time)
-    init = ScheduleGroup.new schedules.shift
 
-    schedules.reduce([init]) do |acc, s|
-      if s.overlaps? acc.last 
-        acc.last << s
+    # todo: comments
+    out = Array( ScheduleGroup.new schedules.shift )
+    schedules.reduce( out.clone ) do |lst, s|
+      match = lst.find { |l| l.overlaps? s, match_owner: true }
+      if match
+        match << s
+        lst
       else
-        acc << ScheduleGroup.new(s)
+        new_group = ScheduleGroup.new s
+        out << new_group
+        intersection = lst.select { |l| l.overlaps? new_group, buffer: 30 }
+        intersection.each { |e| e.overlapped_by += 1 }
+        new_group.overlapping = intersection.length
+        intersection << new_group
       end
-      acc
     end
+    out
   end
 
   # the collected start and end times for the schedules.
@@ -74,15 +86,23 @@ class ScheduleGroup
     self
   end
 
-  # Groups overlap another schedule (or group)
-  #  when any of their child schedules overlap
-  #
-  # TODO: take advantage of start_time and end_time
-  #  so this isn't so inefficient
-  def overlaps?( other, options={} )
-    options.merge! match_owner: true
-    @schedules.find { |s| s.overlaps? other, options }
+  # updates the ScheduleGroups' overlap tracking attributes
+  #  whenever self overlaps with other_group
+  def overlaps!( other_group, options={} )
+    if self.overlaps? other_group, options
+      if @start_time <= other_group.start_time
+        other_group.overlapped_by += 1
+        self.overlapping += 1
+      else
+      end
+
+    end
   end
+
+  def attributes
+    { 'start_time' => nil, 'end_time' => nil, 'shifts' => nil }
+  end
+
 
   private
 
@@ -130,9 +150,12 @@ class ScheduleGroup
     out.last.type = :end
     out.each_with_index.map do |e, i|
       time_format = (e.time.min == 0 ? :hour : :short)
+      length = (e.type == :start ? (out[i+1].time - e.time) / 60 : 0)
+
       { 
         id: i,
         time: e.time.to_s(time_format),
+        length: length,
         type: e.type,
         group: Schedule.groups.invert[e.group]
       }
