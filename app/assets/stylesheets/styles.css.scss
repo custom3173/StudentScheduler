@@ -1,17 +1,27 @@
-// for stiewide sass variables and effects
+// for sitewide sass variables and effects
 
 //colors
-$primary-blue:   #cfdfff;
-$secondary-blue: #3876a5;
-$active:         #fff9d8;
+$primary-blue:     #cfdfff;
+$secondary-blue:   #3876a5;
+$active:           #fff9d8;
+$active-highlight: rgba( darken( $active, 40% ), .50 );
 
 $schedule-regular:   #837bdb;
 $schedule-temporary: #14B406;
 $schedule-absent:    #f0827a;
 
+$md-red:             rgb(244, 67, 54);
 
 // effects
-@mixin hover-highlight {
+@mixin top-bottom-highlight( $color ) {
+  $tbh: inset  0  8px 8px -7px $color,
+        inset  0 -8px 8px -7px $color;
+  -moz-box-shadow:    $tbh;
+  -webkit-box-shadow: $tbh;
+  box-shadow:         $tbh;
+}
+
+@mixin hover-highlight( $color: $active-highlight ) {
   -webkit-transition: border 0.30s, box-shadow 0.30s ease-in-out;
   -moz-transition: border 0.30s, box-shadow 0.30s ease-in-out;
   -ms-transition: border 0.30s, box-shadow 0.30s ease-in-out;
@@ -19,7 +29,50 @@ $schedule-absent:    #f0827a;
   outline: none;
 
   &:hover {
-    box-shadow: 0 0 5px $schedule-regular;
-    border: 1px solid $schedule-regular;
+    box-shadow: 0 0 5px $color;
+    border: 1px solid $color;
+  }
+}
+
+@mixin hover-darken( $color: rgba(black, .05) ) {
+  -webkit-transition: background-color 0.30s ease-in-out;
+  -moz-transition: background-color 0.30s ease-in-out;
+  -ms-transition: background-color 0.30s ease-in-out;
+  -o-transition: background-color 0.30s ease-in-out;
+
+  &:hover {
+    background-color: $color;
+  }
+}
+
+// a down pointing arrow
+@mixin top-marker( $color: $md-red, $size: 7px ) {
+  width: 0;
+  height: 0;
+  border-left: $size solid transparent;
+  border-right: $size solid transparent;
+  border-top: $size solid $color;
+}
+
+.mark {
+  @include top-marker;
+}
+
+// fixes
+
+// reset simple form defaults to keep from garbling
+//  the ui buttonset elements
+.simple_form %buttonset-fix {
+
+  div {
+    margin-left: 0;
+    display: inline-block;
+  }
+
+  label.ui-widget {
+    font-weight: normal;
+    margin-right: 0;
+    width: auto;
+    text-align: center;
   }
 }

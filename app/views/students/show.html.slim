@@ -1,0 +1,43 @@
+p#notice = notice
+
+#profile-info
+  
+  .links
+    = link_to 'New Schedule', new_student_schedule_path(@student), class: 'button'
+
+    = link_to 'Call Out', "#{@student.id}/mark_tomorrow_absent",
+      :class => 'button'
+
+    = link_to 'Delete Expired', "#{@student.id}/purge",
+      data: {confirm: 'Delete all expired schedules?'},
+      :class => 'button'
+
+  h2 Profile
+
+  p
+    b> Name:
+    = @student.fullname
+
+  p
+    b> Username:
+    = @student.username
+
+  p
+    b> Department:
+    = @student.department
+
+  = simple_form_for @student do |f|
+    #student-form
+      h2 Calendar Display Options
+      = f.input :nickname
+      = f.label :color
+      #color-selector
+        = f.collection_radio_buttons :color, Student::COLORS, ->(x) { x }, ->(x) { raw '&nbsp;' }
+      = f.button :submit, 'Update'
+
+.schedules
+  - @schedules.each do |type, scheds|
+    - unless scheds.empty?
+      h2 #{type} Schedules
+      .schedule-accordion
+        = render partial: 'students/schedule', collection: scheds

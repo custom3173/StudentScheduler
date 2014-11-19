@@ -56,10 +56,12 @@ class StudentsController < ApplicationController
   def show
     @student = Student.find(params[:id])
 
+    # todo: need scopes and to be a single db call
     _d = Date.today
-    @schedules = Schedule.where('student_id = ? AND start_date <= ? AND end_date >= ?', @student.id, _d, _d)
-    @upcoming_schedules = Schedule.where('student_id = ? AND start_date > ?', @student.id, _d)
-    @expired_schedules = Schedule.where('student_id = ? AND end_date < ?', @student.id, _d)
+    @schedules = {}
+    @schedules['Active']   = Schedule.where('student_id = ? AND start_date <= ? AND end_date >= ?', @student.id, _d, _d)
+    @schedules['Upcoming'] = Schedule.where('student_id = ? AND start_date > ?', @student.id, _d)
+    @schedules['Expired']  = Schedule.where('student_id = ? AND end_date < ?', @student.id, _d)
 
     respond_to do |format|
       format.html # show.html.erb
