@@ -26,14 +26,12 @@ p#notice = notice
     b> Department:
     = @student.department
 
-  = simple_form_for @student do |f|
+  = simple_form_for @student, url: options_path do |f|
     #student-form
       h2 Calendar Display Options
-      = f.input :nickname
-      = f.label :color
-      #color-selector
-        = f.collection_radio_buttons :color, Student::COLORS, ->(x) { x }, ->(x) { raw '&nbsp;' }
-      = f.button :submit, 'Update'
+      = f.input :nickname, maxlength: :lookup
+      = f.input :color, collection: Student::COLORS, as: :radio_buttons, label_method: ->(x) { raw '&nbsp;' }
+      = f.button :submit, 'Save'
 
 .schedules
   - @schedules.each do |type, scheds|

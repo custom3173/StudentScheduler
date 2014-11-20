@@ -25,12 +25,13 @@
     border-radius: 5px;
   }
 
-  #color-selector {
+  .student_color {
     @extend %buttonset-fix;
     position: relative;
 
-    display: inline-block;
-    width: 300px;
+    .control-label {
+      height: 120px;
+    }
 
     .ui-button {
       margin-bottom: 1rem;

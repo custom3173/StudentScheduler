@@ -16,7 +16,8 @@ class Student < ActiveRecord::Base
   has_many :schedules
 
   validates :username, presence: true, uniqueness: { case_sensitive: false }
-  validates :nickname, uniqueness: true, length: { maximum: 10 }
+  validates :nickname, uniqueness: true, length: { maximum: 10 },
+              allow_nil: true, allow_blank: true
   validate  :approved_color
 
   def approved_color
