@@ -13,7 +13,7 @@ class SchedulesController < ApplicationController
   # GET /schedules/1
   # GET /schedules/1.json
   def show
-    @schedule = Schedule.find_by_id(params[:id])
+    @schedule = SchedulePresenter.new Schedule.find_by_id(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

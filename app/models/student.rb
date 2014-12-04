@@ -2,6 +2,7 @@ class Student < ActiveRecord::Base
 
   before_create :set_color_default
 
+  # student calendar display color options 
   COLORS = %w{ 
     #212121 #616161 #9e9e9e #e0e0e0
     #795548 #607D8B #1A237E #1B5E20
@@ -21,21 +22,25 @@ class Student < ActiveRecord::Base
   validate  :approved_color
 
   def approved_color
-    unless COLORS.include? color || color == DEFAULT_COLOR
+    unless color.nil? || color == DEFAULT_COLOR || COLORS.include?(color)
       errors.add :color, 'PICK FROM THE LIST'
     end
   end
 
   # picks a user's displayname
   def name
-    nickname || short_name
+    return nickname unless nickname.blank?
+    short_name
   end
 
   # shortened version of the name
   #  Jeff Ross becomes Jeff R
   def short_name
-      sn = "#{first_name} #{last_name[0,1]}"
-      sn.blank? ? username : sn
+    if first_name && last_name
+      "#{first_name} #{last_name[0,1]}"
+    else
+      username
+    end
   end
 
   def fullname

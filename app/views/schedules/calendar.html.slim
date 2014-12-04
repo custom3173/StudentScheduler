@@ -17,9 +17,9 @@
 
         .hourly-view
           - @schedules[date].each do |schedule|
-            .schedule data-start_time=schedule.start_time data-overlapping=schedule.overlapping data-overlapped_by=schedule.overlapped_by
+            .schedule data-start_time=schedule.start_time data-overlapping=schedule.overlapping data-overlapped_by=schedule.overlapped_by data-color=schedule.student.color
               h4.name
-                = schedule.student.short_name
+                = schedule.student.name
               - schedule.shifts.each do |shift|
                 h5.time
                   = shift[:time]

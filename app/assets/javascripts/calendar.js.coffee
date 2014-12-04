@@ -19,9 +19,18 @@ resizeSchedule = ->
   schedule_width = schedule.width() - (left_offset + gutter_width * sData.overlapped_by)
 
   schedule.css {
-    'position': 'absolute',
-    'left':   "#{left_offset}px",
-    'width':  "#{schedule_width}px"
+    position: 'absolute'
+    left:     left_offset
+    width:    schedule_width
+  }
+
+  # set the user's color
+  textColor = Colors.bgContrast sData.color
+  schedule.find('.name').css {
+    background:  sData.color
+    borderColor: textColor
+    color:       textColor
+
   }
 
   top_offset = (start_time - cal_offset) * px_per_minute
@@ -37,8 +46,8 @@ resizeSchedule = ->
     .reduce (acc, e) -> acc + e
 
   schedule.css {
-    'top':    "#{top_offset}px",
-    'height': "#{schedule_height}px"
+    top:    top_offset
+    height: schedule_height
   }
 
 rubyTimeToMinutes = (datetime_str) ->

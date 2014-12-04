@@ -10,7 +10,7 @@ jQuery(window).load ->
   # set the color options in student profile
   $('.student_color input[type="radio"]').each ->
     $(this).next('label').css {
-      'background': $(this).val()
+      background: $(this).val()
     }
     # place marker on previously selected color at page load
     if $(this).attr('checked') == 'checked'
