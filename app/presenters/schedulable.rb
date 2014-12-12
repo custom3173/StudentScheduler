@@ -5,16 +5,16 @@ module Schedulable
   extend ActiveSupport::Concern
 
   #### presentation
-  
+
   # human readable shift printouts
   def shift_begin
     format = (@start_time.min == 0 ? :hour : :short)
-    "#{@start_time.to_s(format)}"
+    @start_time.to_s(format)
   end
 
   def shift_end
     format = (@end_time.min == 0 ? :hour : :short)
-    "#{@end_time.to_s(format)}"
+    @end_time.to_s(format)
   end
 
   def shift_time

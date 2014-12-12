@@ -1,72 +1,5 @@
 # David Bassett - 2014
 
-# Utilities
-
-# some simple color manipulation utilities
-#  todo: should probably add support for opacity
-class window.Colors
-
-  # calculate a contrasting color in the same hue that is suitable
-  #  as a background for text in the original color
-  @bgContrast: (hex) ->
-    [r, g, b] = @parseHex hex
-    [r, g, b] = @normalizeRGB r, g, b
-    [h, s, l] = @toHSL r, g, b
-
-    l = @contrastLuma [r, g, b]
-    @cssHSL h, s, l
-
-  # select an appropriately contrasting lightness from an
-  #  evaluation of the color's luminance (apparent brightness)
-  @contrastLuma: (rgb) ->
-    luma = 0.2126*rgb[0] + 0.7152*rgb[1] + 0.0722*rgb[2]
-    if luma >= 0.5 then 0.20 else 0.80
-
-  # convert 8bit RGB to linear [0,1]
-  @normalizeRGB: (r, g, b) ->
-    [r/255, g/255, b/255]
-
-  # convert hex string to RGB
-  @parseHex: (hex) ->
-    hex = hex.substring(1) if hex.charAt(0) == '#'
-
-    r = parseInt hex.substr(0,2), 16
-    g = parseInt hex.substr(2,2), 16
-    b = parseInt hex.substr(4,2), 16
-
-    [r, g, b]
-
-  # transform normalized rgb color to hsl
-  #  duplicated from css so returned values can 
-  #  be displayed directly without conversion
-  @toHSL: (r, g, b) ->
-    min = Math.min(r, g, b)
-    max = Math.max(r, g, b)
-    chroma = max - min
-
-    if chroma == 0
-      h = 0
-    else if r == max
-      h = (((g - b) / chroma) % 6) * 60
-    else if g == max
-      h = (((b - r) / chroma) + 2) * 60
-    else
-      h = (((r - g) / chroma) + 4) * 60
-
-    l = (min + max)/2
-
-    if l == 0 || l == 1
-      s = 0
-    else
-      s = chroma / (1 - Math.abs(2 * l - 1))
-
-    [h, s, l]
-
-  # dump hsl output suitable for css
-  @cssHSL: (h, s, l) ->
-    "hsl(#{ Math.round(h) }, #{ Math.round(s*100) }%, #{ Math.round(l*100) }%)"
-
-
 # JQuery plugins
 
 # create a floating marker to highlight important or
@@ -92,11 +25,10 @@ $.fn.mark = (opts) ->
 
     newElem.css {
       position: 'absolute'
-      top:      "#{ Math.floor(top) }px"
-      left:     "#{ Math.floor(left) }px"
+      top:      Math.round(top)
+      left:     Math.round(left)
     }
 
-# defaults
 $.fn.mark.options = {
   type:        'top' # not yet used
   markerClass: 'mark'
@@ -110,3 +42,52 @@ $.fn.mark.options = {
 # remove any marker elements
 $.fn.unmark = -> 
   $(this).prev('.sc-mark').remove()
+
+# Draws a horizontal rule in the provided element
+#  marking the current time for today
+$.fn.drawTimeline = (opts) ->
+  opts = $.extend true, {}, $.fn.drawTimeline.options, opts
+  elem = $(this)
+  d    = new Date
+  timeOffset  = (d.getHours()*60 + d.getMinutes()) * opts.pxPerMin
+
+  top  = opts.offset.top + timeOffset
+  left = opts.offset.left
+
+  newElem = $("<hr/>", {
+    class: opts.class
+  }).prependTo elem
+
+  newElem.zIndex(999)
+
+  newElem.css {
+    position: 'absolute'
+    top:      0
+    left:     Math.round(left)
+  }
+
+  # todo: refactor this
+  setTimeout( ->
+   newElem.css {
+    top: Math.round(top)
+  }, 1)
+
+$.fn.drawTimeline.options = {
+  class:    'timeline'
+  pxPerMin: 0.8
+  offset: {
+    top:    0
+    left:   0
+  }
+}
+
+# hacky method for calculating the width of an elements
+#  rendered text
+# Note: It looks like it is at least a few pixels off
+$.fn.textWidth = ->
+  html_org = $(this).html()
+  html_calc = '<span>' + html_org + '</span>'
+  $(this).html(html_calc)
+  width = $(this).find('span:first').width()
+  $(this).html(html_org)
+  width

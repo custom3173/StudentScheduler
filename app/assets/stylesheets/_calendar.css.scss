@@ -20,10 +20,6 @@ $default-schedule-width: 133px;
     height: 650px; //todo: replace fixed height a dynamic one, maybe need clearfix?
 
     .schedule {
-      @include hover-highlight;
-
-      overflow: hidden;
-
       // JS switches to absolute positioning and changes
       //  the schedule offsets. If it fails then the schedules
       //  will still be visible with relative positioning
@@ -31,36 +27,80 @@ $default-schedule-width: 133px;
       height: 150px;
       width: $default-schedule-width;
 
-      background-color: #eee;
+      background-color: rgba(0, 0, 0, 0.05);
       border: 1px solid transparent;
       border-radius: 2px;
+      overflow: hidden;
+      outline: none;
+      cursor: pointer;
 
-      .name, .shift-begin, .shift-end {
-        color: $schedule-regular;
-      }
+      // hover effects
+      @include transition(
+        background 0.30s,
+        border 0.30s,
+        box-shadow 0.30s ease-in-out
+      );
 
-      .shift-begin,.shift-end {
-        line-height: 20px;
+      &:hover {
+        box-shadow: 0 0 5px $schedule-regular;
+        border: 1px solid $schedule-regular;
+        background: rgba(240, 240, 240, 0.95);
       }
 
       .name {
-        background-color: #eee;
         border-bottom: 2px solid $schedule-regular;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
+      .time {
+        height: 20px;
+        // allows js to measure text width
+        display: inline-block;
+      }
 
       .b-line {
         position: relative;
-        left: 10px;
         height: 30px;
         border-left: 1px solid $schedule-regular;
+
+        // buffer for js to place schedules
+        width: 7px;
+        margin-left: 7px;
       }
+    }
+
+    // bring hovered schedules forward
+    .schedule.selected {
+      z-index: 99;
+      box-shadow: 0 0 5px $secondary-blue;
+      border: 1px solid $secondary-blue;
+      background: rgb(240, 240, 240);
+    }
+
+
+    // the sliding red marker for the current time
+    .timeline {
+      @include fade-hr;
+      @include transition(top 1s ease-in-out);
+
+      position: absolute;
+      top: 0px;
+      width: 96%;
+      margin: 0;
+      // don't interact with mouse
+      pointer-events: none;
     }
   }
 
   .cal-day {
     float: left;
     width: $column-width;
+
+    .day-label {
+      text-align: center;
+    }
   }
 
   .cal-week {}

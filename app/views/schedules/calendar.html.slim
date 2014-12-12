@@ -12,12 +12,12 @@
   .cal-week
     - (@today.beginning_of_week-1..@today.end_of_week-1).each do |date|
 
-      .cal-day
+      = content_tag :div, class: 'cal-day', id: ('td' if date == Date.today)
         h3.day-label = date.to_s(:cal)
 
         .hourly-view
           - @schedules[date].each do |schedule|
-            .schedule data-start_time=schedule.start_time data-overlapping=schedule.overlapping data-overlapped_by=schedule.overlapped_by data-color=schedule.student.color
+            .schedule data-start_time=schedule.start_time data-overlapping=schedule.overlapping data-overlapped_by=schedule.overlapped_by data-color=schedule.student.color data-slot=0
               h4.name
                 = schedule.student.name
               - schedule.shifts.each do |shift|

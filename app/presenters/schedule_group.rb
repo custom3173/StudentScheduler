@@ -154,7 +154,7 @@ class ScheduleGroup
 
       { 
         id: i,
-        time: e.time.to_s(time_format),
+        time: e.time.to_s(time_format).chop,
         length: length,
         type: e.type,
         group: Schedule.groups.invert[e.group]
