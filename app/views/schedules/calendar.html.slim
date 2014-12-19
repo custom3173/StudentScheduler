@@ -1,6 +1,4 @@
-#calendar
-  = data_tag 'schedule-data',
-             {schedules: @schedules, offset: @calendar.offset}
+#calendar data-offset=@calendar.offset
 
   #controls
     #today
@@ -10,18 +8,18 @@
 
 
   .cal-week
-    - (@today.beginning_of_week-1..@today.end_of_week-1).each do |date|
+    - (@calendar.date.beginning_of_week-1..@calendar.date.end_of_week-1).each do |date|
 
       = content_tag :div, class: 'cal-day', id: ('td' if date == Date.today)
         h3.day-label = date.to_s(:cal)
 
         .hourly-view
-          - @schedules[date].each do |schedule|
-            .schedule data-start_time=schedule.start_time data-overlapping=schedule.overlapping data-overlapped_by=schedule.overlapped_by data-color=schedule.student.color data-slot=0
+          - @calendar.schedules_by_date[date].each do |schedule|
+            .schedule data-user_id=schedule.student.id data-offset=schedule.offset data-color=schedule.student.color
               h4.name
                 = schedule.student.name
               - schedule.shifts.each do |shift|
                 h5.time
                   = shift[:time]
                 - unless shift[:type] == :end
-                  .b-line data-length=shift[:length]
+                  .v-div data-length=shift[:length]

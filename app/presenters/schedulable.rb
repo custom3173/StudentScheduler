@@ -21,6 +21,11 @@ module Schedulable
     "#{shift_begin} to #{shift_end}"
   end
 
+  # minutes from the beginning of the day
+  def offset
+    @start_time.hour*60 + @start_time.min
+  end
+
   ### comparison / eval
 
   # true when two schedules' shift times overlap each other

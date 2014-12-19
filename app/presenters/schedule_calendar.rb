@@ -19,6 +19,8 @@ class ScheduleCalendar
   # get the appropriate schedules from model
   def load!
     @schedules_by_date = {}
+    # empty array for dates with no schedules
+    @schedules_by_date.default = []
 
     # check for valid setup before making queries
     unless @cal_begin.acts_like?(:date) && @cal_end.acts_like?(:date)
@@ -29,15 +31,17 @@ class ScheduleCalendar
 
     # set the offset (in minutes) from the earliest schedule
     #  so the view can eliminate excess whitespace
-    earliest_time = raw.min_by(&:start_time).start_time
-    @offset = earliest_time.hour*60 + earliest_time.min
-    
-    # wrap schedules into ScheduleGroups, group by date,
-    #  and calculate their overlap values
+    if raw.empty?
+      @offset = 0
+    else
+      earliest_time = raw.min_by(&:start_time).start_time
+      @offset = earliest_time.hour*60 + earliest_time.min
+    end
+
+    # wrap schedules into ScheduleGroups and group by date
     (@cal_begin..@cal_end).each do |date|
-      @schedules_by_date[date] = ScheduleGroup.group( raw.select do |s|
-        s.shift_on_date? date 
-      end ) || []
+      grouped = ScheduleGroup.group( raw.select {|s| s.shift_on_date? date} )
+      @schedules_by_date[date] = grouped unless grouped.nil?
     end
   end
 
@@ -69,7 +73,7 @@ class ScheduleCalendar
   #  assigns a DateTime/Date object to the instance
   def date=( date_str )
     begin # try to parse the date string
-      @date = DateTime.parse date_str
+      @date = date_str.to_date
     rescue StandardError
       @date = Date.today
     end

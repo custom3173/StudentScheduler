@@ -24,7 +24,6 @@ $default-schedule-width: 133px;
       //  the schedule offsets. If it fails then the schedules
       //  will still be visible with relative positioning
       position: relative;
-      height: 150px;
       width: $default-schedule-width;
 
       background-color: rgba(0, 0, 0, 0.05);
@@ -56,13 +55,13 @@ $default-schedule-width: 133px;
 
       .time {
         height: 20px;
+        line-height: 20px;
         // allows js to measure text width
         display: inline-block;
       }
 
-      .b-line {
-        position: relative;
-        height: 30px;
+      .v-div {
+        height: 1rem;
         border-left: 1px solid $schedule-regular;
 
         // buffer for js to place schedules
