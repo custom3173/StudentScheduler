@@ -4,6 +4,10 @@
     #today
       = link_to 'Today', {date: Date.today}, {class: 'button'}
     #date
+    #users-toggle
+      - @calendar.students.each do |student|
+        = check_box_tag student.id, nil, true
+        = label_tag student.id, student.name
     #type
 
 
@@ -19,7 +23,7 @@
               h4.name
                 = schedule.student.name
               - schedule.shifts.each do |shift|
-                h5.time
+                h5 class="time #{shift[:group]}"
                   = shift[:time]
                 - unless shift[:type] == :end
                   .v-div data-length=shift[:length]

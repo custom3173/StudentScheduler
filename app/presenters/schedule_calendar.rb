@@ -4,7 +4,7 @@
 
 class ScheduleCalendar
 
-  attr_reader   :schedules_by_date, :type, :date, :offset,
+  attr_reader   :schedules_by_date, :students, :type, :date, :offset,
                   :cal_begin, :cal_end
 
   # date: string representation of date
@@ -28,6 +28,9 @@ class ScheduleCalendar
     end
 
     raw = SchedulePresenter.wrap(Schedule.in_date_range(@cal_begin, @cal_end))
+
+    # get a unique sorted list of students appearing in this calendar
+    @students = raw.map(&:student).uniq.sort_by(&:name)
 
     # set the offset (in minutes) from the earliest schedule
     #  so the view can eliminate excess whitespace

@@ -5,6 +5,7 @@ class Calendar
     pxPerMin:   0.8         # controls the height of sized elements
     gutter:     7           # width of the schedule seperators (in px)
     schedClass: '.schedule' #
+    toggled:    '.off'      # schedules switched off by user
     labelClass: '.name'     # css classnames
     timeClass:  '.time'     #
     vDivClass:  '.v-div'    # vertical divider
@@ -70,71 +71,58 @@ class Calendar
     #  schedules overlap each other. This will make calculating their
     #  relative positions possible
     for day in @calendarDays
-      dailySchedules = $(day).find @schedClass
+      dailySchedules = $(day).find(@schedClass).not(@toggled)
       group = [] # overlapping schedules
       console.log "DAY"
       for schedule, i in dailySchedules
         console.log "-Schedule#{i}"
-        col_set = false    # don't increment column after setting
 
-        prev_prev_col = -1
         sd = $(schedule).data()
-        sd.index    = i
-        sd.col      = 0
         sd.left     = 0
-        sd.gutter   = 0
+        sd.index    = i
         sd.overlaps = []
+        sd.col      = null
 
         # keep a list of overlapping schedules and filter out non-overlaps
         #  this keeps the runtime well less than O(n^2) usually
-        group = group.filter (prevSched) ->
+        # todo: this could use further refactoring
+        for prevSched, j in group 
           console.log "--group"
           prev_sd = $(prevSched).data()
 
-          # fill first gap found unless column is already set
-          if !col_set && prev_sd.col > prev_prev_col + 1
-            sd.col = prev_prev_col + 1
+          if prevSched?
+            # schedules overlap
+            if overlapHeight schedule, prevSched
+              if sd.col?
+                prev_sd.overlaps.push sd.index
+                console.log "---Schedule#{i} overlapped by #{prev_sd.index}"
+              else
+                sd.overlaps.push prev_sd.index
+                console.log "---Schedule#{i} overlaps #{prev_sd.index}"
+
+            # schedules do not overlap
+            else 
+              console.log "---Schedule#{i} doesn't overlap #{prev_sd.index}"
+              group[j] = null
+              unless sd.col?
+                console.log "----and it replaces #{prev_sd.index}"
+                sd.col = j
+                group[j] = schedule
+
+          # fill column gaps
+          else if !sd.col?
+            sd.col = j
+            group[j] = schedule
             console.log "---Schedule#{i} found gap in col #{sd.col}"
-            col_set = true
-          
-          prev_prev_col = prev_sd.col
 
-          # schedules overlap; increment col and return true for filter
-          if overlapHeight schedule, prevSched
-            if col_set
-              prev_sd.overlaps.push sd.index
-              console.log "---Schedule#{i} overlapped by #{prev_sd.index}"
-            else
-              sd.overlaps.push prev_sd.index
-              console.log "---Schedule#{i} overlaps #{prev_sd.index}"
-              sd.col++
-            true
-
-          # the schedules don't overlap, new schedule replaces
-          #  the previous and filter out the schedule
-          else 
-            console.log "---Schedule#{i} doesn't overlap #{prev_sd.index}"
-            unless col_set
-              console.log "----and it replaces #{prev_sd.index}"
-              sd.col = prev_sd.col # HERE <<< pushing a schedule on the end doesn't fill the gap
-              col_set = true
-            false
-
-        group.push schedule
-
-        # calculate the width of the gutters
-        # todo: gutters and max_col can be done faster
-        for sched in group
-          sd = $(sched).data()
-          sd.gutter = Math.max(sd.gutter, (group.length) - sd.col)
-
-      max_col = 0
-      $(dailySchedules).each ->
-        col = $(this).data('col')
-        max_col = col if col > max_col
+        # add schedule to end of array unless it was already inserted
+        unless sd.col?
+          sd.col = group.length
+          group.push schedule
 
       # calculate the schedules' offsets
-      for column in [0..max_col]
+      max_column = group.length - 1
+      for column in [0..max_column]
         for s1 in dailySchedules when $(s1).data().col == column
           sd1 = $(s1).data()
 
@@ -142,15 +130,14 @@ class Calendar
             s2 = $(dailySchedules)[i]
             sd2 = $(s2).data()
 
+            # todo: remove constants
             sd1.left = Math.max widestLabel(s2, s1) + sd2.left + 7, sd1.left
 
           $(s1).zIndex sd1.col
           $(s1).css {
             left: sd1.left
-            width: @dayWidth - sd1.left - sd1.gutter * 7
+            width: @dayWidth - sd1.left - (max_column - column + 1) * 7
           }
-
-
 
 
 # some size/proportion controls
@@ -183,23 +170,23 @@ jQuery ->
 
   cal_offset = $('#calendar').data('offset') # todo, refactor
 
-  # colorize and add handlers to schedules
-  $('.schedule').each ->
-    schedule = $(this)
-    #colorize schedule
-    #position schedule
-
-    # bring clicked schedules to the front
-    schedule.click ->
-      $('.selected').removeClass('selected')
-      $(this).addClass('selected')
-
-
-  # place a marker above today's schedules and mark the time
+  # mark the current day and time
   $('#td').mark()
-
   timelineOffset = label_hgt + tag_hgt - cal_offset * px_per_minute
   $('#td').find('.hourly-view').drawTimeline( offset: {top: timelineOffset})
 
+  # draw the calendar
   calendar = new Calendar($('.cal-day'))
   calendar.draw()
+
+  ### actions ###
+
+  # make schedules selectable
+  $('.schedule').click ->
+    $('.selected').removeClass('selected')
+    $(this).addClass('selected')
+
+  # control visibility of schedules per student
+  $('#users-toggle input').change ->
+    $(".schedule[data-user_id='#{$(this).attr('id')}']").toggleClass 'off'
+    calendar.resize()
