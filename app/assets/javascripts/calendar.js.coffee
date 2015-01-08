@@ -166,6 +166,10 @@ widestLabel = (s1, s2) ->
 
 ############ doc ready ############
 jQuery ->
+  # buttonify calendar controls
+  $('a').button()
+  $('#type').buttonset()
+
   tag_hgt       = $('.time').first().height()
 
   cal_offset = $('#calendar').data('offset') # todo, refactor
@@ -173,7 +177,7 @@ jQuery ->
   # mark the current day and time
   $('#td').mark()
   timelineOffset = label_hgt + tag_hgt - cal_offset * px_per_minute
-  $('#td').find('.hourly-view').drawTimeline( offset: {top: timelineOffset})
+  $('#td').find('.detailed-schedules').drawTimeline( offset: {top: timelineOffset})
 
   # draw the calendar
   calendar = new Calendar($('.cal-day'))

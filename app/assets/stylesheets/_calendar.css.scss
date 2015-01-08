@@ -13,77 +13,129 @@ $default-schedule-width: 133px;
 
 #calendar {
   
-  #controls {}
+  #controls {
+    div, h4 {
+      display: inline-block;
+    }
 
-  .hourly-view {
-    position: relative;
-    height: 650px; //todo: replace fixed height a dynamic one, maybe need clearfix?
+    #type {
+      .ui-state-active {
+        @include top-bottom-highlight($active-highlight);
+      }
+    }
 
-    .schedule {
-      // JS switches to absolute positioning and changes
-      //  the schedule offsets. If it fails then the schedules
-      //  will still be visible with relative positioning
+    #users-toggle {
+      display: block;
+      li { list-style: none; }
+    }
+  }
+
+
+  #display {
+    .detailed-schedules {
       position: relative;
-      width: $default-schedule-width;
+      height: 650px; //todo: replace fixed height a dynamic one, maybe need clearfix?
 
-      background-color: rgba(0, 0, 0, 0.05);
-      border: 1px solid transparent;
-      border-radius: 2px;
-      overflow: hidden;
-      outline: none;
-      cursor: pointer;
+      .schedule {
+        // JS switches to absolute positioning and changes
+        //  the schedule offsets. If it fails then the schedules
+        //  will still be visible with relative positioning
+        position: relative;
+        width: $default-schedule-width;
 
-      // hover effects
-      @include transition(
-        background 0.30s,
-        border 0.30s,
-        box-shadow 0.30s ease-in-out
-      );
-
-      &:hover {
-        box-shadow: 0 0 5px $schedule-regular;
-        border: 1px solid $schedule-regular;
-        background: rgba(240, 240, 240, 0.95);
-      }
-
-      .name {
-        border-bottom: 2px solid $schedule-regular;
-        white-space: nowrap;
+        background-color: rgba(0, 0, 0, 0.05);
+        border: 1px solid transparent;
+        border-radius: 2px;
         overflow: hidden;
-        text-overflow: ellipsis;
+        outline: none;
+        cursor: pointer;
+
+        // hover effects
+        @include transition(
+          background 0.30s,
+          border 0.30s,
+          box-shadow 0.30s ease-in-out
+        );
+
+        &:hover {
+          box-shadow: 0 0 5px $schedule-regular;
+          border: 1px solid $schedule-regular;
+          background: rgba(240, 240, 240, 0.95);
+        }
+
+        .name {
+          border-bottom: 2px solid $schedule-regular;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .time {
+          height: 20px;
+          line-height: 20px;
+          // allows js to measure text width
+          display: inline-block;
+
+          // last sched defaults to absent color
+          &:last-child { color: $schedule-absent; }
+        }
+
+        .v-div {
+          height: 1rem;
+          border-left: 1px solid #999;
+
+          // buffer for js to place schedules
+          width: 7px;
+          margin-left: 7px;
+        }
+
+        // set schedule group colors
+        .regular {
+          color: $schedule-regular;
+          & + .v-div { border-color: $schedule-regular; }
+        }
+        .temporary {
+          color: $schedule-temporary;
+          & + .v-div { border-color: $schedule-temporary; }
+        }
+        .absent {
+          color: $schedule-absent;
+          & + .v-div { border-color: $schedule-absent; }
+        }
       }
 
-      .time {
-        height: 20px;
-        line-height: 20px;
-        // allows js to measure text width
-        display: inline-block;
+      // the sliding red marker for the current time
+      .timeline {
+        @include fade-hr;
+        @include transition(top 1s ease-in-out);
 
-        // last sched defaults to absent color
-        &:last-child { color: $schedule-absent; }
+        position: absolute;
+        top: 0px;
+        width: 96%;
+        margin: 0;
+        // don't interact with mouse
+        pointer-events: none;
       }
+    }
 
-      .v-div {
-        height: 1rem;
-        border-left: 1px solid #999;
+    .compact-schedules {
+      .sched {
+        background-color: #eee;
+        border: solid $schedule-regular;
+        border-width: 0 0 2px 7px;
+        border-radius: 20px;
 
-        // buffer for js to place schedules
-        width: 7px;
-        margin-left: 7px;
+        padding-left: 7px;
+        margin: 3px;
       }
+    }
 
-      // set schedule group colors
-      .regular {
-        color: $schedule-regular;
-        & + .v-div { border-color: $schedule-regular; }
-      }
-      .temporary {
-        color: $schedule-temporary;
-        & + .v-div { border-color: $schedule-temporary; }
-      }
-      .absent {
-        color: $schedule-absent;
-        & + .v-div { border-color: $schedule-absent; }
+    .cal-day {
+      float: left;
+      width: $column-width;
+
+      .day-label {
+        text-align: center;
       }
     }
 
@@ -99,31 +151,5 @@ $default-schedule-width: 133px;
     .schedule.off {
       display: none;
     }
-
-
-    // the sliding red marker for the current time
-    .timeline {
-      @include fade-hr;
-      @include transition(top 1s ease-in-out);
-
-      position: absolute;
-      top: 0px;
-      width: 96%;
-      margin: 0;
-      // don't interact with mouse
-      pointer-events: none;
-    }
   }
-
-  .cal-day {
-    float: left;
-    width: $column-width;
-
-    .day-label {
-      text-align: center;
-    }
-  }
-
-  .cal-week {}
-  .cal-month {}
 }

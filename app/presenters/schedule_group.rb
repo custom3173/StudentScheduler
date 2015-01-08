@@ -60,6 +60,25 @@ class ScheduleGroup
     @shifts || @shifts = _calculate_shifts
   end
 
+  # simpler shift display. Returns an array of strings noting
+  #  start/end for working shifts only. Absent shifts are 
+  #  subtracted from the working shifts, but not included
+  #  in the final result
+  def compact_shifts
+    shifts = self.shifts
+    start, fin = nil, nil
+
+    shifts.reduce([]) do |compact, shift|
+      if shift[:group] != 'absent' && shift[:type] != :end
+        start ||= shift[:time]
+      elsif start # not nil
+        compact << "#{start} - #{shift[:time]}"
+        start = nil
+      end
+      compact
+    end
+  end
+
   # append schedules like the group is an array
   def <<( other )
     case other

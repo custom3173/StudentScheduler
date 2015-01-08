@@ -1,0 +1,9 @@
+- detailed_schedules.each do |schedule|
+  .schedule data-user_id=schedule.student.id data-offset=schedule.offset data-color=schedule.student.color
+    h4.name
+      = schedule.student.name
+    - schedule.shifts.each do |shift|
+      h5 class="time #{shift[:group]}"
+        = shift[:time]
+      - unless shift[:type] == :end
+        .v-div data-length=shift[:length]

@@ -5,8 +5,16 @@ class SchedulesController < ApplicationController
 
   # get|post /calendar
   def calendar
-    @calendar = ScheduleCalendar.new(params)
-    @schedules = @calendar.schedules_by_date
+    # persist user's calendar options
+    session[:calendar] ||= HashWithIndifferentAccess.new
+    session[:calendar].merge!(params[:calendar] || {})
+
+    @calendar = ScheduleCalendar.new(session[:calendar])
+
+    respond_to do |format|
+      format.js
+      format.html
+    end
   end
 
   # GET /schedules/1

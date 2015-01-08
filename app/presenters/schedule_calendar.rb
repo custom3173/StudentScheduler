@@ -12,9 +12,44 @@ class ScheduleCalendar
   def initialize( options = {} )
     self.date = options[:date]
     self.type = options[:type] || :week
+    puts options
 
     load!
   end
+
+  ### presentation helpers ###
+
+  # intelligent and concise label for the date
+  #   range that accounts for the display type
+  def print_date_interval
+    case @type
+    when :day
+      @date.strftime "%A, %b %-d, %Y"
+    when :week
+      if @cal_begin.month == @cal_end.month
+        "#{@cal_begin.strftime '%b %-d'} - #{@cal_end.strftime '%-d, %Y'}"
+      elsif @cal_begin.year == @cal_end.year
+        "#{@cal_begin.strftime '%b %-d'} - #{@cal_end.strftime '%b %-d, %Y'}"
+      else
+        "#{@cal_begin.strftime '%b %-d, %Y'} - #{@cal_end.strftime '%b %-d, %Y'}"
+      end
+    when :month
+      @date.strftime "%B %Y"
+    end
+  end
+
+  # get a date from the previous interval range
+  def previous
+    @date - 1.send(@type)
+  end
+
+  # get a date from the next interval
+  def next
+    @date + 1.send(@type)
+  end
+
+
+  ### nuts and bolts
 
   # get the appropriate schedules from model
   def load!
@@ -27,7 +62,9 @@ class ScheduleCalendar
       raise StandardError, "Set valid date and type first"
     end
 
-    raw = SchedulePresenter.wrap(Schedule.in_date_range(@cal_begin, @cal_end))
+    # load schedules and wrap with presenter
+    raw = Schedule.includes(:student).in_date_range(@cal_begin, @cal_end)
+    raw = SchedulePresenter.wrap raw
 
     # get a unique sorted list of students appearing in this calendar
     @students = raw.map(&:student).uniq.sort_by(&:name)
