@@ -1,7 +1,3 @@
-jQuery.ajaxSetup({
-  'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
-});
-
 $(function() {
   /* UI related JS below here */
 

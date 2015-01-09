@@ -11,10 +11,12 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery-ui/accordion
 //= require jquery-ui/datepicker
 //= require jquery-ui/button
 //= require jquery-ui/tooltip
 //= require jquery-ui/slider
+//= turbolinks
 //= require_tree .

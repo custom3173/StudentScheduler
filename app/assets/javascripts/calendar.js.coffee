@@ -1,20 +1,24 @@
 # handles sizing, positioning and coloring the schedules 
 class Calendar
   defaults = {
-    type:       'week'      # the display mode, may be day, week, or month
-    pxPerMin:   0.8         # controls the height of sized elements
-    gutter:     7           # width of the schedule seperators (in px)
-    schedClass: '.schedule' #
-    toggled:    '.off'      # schedules switched off by user
-    labelClass: '.name'     # css classnames
-    timeClass:  '.time'     #
-    vDivClass:  '.v-div'    # vertical divider
+    type:        'week'      # the display mode, may be day, week, or month
+    pxPerMin:    0.8         # controls the height of sized elements
+    gutter:      7           # width of the schedule seperators (in px)
+    calDayClass: '.cal-day'  #
+    schedClass:  '.schedule' #
+    toggled:     '.off'      # schedules switched off by user
+    labelClass:  '.name'     # css classnames
+    timeClass:   '.time'     #
+    vDivClass:   '.v-div'    # vertical divider
   }
 
-  # calendarDays are the schedule containers (jQ obj expected)
-  constructor: (@calendarDays, opts={}) ->
+  # calendar should the parent container of all the display elements
+  constructor: (calendar, opts={}) ->
     # defaults, be cautious about using invalid options
     $.extend @, defaults, opts
+
+    # calendarDays are the schedule containers
+    @calendarDays = $(calendar).find(@calDayClass)
 
     # various dimensions
     @labelHeight = @calendarDays.find(@labelClass).outerHeight(true)
@@ -140,11 +144,6 @@ class Calendar
           }
 
 
-# some size/proportion controls
-#  schedule element heights in pixels
-label_hgt     = 21
-px_per_minute = 48 / 60
-
 
 # returns true when two elements overlap any Y axis
 #  (height) point on the page
@@ -164,11 +163,15 @@ overlapHeight = (x1, x2) ->
 widestLabel = (s1, s2) ->
   Math.max.apply(Math, $(s1).children().not('.name').filter( -> overlapHeight(this, s2)).map( -> $(this).outerWidth(true)))
 
-############ doc ready ############
-jQuery ->
+window.buildCalendar = () ->
   # buttonify calendar controls
   $('a').button()
   $('#type').buttonset()
+
+  # some size/proportion controls
+  #  schedule element heights in pixels
+  label_hgt     = 21
+  px_per_minute = 48 / 60
 
   tag_hgt       = $('.time').first().height()
 
@@ -180,8 +183,9 @@ jQuery ->
   $('#td').find('.detailed-schedules').drawTimeline( offset: {top: timelineOffset})
 
   # draw the calendar
-  calendar = new Calendar($('.cal-day'))
+  calendar = new Calendar '#display'
   calendar.draw()
+
 
   ### actions ###
 
@@ -194,3 +198,11 @@ jQuery ->
   $('#users-toggle input').change ->
     $(".schedule[data-user_id='#{$(this).attr('id')}']").toggleClass 'off'
     calendar.resize()
+
+############ doc ready ############
+jQuery ->
+
+  # request calendar data
+  # NOTE: Sets the variable calendarJSON
+
+  buildCalendar()

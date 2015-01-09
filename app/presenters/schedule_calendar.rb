@@ -5,14 +5,41 @@
 class ScheduleCalendar
 
   attr_reader   :schedules_by_date, :students, :type, :date, :offset,
-                  :cal_begin, :cal_end
+                  :cal_begin, :cal_end, :previous, :next, :date_label
 
   # date: string representation of date
   # type: string or sym in [day, week, month]
   def initialize( options = {} )
-    self.date = options[:date]
-    self.type = options[:type] || :week
-    puts options
+
+    # try to parse the date string
+    begin
+      @date = options[:date].to_date
+    rescue StandardError
+      @date = Date.today
+    end
+
+    # verify the type is valid and set the
+    #  calendar start and end dates
+    type = (options[:type] || :week).to_sym
+    case type
+    when :day
+      @cal_begin, @cal_end = @date, @date
+    when :week
+      @cal_begin = @date.beginning_of_week - 1.day
+      @cal_end   = @date.end_of_week - 1.day
+    when :month
+      @cal_begin = @date.beginning_of_month
+      @cal_end   = @date.end_of_month
+    else raise ArgumentError, "Invalid calendar type: #{type}"
+    end
+
+    # set the calendar type, start and end dates
+    #  and the dates of the next and previous calendar
+    #  of the same type
+    @type          = type
+    @previous      = self.get_previous_date
+    @next          = self.get_next_date
+    @date_label    = self.get_date_interval
 
     load!
   end
@@ -21,7 +48,7 @@ class ScheduleCalendar
 
   # intelligent and concise label for the date
   #   range that accounts for the display type
-  def print_date_interval
+  def get_date_interval
     case @type
     when :day
       @date.strftime "%A, %b %-d, %Y"
@@ -39,12 +66,12 @@ class ScheduleCalendar
   end
 
   # get a date from the previous interval range
-  def previous
+  def get_previous_date
     @date - 1.send(@type)
   end
 
   # get a date from the next interval
-  def next
+  def get_next_date
     @date + 1.send(@type)
   end
 
@@ -82,40 +109,6 @@ class ScheduleCalendar
     (@cal_begin..@cal_end).each do |date|
       grouped = ScheduleGroup.group( raw.select {|s| s.shift_on_date? date} )
       @schedules_by_date[date] = grouped unless grouped.nil?
-    end
-  end
-
-  # depends on date being set
-  def type=( new_type )
-
-    # check that @date quacks like a date
-    unless @date.acts_like? :date
-      raise StandardError, "Invalid date set: #{@date}"
-    end
-
-    new_type = new_type.to_sym
-    case new_type
-    when :day
-      @cal_begin, @cal_end = @date, @date
-    when :week
-      @cal_begin = @date.beginning_of_week - 1.day
-      @cal_end   = @date.end_of_week - 1.day
-    when :month
-      @cal_begin = @date.beginning_of_month
-      @cal_end   = @date.end_of_month
-    else raise ArgumentError, "Invalid calendar type: #{new_type}"
-    end
-
-    @type = new_type
-  end
-
-  # expects a date string and attempts to parse it
-  #  assigns a DateTime/Date object to the instance
-  def date=( date_str )
-    begin # try to parse the date string
-      @date = date_str.to_date
-    rescue StandardError
-      @date = Date.today
     end
   end
 end

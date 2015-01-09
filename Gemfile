@@ -11,6 +11,8 @@ gem 'coffee-rails'
 gem 'uglifier'
 gem 'slim-rails'
 gem 'simple_form'
+gem 'turbolinks'
+gem 'jquery-turbolinks'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
