@@ -4,7 +4,6 @@ class SchedulesController < ApplicationController
   before_filter :user_verification
 
   # get|post /calendar
-  # TODO: split into two methods to prevent doubling work?
   def calendar
     # persist user's calendar options
     session[:calendar] ||= HashWithIndifferentAccess.new

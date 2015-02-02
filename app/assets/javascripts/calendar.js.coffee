@@ -10,6 +10,10 @@ class Calendar
     labelClass:  '.name'     # css classnames
     timeClass:   '.time'     #
     vDivClass:   '.v-div'    # vertical divider
+    todayId:     '#td'       # id for current date
+    detailedClass: '.detailed-schedules'
+    compactClass:  '.compact-scedules'
+
   }
 
   # calendar should the parent container of all the display elements
@@ -35,25 +39,41 @@ class Calendar
 
   draw: ->
     @colorize()
-    @position()
-    @resize()
+    if @type == 'week' || @type == 'day'
+      @detailViewPosition()
+      @detailViewLayers()
+    @markDateAndTime()
 
   # set the colors on the schedule labels
   colorize: ->
-    contrast = {}
-    # don't compute contrast colors more than once
-    for schedule in @schedules when not contrast[ $(schedule).data('color') ]?
-      color = $(schedule).data('color')
-      contrast[ color ] = Colors.bgContrast color
+    for student in $('#controls #students li')
+      userId    = $(student).data 'user'
+      color     = $(student).data 'color'
+      contrast  = Colors.bgContrast color
+      schedules = $(@schedules).filter("[data-user=#{userId}]")
 
-      $(@schedules).filter("[data-color=#{color}]").find(@labelClass).css {
+      # month schedules are their own labels
+      schedules = schedules.find(@labelClass) unless @type == 'month'
+
+      newStyle = {
+        color:       contrast
         background:  color
-        borderColor: contrast[ color ]
-        color:       contrast[ color ]
+        borderColor: contrast
       }
 
-  # Change the height of each schedule and position on the calendar
-  position: ->
+      schedules.css newStyle
+      $(student).find('.name').css newStyle
+
+  # visually mark current day and time
+  markDateAndTime: ->
+    timelineOffset = @labelHeight + @timeHeight - @offset * @pxPerMin
+    $(@todayId)
+      .mark()
+      .find(@detailedClass)
+      .drawTimeline( offset: {top: timelineOffset})
+
+  # Change the height and vertical positiong of each schedule
+  detailViewPosition: ->
     # set the height of the vertical dividers
     for divider in $(@vDivClass)
       duration = $(divider).data 'length'
@@ -70,7 +90,9 @@ class Calendar
       }
 
   # set the width and offset of the schedules relative to each other
-  resize: ->
+  #  and tile them in columns to maximize the visibility of important
+  #  elements
+  detailViewLayers: ->
     # calculate the 'column' of each schedule first and a list of which
     #  schedules overlap each other. This will make calculating their
     #  relative positions possible
@@ -164,26 +186,26 @@ widestLabel = (s1, s2) ->
   Math.max.apply(Math, $(s1).children().not('.name').filter( -> overlapHeight(this, s2)).map( -> $(this).outerWidth(true)))
 
 window.buildCalendar = () ->
-  # buttonify calendar controls
-  $('a').button()
+  # jqui-ify calendar controls
+  $('#date a').first()
+    .button {
+      text: false
+      icons:
+        primary: 'ui-icon-triangle-1-w'
+    }
+    .next().next().button {
+      text: false
+      icons:
+        primary: 'ui-icon-triangle-1-e'
+    }
+  $('#today, #type').children('a').button()
   $('#type').buttonset()
+  $('#students').hoverMenu()
 
-  # some size/proportion controls
-  #  schedule element heights in pixels
-  label_hgt     = 21
-  px_per_minute = 48 / 60
 
-  tag_hgt       = $('.time').first().height()
-
-  cal_offset = $('#calendar').data('offset') # todo, refactor
-
-  # mark the current day and time
-  $('#td').mark()
-  timelineOffset = label_hgt + tag_hgt - cal_offset * px_per_minute
-  $('#td').find('.detailed-schedules').drawTimeline( offset: {top: timelineOffset})
 
   # draw the calendar
-  calendar = new Calendar '#display'
+  calendar = new Calendar( '#display', type: $('#display').data('type') )
   calendar.draw()
 
 
@@ -195,14 +217,17 @@ window.buildCalendar = () ->
     $(this).addClass('selected')
 
   # control visibility of schedules per student
-  $('#users-toggle input').change ->
-    $(".schedule[data-user_id='#{$(this).attr('id')}']").toggleClass 'off'
-    calendar.resize()
+  $('#students li')
+    .click ->
+      # style menu selection
+      $(this).find('.icon').toggleClass 'hidden'
+      $(this).find('.name').toggleClass 'greyed'
+
+      # adjust schedule visibility
+      studentSchedules = $(".schedule[data-user='#{$(this).data('user')}']")
+      studentSchedules.toggleClass 'off'
+      calendar.detailViewLayers()
 
 ############ doc ready ############
 jQuery ->
-
-  # request calendar data
-  # NOTE: Sets the variable calendarJSON
-
   buildCalendar()

@@ -81,6 +81,34 @@ $.fn.drawTimeline.options = {
   }
 }
 
+# take a button and list and create a simple hover menu
+$.fn.hoverMenu = ->
+  menu = $(this)
+
+  menu.find('#menu-text')
+    .button {
+      icons:
+        secondary: "ui-icon-triangle-1-s"
+    }
+
+  # hide and show menu
+  menu.hover ->
+    $(this).find('ul')
+      .stop(true)
+      .toggle {
+        effect: 'blind'
+        duration: 200
+      }
+
+  menu.find('ul')
+    .menu()
+    .position
+      my: 'left top'
+      at: 'left bottom'
+      of: menu.find('#menu-text')
+    .hide()
+  return this
+
 # hacky method for calculating the width of an elements
 #  rendered text
 # Note: It looks like it is at least a few pixels off

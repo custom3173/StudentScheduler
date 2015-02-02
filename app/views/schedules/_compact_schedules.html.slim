@@ -1,3 +1,4 @@
 - schedules.each do |schedule|
     - schedule.compact_shifts.each do |shift|
-      h5.sched data-user_id=schedule.student.id data-color=schedule.student.color = shift
+      h5.schedule data-user=schedule.student.id
+        = shift

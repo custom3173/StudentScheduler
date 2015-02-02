@@ -3,30 +3,83 @@
  * updated 2014
  */
 
-// todo: don't know how many of these are needed
-$time-increment:   5; //minutes
-$px-per-hour:      48;
-$increment-offset: 4; //4 pixels per 5 minute increment
-
 $column-width: 140px;
-$default-schedule-width: 133px;
+$gutter: 7px;
+
+%colorized-name {
+  border-bottom: 2px solid $schedule-regular;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 #calendar {
   
   #controls {
+    margin-bottom: 2rem;
     div, h4 {
       display: inline-block;
     }
 
+    #date{
+      h4 {
+        text-align: center;
+        width: 14rem;
+      }
+    }
+
+    #today{
+      margin-right: 3rem;
+    }
+
     #type {
+      margin-right: 3rem;
       .ui-state-active {
         @include top-bottom-highlight($active-highlight);
       }
     }
 
-    #users-toggle {
-      display: block;
-      li { list-style: none; }
+    #students {
+      position: relative;
+
+      ul, li { @extend .ui-corner-all; }
+
+      // the students toggle menu
+      ul {
+        position: absolute;
+        width: 140px;
+        z-index: 9999;
+
+        li {
+          cursor: pointer;
+
+          .name {
+            @extend %colorized-name;
+            @include fade-to-grey;
+            width: 110px;
+            line-height: 1.2rem;
+          }
+
+          // fix broken jQui menu elements
+          &.ui-menu-item {
+            background: none;
+          }
+          .icon {
+            @extend .ui-icon, .ui-icon-check;
+            position: static;
+            display: inline-block;
+            margin: 3px 5px;
+            background-image: url(red-ui-icons.png);
+          }
+          &:hover .icon {
+            background-image: url(jquery-ui/ui-icons_454545_256x240.png);
+          }
+          .hidden {
+            visibility: hidden;
+          }
+        }
+      }
     }
   }
 
@@ -41,7 +94,7 @@ $default-schedule-width: 133px;
         //  the schedule offsets. If it fails then the schedules
         //  will still be visible with relative positioning
         position: relative;
-        width: $default-schedule-width;
+        width: $column-width - $gutter;
 
         background-color: rgba(0, 0, 0, 0.05);
         border: 1px solid transparent;
@@ -51,23 +104,10 @@ $default-schedule-width: 133px;
         cursor: pointer;
 
         // hover effects
-        @include transition(
-          background 0.30s,
-          border 0.30s,
-          box-shadow 0.30s ease-in-out
-        );
-
-        &:hover {
-          box-shadow: 0 0 5px $schedule-regular;
-          border: 1px solid $schedule-regular;
-          background: rgba(240, 240, 240, 0.95);
-        }
+        @include hover-highlight( $schedule-regular );
 
         .name {
-          border-bottom: 2px solid $schedule-regular;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          @extend %colorized-name;
         }
 
         .time {
@@ -75,9 +115,6 @@ $default-schedule-width: 133px;
           line-height: 20px;
           // allows js to measure text width
           display: inline-block;
-
-          // last sched defaults to absent color
-          &:last-child { color: $schedule-absent; }
         }
 
         .v-div {
@@ -91,8 +128,8 @@ $default-schedule-width: 133px;
 
         // set schedule group colors
         .regular {
-          color: $schedule-regular;
-          & + .v-div { border-color: $schedule-regular; }
+          //color: $schedule-regular;
+          //& + .v-div { border-color: $schedule-regular; }
         }
         .temporary {
           color: $schedule-temporary;
@@ -119,14 +156,15 @@ $default-schedule-width: 133px;
     }
 
     .compact-schedules {
-      .sched {
+      .schedule {
         background-color: #eee;
         border: solid $schedule-regular;
         border-width: 0 0 2px 7px;
         border-radius: 20px;
-
         padding-left: 7px;
         margin: 3px;
+        font-size: 15px;
+        font-weight: bold;
       }
     }
 

@@ -1,5 +1,5 @@
 - schedules.each do |schedule|
-  .schedule data-user_id=schedule.student.id data-offset=schedule.offset data-color=schedule.student.color
+  .schedule data-user=schedule.student.id data-offset=schedule.offset
     h4.name
       = schedule.student.name
     - schedule.shifts.each do |shift|

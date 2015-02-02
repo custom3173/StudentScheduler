@@ -18,5 +18,7 @@
 //= require jquery-ui/button
 //= require jquery-ui/tooltip
 //= require jquery-ui/slider
+//= require jquery-ui/menu
+//= require jquery-ui/effect-blind
 //= turbolinks
 //= require_tree .

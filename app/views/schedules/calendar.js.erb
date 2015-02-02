@@ -1,8 +1,5 @@
-// load calendar data
-var calendarJSON = $.parseJSON("<%= j @calendar.to_json.html_safe %>");
-
 // rerender the calendar display
 $('#calendar').html('<%= j (render partial: "calendar_display", locals: {calendar: @calendar} )%>');
 
 // run the calendar js to fancy everything up
-buildCalendar( );
+buildCalendar();

@@ -29,6 +29,35 @@ $md-red:             rgb(244, 67, 54);
   box-shadow:         $tbh;
 }
 
+@mixin hover-highlight( $color, $speed: 0.3s ) {
+  @include transition(
+    background $speed,
+    box-shadow $speed,
+    border     $speed ease-in-out
+  );
+
+  &:hover {
+    background: rgba(240, 240, 240, 0.95);
+    box-shadow: 0 0 5px $color;
+    border: 1px solid $color;
+  }
+}
+
+// fades element to grey when the class .greyed is found
+@mixin fade-to-grey( $speed: 0.3s ) {
+  @include transition(
+    background-color $speed,
+    border-color     $speed,
+    color            $speed ease-in-out
+  );
+
+  &.greyed {
+    background-color: #e6e6e6 !important;
+    border-color: #676767     !important; 
+    color: #676767            !important;
+  }
+}
+
 // a down pointing arrow
 @mixin top-marker( $color: $md-red, $size: 7px ) {
   width: 0;

@@ -7,13 +7,13 @@ class ScheduleCalendar
   attr_reader   :schedules_by_date, :students, :type, :date, :offset,
                   :cal_begin, :cal_end, :previous, :next, :date_label
 
-  # date: string representation of date
+  # date: :today or string representation of date
   # type: string or sym in [day, week, month]
   def initialize( options = {} )
 
     # try to parse the date string
     begin
-      @date = options[:date].to_date
+      @date = (options[:date] == :today ? Date.today : options[:date].to_date)
     rescue StandardError
       @date = Date.today
     end
@@ -24,9 +24,14 @@ class ScheduleCalendar
     case type
     when :day
       @cal_begin, @cal_end = @date, @date
-    when :week
-      @cal_begin = @date.beginning_of_week - 1.day
-      @cal_end   = @date.end_of_week - 1.day
+    when :week # correct for sunday to be start of the week
+      if @date.sunday? 
+        @cal_begin = @date
+        @cal_end   = @date + 6.days
+      else
+        @cal_begin = @date.beginning_of_week - 1.day
+        @cal_end   = @date.end_of_week - 1.day
+      end
     when :month
       @cal_begin = @date.beginning_of_month
       @cal_end   = @date.end_of_month
@@ -84,26 +89,12 @@ class ScheduleCalendar
     # empty array for dates with no schedules
     @schedules_by_date.default = []
 
-    # check for valid setup before making queries
-    unless @cal_begin.acts_like?(:date) && @cal_end.acts_like?(:date)
-      raise StandardError, "Set valid date and type first"
-    end
-
     # load schedules and wrap with presenter
     raw = Schedule.includes(:student).in_date_range(@cal_begin, @cal_end)
     raw = SchedulePresenter.wrap raw
 
     # get a unique sorted list of students appearing in this calendar
     @students = raw.map(&:student).uniq.sort_by(&:name)
-
-    # set the offset (in minutes) from the earliest schedule
-    #  so the view can eliminate excess whitespace
-    if raw.empty?
-      @offset = 0
-    else
-      earliest_time = raw.min_by(&:start_time).start_time
-      @offset = earliest_time.hour*60 + earliest_time.min
-    end
 
     # wrap schedules into ScheduleGroups and group by date
     (@cal_begin..@cal_end).each do |date|
