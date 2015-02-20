@@ -3,23 +3,33 @@ class Calendar
   defaults = {
     type:        'week'      # the display mode, may be day, week, or month
     pxPerMin:    0.8         # controls the height of sized elements
-    gutter:      7           # width of the schedule seperators (in px)
+    gutter:      7           # width of the schedule separators (in px)
     calDayClass: '.cal-day'  #
     schedClass:  '.schedule' #
     toggled:     '.off'      # schedules switched off by user
     labelClass:  '.name'     # css classnames
     timeClass:   '.time'     #
     vDivClass:   '.v-div'    # vertical divider
-    todayId:     '#td'       # id for current date
+    todayClass:  '.td'       # id for current date
     detailedClass: '.detailed-schedules'
     compactClass:  '.compact-scedules'
 
+  }
+  dayDefaults = { # default overrides for type: 'day' calendars
+    gutter: 28
+  }
+  monthDefaults = { # overrides for type: 'month'
   }
 
   # calendar should the parent container of all the display elements
   constructor: (calendar, opts={}) ->
     # defaults, be cautious about using invalid options
-    $.extend @, defaults, opts
+    if opts.type == 'day'
+      $.extend @, defaults, dayDefaults, opts
+    else if opts.type == 'month'
+      $.extend @, defaults, monthDefaults, opts
+    else
+      $.extend @, defaults, opts
 
     # calendarDays are the schedule containers
     @calendarDays = $(calendar).find(@calDayClass)
@@ -67,7 +77,7 @@ class Calendar
   # visually mark current day and time
   markDateAndTime: ->
     timelineOffset = @labelHeight + @timeHeight - @offset * @pxPerMin
-    $(@todayId)
+    $(@todayClass)
       .mark()
       .find(@detailedClass)
       .drawTimeline( offset: {top: timelineOffset})
@@ -157,12 +167,12 @@ class Calendar
             sd2 = $(s2).data()
 
             # todo: remove constants
-            sd1.left = Math.max widestLabel(s2, s1) + sd2.left + 7, sd1.left
+            sd1.left = Math.max widestLabel(s2, s1) + sd2.left, sd1.left
 
           $(s1).zIndex sd1.col
           $(s1).css {
             left: sd1.left
-            width: @dayWidth - sd1.left - (max_column - column + 1) * 7
+            width: @dayWidth - sd1.left - (max_column - column + 1) * @gutter
           }
 
 
@@ -204,7 +214,7 @@ window.buildCalendar = () ->
 
 
 
-  # draw the calendar
+  # draw the calendar display
   calendar = new Calendar( '#display', type: $('#display').data('type') )
   calendar.draw()
 
@@ -230,4 +240,6 @@ window.buildCalendar = () ->
 
 ############ doc ready ############
 jQuery ->
-  buildCalendar()
+  # condition prevents processing this
+  # on other pages unnecessarily 
+  buildCalendar() if $('#calendar').length

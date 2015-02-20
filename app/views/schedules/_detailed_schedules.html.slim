@@ -1,9 +1,13 @@
-- schedules.each do |schedule|
-  .schedule data-user=schedule.student.id data-offset=schedule.offset
-    h4.name
-      = schedule.student.name
-    - schedule.shifts.each do |shift|
-      h5 class="time #{shift[:group]}"
-        = shift[:time]
-      - unless shift[:type] == :end
-        .v-div data-length=shift[:length]
+- calendar.schedules_by_date.each do |date, schedules|
+  = content_tag :div, class: calendar.date_classes(date)
+    h3.day-label = date.to_s(:cal)
+    .detailed-schedules
+      - schedules.each do |schedule|
+        .schedule data-user=schedule.student.id data-offset=schedule.offset
+          h4.name
+            = schedule.student.name
+          - schedule.shifts.each do |shift|
+            h5 class="time #{shift[:group]}"
+              = shift[:time]
+            - unless shift[:type] == :end
+              .v-div data-length=shift[:length]

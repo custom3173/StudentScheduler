@@ -33,8 +33,8 @@ class ScheduleCalendar
         @cal_end   = @date.end_of_week - 1.day
       end
     when :month
-      @cal_begin = @date.beginning_of_month
-      @cal_end   = @date.end_of_month
+      @cal_begin = @date.beginning_of_month.beginning_of_week(:sunday)
+      @cal_end   = @date.end_of_month.end_of_week(:sunday)
     else raise ArgumentError, "Invalid calendar type: #{type}"
     end
 
@@ -78,6 +78,16 @@ class ScheduleCalendar
   # get a date from the next interval
   def get_next_date
     @date + 1.send(@type)
+  end
+
+  # get class selectors to distinguish important days
+  def date_classes(date)
+    selectors = []
+    selectors << 'td' if date == Date.today
+    if date < @date.beginning_of_month || date > @date.end_of_month
+      selectors << 'not-month'
+    end
+    selectors << 'cal-day'
   end
 
 

@@ -3,9 +3,6 @@
  * updated 2014
  */
 
-$column-width: 140px;
-$gutter: 7px;
-
 %colorized-name {
   border-bottom: 2px solid $schedule-regular;
   white-space: nowrap;
@@ -85,61 +82,72 @@ $gutter: 7px;
 
 
   #display {
+
+    // override default styles for specific calendar types
+    &[data-type="day"] {
+      .cal-day {
+        width: 420px;
+        margin: 0 auto;
+      }
+      .day-label {  }
+      .schedule {
+        .time {
+          margin-right: 20px;
+        }
+        .v-div {
+          margin: 0 20px 0 7px;
+        }
+      }
+    }
+
+    &[data-type="week"] {
+      .cal-day {
+        float: left;
+        width: 140px;
+      }
+    }
+
+    &[data-type="month"] {
+      .weekday {
+        float: left;
+        width: 140px;
+        text-align: center;
+      }
+
+      .cal-day {
+        float: left;
+        width: 140px;
+        height: 180px; // todo: this must be set uniformly and handle overflow
+
+        .day-label {
+          text-align: left;
+          margin: 5px;
+        }
+        .schedule {
+          background-color: #eee;
+          border: solid $schedule-regular;
+          border-width: 0 0 2px 7px;
+          border-radius: 20px;
+          padding-left: 7px;
+          margin: 3px;
+          font-size: 15px;
+          font-weight: bold;
+        }
+      }
+
+      .not-month {
+        background-color: #eee;
+        * {
+          opacity: 0.8;
+        }
+      }
+    }
+
+    .day-label { text-align: center; }
+
     .detailed-schedules {
       position: relative;
       height: 650px; //todo: replace fixed height a dynamic one, maybe need clearfix?
-
-      .schedule {
-        // JS switches to absolute positioning and changes
-        //  the schedule offsets. If it fails then the schedules
-        //  will still be visible with relative positioning
-        position: relative;
-        width: $column-width - $gutter;
-
-        background-color: rgba(0, 0, 0, 0.05);
-        border: 1px solid transparent;
-        border-radius: 2px;
-        overflow: hidden;
-        outline: none;
-        cursor: pointer;
-
-        // hover effects
-        @include hover-highlight( $schedule-regular );
-
-        .name {
-          @extend %colorized-name;
-        }
-
-        .time {
-          height: 20px;
-          line-height: 20px;
-          // allows js to measure text width
-          display: inline-block;
-        }
-
-        .v-div {
-          height: 1rem;
-          border-left: 1px solid #999;
-
-          // buffer for js to place schedules
-          width: 7px;
-          margin-left: 7px;
-        }
-
-        // set schedule group colors
-        .regular {
-          //color: $schedule-regular;
-          //& + .v-div { border-color: $schedule-regular; }
-        }
-        .temporary {
-          color: $schedule-temporary;
-          & + .v-div { border-color: $schedule-temporary; }
-        }
-        .absent {
-          color: $schedule-absent;
-          & + .v-div { border-color: $schedule-absent; }
-        }
-      }
 
       // the sliding red marker for the current time
       .timeline {
@@ -155,25 +163,57 @@ $gutter: 7px;
       }
     }
 
-    .compact-schedules {
-      .schedule {
-        background-color: #eee;
-        border: solid $schedule-regular;
-        border-width: 0 0 2px 7px;
-        border-radius: 20px;
-        padding-left: 7px;
-        margin: 3px;
-        font-size: 15px;
-        font-weight: bold;
+    // general schedule defaults
+    .schedule {
+      // JS switches to absolute positioning and changes
+      //  the schedule offsets. If it fails then the schedules
+      //  will still be visible with relative positioning
+      position: relative;
+
+      background-color: rgba(0, 0, 0, 0.05);
+      border: 1px solid transparent;
+      border-radius: 2px;
+      overflow: hidden;
+      outline: none;
+      cursor: pointer;
+
+      // hover effects
+      @include hover-highlight( $schedule-regular );
+
+      .name {
+        @extend %colorized-name;
+        padding-left: 2px;
       }
-    }
 
-    .cal-day {
-      float: left;
-      width: $column-width;
+      .time {
+        height: 20px;
+        line-height: 20px;
+        margin-right: 7px;
+        // allows js to measure text width
+        display: inline-block;
+      }
 
-      .day-label {
-        text-align: center;
+      .v-div {
+        height: 1rem;
+        border-left: 1px solid #999;
+
+        // buffer for js to place schedules
+        width: 7px;
+        margin: 0 7px;
+      }
+
+      // set schedule group colors
+      .regular {
+        //color: $schedule-regular;
+        //& + .v-div { border-color: $schedule-regular; }
+      }
+      .temporary {
+        color: $schedule-temporary;
+        & + .v-div { border-color: $schedule-temporary; }
+      }
+      .absent {
+        color: $schedule-absent;
+        & + .v-div { border-color: $schedule-absent; }
       }
     }
 

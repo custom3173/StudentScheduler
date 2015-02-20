@@ -1,4 +1,9 @@
-- schedules.each do |schedule|
-    - schedule.compact_shifts.each do |shift|
-      h5.schedule data-user=schedule.student.id
-        = shift
+- Date::DAYNAMES.each do |day|
+  h3.weekday = day
+- calendar.schedules_by_date.each do |date, schedules|
+  = content_tag :div, class: calendar.date_classes(date)
+    h4.day-label = date.strftime "%-m/%-d"
+    - schedules.each do |schedule|
+        - schedule.compact_shifts.each do |shift|
+          h5.schedule data-user=schedule.student.id
+            = shift

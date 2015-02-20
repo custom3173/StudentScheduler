@@ -22,18 +22,8 @@
           h4.name = student.name
 
 #display data-type=calendar.type
-  - (calendar.cal_begin..calendar.cal_end).each do |date|
-    = content_tag :div, class: 'cal-day', id: ('td' if date == Date.today)
-      h3.day-label = date.to_s(:cal)
+  - if calendar.type == :day || calendar.type == :week
+    = render partial: 'detailed_schedules', locals: {calendar: calendar}
 
-      - if calendar.type == :day
-        .detailed-schedules
-          = render partial: 'detailed_schedules', locals: {schedules: calendar.schedules_by_date[date]}
-
-      - elsif calendar.type == :week
-        .detailed-schedules
-          = render partial: 'detailed_schedules', locals: {schedules: calendar.schedules_by_date[date]}
-
-      - elsif calendar.type == :month
-        .compact-schedules
-          = render partial: 'compact_schedules', locals: {schedules: calendar.schedules_by_date[date]}
+  - elsif calendar.type == :month
+    = render partial: 'compact_schedules', locals: {calendar: calendar}
