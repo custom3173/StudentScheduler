@@ -1,17 +1,17 @@
 #controls
 
   #date
-    = link_to '<', calendar: {date: calendar.previous}, remote: true
+    = link_to 'Previous', calendar: {date: calendar.previous}, remote: true
     h4 = calendar.date_label
-    = link_to '>', calendar: {date: calendar.next}, remote: true
+    = link_to 'Next', calendar: {date: calendar.next}, remote: true
 
   #today
     = link_to 'Today', calendar: {date: :today}, remote: true
 
   #type
-    = link_to 'Day',   calendar: {type: :day}, remote: true
-    = link_to 'Week',  calendar: {type: :week}, remote: true
-    = link_to 'Month', calendar: {type: :month}, remote: true
+    = link_to 'Day',   {calendar: {type: :day}, remote: true},   id: 'day'
+    = link_to 'Week',  {calendar: {type: :week}, remote: true},  id: 'week'
+    = link_to 'Month', {calendar: {type: :month}, remote: true}, id: 'month'
 
   #students
     #menu-text Students

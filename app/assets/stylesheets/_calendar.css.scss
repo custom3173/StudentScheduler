@@ -32,7 +32,10 @@
 
     #type {
       margin-right: 3rem;
-      .ui-state-active {
+
+      // force active appearance for links styled with buttonset
+      .forced-active {
+        @extend .ui-state-active;
         @include top-bottom-highlight($active-highlight);
       }
     }
@@ -82,6 +85,9 @@
 
 
   #display {
+    .cal-day {
+      position: relative;
+    }
 
     // override default styles for specific calendar types
     &[data-type="day"] {
@@ -115,9 +121,11 @@
       }
 
       .cal-day {
-        float: left;
+        display: inline-block;
+        vertical-align: top;
         width: 140px;
-        height: 180px; // todo: this must be set uniformly and handle overflow
+        min-height: 140px;
+        margin-bottom: 10px;
 
         .day-label {
           text-align: left;

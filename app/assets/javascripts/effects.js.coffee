@@ -10,24 +10,20 @@ $.fn.mark = (opts) ->
   this.each ->
     elem = $(this)
 
-    # get these now before the marker is placed
-    top  = elem.position().top + opts.offset.top
-    left = elem.position().left + opts.offset.left
-
-    newElem = $("<span/>", {
+    marker = $("<span/>", {
       class: [opts.markerClass, 'sc-mark'].join ' '
-    }).insertBefore elem
+    }).prependTo elem
 
-    newElem.zIndex(999)
+    marker.css { position: 'absolute' }
 
-    top  -= opts.markerHeight * 1.3
-    left += (elem.outerWidth() - newElem.outerWidth()) / 2
-
-    newElem.css {
-      position: 'absolute'
-      top:      Math.round(top)
-      left:     Math.round(left)
+    marker.zIndex(999)
+    marker.position {
+      my: 'bottom-30%'
+      at: 'top'
+      of: elem
+      collision: 'none'
     }
+  return this
 
 $.fn.mark.options = {
   type:        'top' # not yet used
@@ -41,7 +37,7 @@ $.fn.mark.options = {
 
 # remove any marker elements
 $.fn.unmark = -> 
-  $(this).prev('.sc-mark').remove()
+  $(this).children('.sc-mark').remove()
 
 # Draws a horizontal rule in the provided element
 #  marking the current time for today

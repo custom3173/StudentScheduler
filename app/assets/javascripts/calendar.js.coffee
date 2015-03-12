@@ -76,11 +76,26 @@ class Calendar
 
   # visually mark current day and time
   markDateAndTime: ->
-    timelineOffset = @labelHeight + @timeHeight - @offset * @pxPerMin
-    $(@todayClass)
+    if $(@todayClass).length
+      timelineOffset = @labelHeight + @timeHeight - @offset * @pxPerMin
+      
+      # disable today button
+      $('#today > a').button('disable')
+
+      $(@todayClass)
       .mark()
       .find(@detailedClass)
       .drawTimeline( offset: {top: timelineOffset})
+
+  # update the calendar view after elements are 
+  #  changed/hidden in a way that doesn't require a
+  #  complete redraw
+  refreshDisplay: ->
+  if @type == 'week' || @type == 'day'
+    @detailViewPosition()
+  else
+    # placeholder for month change refactors
+
 
   # Change the height and vertical positiong of each schedule
   detailViewPosition: ->
@@ -180,14 +195,8 @@ class Calendar
 # returns true when two elements overlap any Y axis
 #  (height) point on the page
 overlapHeight = (x1, x2) ->
-  a = {
-    top: $(x1).offset().top
-    bot: $(x1).offset().top + $(x1).height()
-  }
-  b = {
-    top: $(x2).offset().top
-    bot: $(x2).offset().top + $(x2).height()
-  }
+  a = {top: $(x1).offset().top, bot: $(x1).offset().top + $(x1).height()}
+  b = {top: $(x2).offset().top, bot: $(x2).offset().top + $(x2).height()}
   a.top <= b.bot and a.bot >= b.top
 
 # returns the widest time label from schedule s1
@@ -196,6 +205,8 @@ widestLabel = (s1, s2) ->
   Math.max.apply(Math, $(s1).children().not('.name').filter( -> overlapHeight(this, s2)).map( -> $(this).outerWidth(true)))
 
 window.buildCalendar = () ->
+  # todo: this should be refactored into the Calendar class
+
   # jqui-ify calendar controls
   $('#date a').first()
     .button {
@@ -209,13 +220,18 @@ window.buildCalendar = () ->
         primary: 'ui-icon-triangle-1-e'
     }
   $('#today, #type').children('a').button()
-  $('#type').buttonset()
   $('#students').hoverMenu()
 
+  # todo: refactor into cal constructor
+  type = $('#display').data('type')
 
+  $('#type')
+    .buttonset()
+    .children("##{type}")
+      .addClass('forced-active')
 
   # draw the calendar display
-  calendar = new Calendar( '#display', type: $('#display').data('type') )
+  calendar = new Calendar( '#display', type: type )
   calendar.draw()
 
 
@@ -236,7 +252,7 @@ window.buildCalendar = () ->
       # adjust schedule visibility
       studentSchedules = $(".schedule[data-user='#{$(this).data('user')}']")
       studentSchedules.toggleClass 'off'
-      calendar.detailViewLayers()
+      calendar.refreshDisplay()
 
 ############ doc ready ############
 jQuery ->
