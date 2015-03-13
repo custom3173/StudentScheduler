@@ -2,7 +2,7 @@ p#notice #{notice}
 
 p = link_to 'Edit', edit_student_schedule_path(@student, @schedule), class: 'edit'
 
-p Student: #{ @schedule.student.short_name }
+p Student: #{ @schedule.student.displayName }
 
 p Shift start: #{ l @schedule.start_time }
 

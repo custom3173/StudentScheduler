@@ -1,23 +1,17 @@
 class StudentsController < ApplicationController
-
-  before_filter :load_student,
+  before_filter :set_student,
     only: [:show, :edit, :update, :update_display_options,
            :destroy, :purge_expired_schedules]
 
-  before_filter :load_user_into_session
+  before_action(except: [:show, :update_display_options, :purge_expired_schedules]) { |c| c.require_group :admin }
 
-  before_filter :admin_verification,
-    :except => [:calendar, :show, :purge_expired_schedules]
-
-  before_filter :user_verification,
-    :only => [:show, :purge_expired_schedules]
-
+  # todo: replace with an AR scope
   def index
-    @students = Student.where("admin = false")
+    @students = Student.where(group: 'student')
   end
 
   def administrators
-    @students = Student.where("admin = true")
+    @students = Student.where(group: 'admin')
   end
 
   def show
@@ -65,6 +59,7 @@ class StudentsController < ApplicationController
     redirect_to students_url
   end
 
+  # todo: goes in schedules controller
   def purge_expired_schedules
     _schedules = Schedule.where('student_id = ? AND end_date < ?', @student.id, Date.today)
     _schedules.each {|s| s.destroy}
@@ -74,8 +69,8 @@ class StudentsController < ApplicationController
 
   private
 
-  def load_student
-    @student = Student.find(params[:id])
+  def set_student
+    @student = Student.find params[:id]
   end
 
   def load_student_schedules
@@ -91,11 +86,7 @@ class StudentsController < ApplicationController
 
   # administrator permitted attributes
   def student_params
-    params.require(:student).permit(
-      :first_name, :last_name, :username,   :email,
-      :department, :lims,      :admin,      :color,
-      :nickname
-    )
+    params.require(:student).permit(:umbcusername, :group, :color, :nickname)
   end
 
   # student options

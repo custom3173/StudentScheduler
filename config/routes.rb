@@ -1,6 +1,5 @@
 Studentscheduler::Application.routes.draw do
-
-  #resources :students, :schedules
+  mount Shibbolite::Engine => '/shibbolite'
 
   resources :students do
     resources :schedules

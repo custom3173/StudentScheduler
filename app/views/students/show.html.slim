@@ -16,15 +16,15 @@ p#notice = notice
 
   p
     b> Name:
-    = @student.fullname
+    = @student.displayName
 
   p
     b> Username:
-    = @student.username
+    = @student.umbcusername
 
   p
     b> Department:
-    = @student.department
+    = @student.umbcDepartment
 
   = simple_form_for @student, url: options_path do |f|
     #student-form

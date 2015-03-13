@@ -1,7 +1,10 @@
 class SchedulesController < ApplicationController
-
-  before_filter :load_student
-  before_filter :user_verification
+  before_action :use_attributes_if_available, only: [:show, :calendar]
+  before_action :set_schedule, only: [:show, :edit, :update, :destroy]
+  before_action :set_student, except: :calendar
+  before_action(only: [:new, :create, :edit, :update, :destroy]) do |c|
+    c.require_group_or_id :admin, @student.id
+  end
 
   # get|post /calendar
   def calendar
@@ -17,19 +20,13 @@ class SchedulesController < ApplicationController
     end
   end
 
-  # GET /schedules/1
-  # GET /schedules/1.json
   def show
-    @schedule = SchedulePresenter.new Schedule.find_by_id(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @schedule }
     end
   end
 
-  # GET /schedules/new
-  # GET /schedules/new.json
   def new
     @schedule = @student.schedules.new
 
@@ -44,13 +41,9 @@ class SchedulesController < ApplicationController
     end
   end
 
-  # GET /schedules/1/edit
   def edit
-    @schedule = @student.schedules.find(params[:id])
   end
 
-  # POST /schedules
-  # POST /schedules.json
   def create
     @schedule = @student.schedules.new(schedule_params)
 
@@ -58,9 +51,8 @@ class SchedulesController < ApplicationController
       if @schedule.save
 
         # send notification email
-        editor = Student.find_by_username(session[:username])
-        Student.where("admin = true").push(@student).each do |recipient|
-          ServiceMailer.created_schedule_email(recipient, @student, editor, @schedule).deliver unless recipient.email.nil?
+        Student.where(group: 'admin').push(@student).each do |recipient|
+          ServiceMailer.created_schedule_email(recipient, @student, current_user, @schedule).deliver unless recipient.mail.nil?
         end
 
         format.html { redirect_to [@student, @schedule], notice: 'Schedule was successfully created.' }
@@ -72,19 +64,15 @@ class SchedulesController < ApplicationController
     end
   end
 
-  # PUT /schedules/1
-  # PUT /schedules/1.json
   def update
-    @schedule = @student.schedules.find(params[:id])
     old_schedule = @schedule.dup # save the old schedule before it updates to send it to the mailer
 
     respond_to do |format|
       if @schedule.update_attributes(schedule_params)
 
         # send notification email
-        editor = Student.find_by_username(session[:username])
-        Student.where("admin = true").push(@student).each do |recipient|
-          ServiceMailer.updated_schedule_email(recipient, @student, editor, old_schedule, @schedule).deliver unless recipient.email.nil?
+        Student.where(group: 'admin').push(@student).each do |recipient|
+          ServiceMailer.updated_schedule_email(recipient, @student, current_user, old_schedule, @schedule).deliver unless recipient.mail.nil?
         end
 
         format.html { redirect_to [@student, @schedule], notice: 'Schedule was successfully updated.' }
@@ -96,17 +84,14 @@ class SchedulesController < ApplicationController
     end
   end
 
-  # DELETE /schedules/1
-  # DELETE /schedules/1.json
   def destroy
-    @schedule = @student.schedules.find(params[:id])
-    old_schedule = @schedule.dup # save the old schedule before it is deleted to send it to the mailer
+    # save the old schedule before it is deleted to send it to the mailer
+    old_schedule = @schedule.dup
     @schedule.destroy
 
     # send notification email
-    editor = Student.find_by_username(session[:username])
-    Student.where("admin = true").push(@student).each do |recipient|
-      ServiceMailer.deleted_schedule_email(recipient, @student, editor, old_schedule).deliver unless recipient.email.nil?
+    Student.where(group: 'admin').push(@student).each do |recipient|
+      ServiceMailer.deleted_schedule_email(recipient, @student, current_user, old_schedule).deliver unless recipient.mail.nil?
     end
 
     respond_to do |format|
@@ -116,6 +101,8 @@ class SchedulesController < ApplicationController
   end
 
   # post /students/1/mark_tomorrow_absent
+  # todo: complete overhaul of these
+  # fixme: need to have authentication replaced
   def mark_tomorrow_absent_form
     @student = Student.find(params[:id])
     @schedule = @student.schedules.new
@@ -143,30 +130,29 @@ class SchedulesController < ApplicationController
     if @schedule.save
 
       # send notification email
-      editor = Student.find_by_username(session[:username])
-      Student.where("admin = true").push(@student).each do |recipient|
-        ServiceMailer.called_out_tomorrow_email(recipient, @student, editor, @schedule).deliver unless recipient.email.nil?
+      Student.where(group: 'admin').push(@student).each do |recipient|
+        ServiceMailer.called_out_tomorrow_email(recipient, @student, current_user, @schedule).deliver unless recipient.mail.nil?
       end
 
       redirect_to @student, notice: 'Your schedule has been updated.'
     else
       render action: 'mark_tomorrow_absent_form'
     end
-
   end
 
   private
+
+  def set_schedule
+    @schedule = SchedulePresenter.new Schedule.find(params[:id])
+  end
+
+  def set_student
+    @student = Student.find params[:student_id]
+  end
 
   def schedule_params
     params.require(:schedule).permit(:description, :end_date, :end_time,
       :friday, :monday, :saturday, :start_date, :start_time, :group,
       :student_id, :sunday, :thursday, :tuesday, :wednesday)
   end
-
-  def load_student
-    if params[:student_id]
-      @student = Student.find_by_id(params[:student_id])
-    end
-  end
-
 end

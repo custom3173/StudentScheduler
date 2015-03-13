@@ -4,7 +4,7 @@
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 </head>
 <body>
-<%= content_tag :h2, (@self_edited ? "#{@student.username} created a schedule" : "#{@editor.username} created a schedule for #{@student.username}") %>
+<%= content_tag :h2, (@self_edited ? "#{@student.umbcusername} created a schedule" : "#{@editor.umbcusername} created a schedule for #{@student.umbcusername}") %>
 
 <h3>New Schedule</h3>
 <%= render :partial => 'schedule_email', :locals => {:schedule => @schedule} %>

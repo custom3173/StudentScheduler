@@ -4,7 +4,7 @@ class ServiceMailer < ActionMailer::Base
   def test_email(recipient)
     @recipient = recipient
 
-    mail(:to => recipient.email, :subject => "Test email")
+    mail(:to => recipient.mail, :subject => "Test email")
   end
 
   # recipient is the Student who should receive the email
@@ -16,10 +16,10 @@ class ServiceMailer < ActionMailer::Base
     @editor = editor
     @old_schedule = old_schedule
     @new_schedule = new_schedule
-    @self_edited = editor.username == student.username
+    @self_edited = editor.umbcusername == student.umbcusername
 
-    @self_edited ? subject = "#{student.username} updated a schedule" : subject = "#{editor.username} updated a schedule for #{student.username}"
-    mail(:to => recipient.email, :subject => subject)
+    @self_edited ? subject = "#{student.umbcusername} updated a schedule" : subject = "#{editor.umbcusername} updated a schedule for #{student.umbcusername}"
+    mail(:to => recipient.mail, :subject => subject)
   end
 
   def created_schedule_email(recipient, student, editor, schedule)
@@ -27,10 +27,10 @@ class ServiceMailer < ActionMailer::Base
     @student = student
     @editor = editor
     @schedule = schedule
-    @self_edited = editor.username == student.username
+    @self_edited = editor.umbcusername == student.umbcusername
 
-    @self_edited ? subject = "#{student.username} created a new schedule" : subject = "#{editor.username} created a schedule for #{student.username}"
-    mail(:to => recipient.email, :subject => subject)
+    @self_edited ? subject = "#{student.umbcusername} created a new schedule" : subject = "#{editor.umbcusername} created a schedule for #{student.umbcusername}"
+    mail(:to => recipient.mail, :subject => subject)
   end
 
   def deleted_schedule_email(recipient, student, editor, schedule)
@@ -38,10 +38,10 @@ class ServiceMailer < ActionMailer::Base
     @student = student
     @editor = editor
     @schedule = schedule
-    @self_edited = editor.username == student.username
+    @self_edited = editor.umbcusername == student.umbcusername
 
-    @self_edited ? subject = "#{student.username} deleted a schedule" : subject = "#{editor.username} deleted a schedule for #{student.username}"
-    mail(:to => recipient.email, :subject => subject)
+    @self_edited ? subject = "#{student.umbcusername} deleted a schedule" : subject = "#{editor.umbcusername} deleted a schedule for #{student.umbcusername}"
+    mail(:to => recipient.mail, :subject => subject)
   end
 
   def called_out_tomorrow_email(recipient, student, editor, schedule)
@@ -49,9 +49,9 @@ class ServiceMailer < ActionMailer::Base
     @student = student
     @editor = editor
     @schedule = schedule
-    @self_edited = editor.username == student.username
+    @self_edited = editor.umbcusername == student.umbcusername
 
-    @self_edited ? subject = "#{student.username} has called out of work tomorrow" : subject = "#{editor.username} has cancelled #{@student.username}'s shift tomorrow}"
-    mail(:to => recipient.email, :subject => subject)
+    @self_edited ? subject = "#{student.umbcusername} has called out of work tomorrow" : subject = "#{editor.umbcusername} has cancelled #{@student.umbcusername}'s shift tomorrow}"
+    mail(:to => recipient.mail, :subject => subject)
   end
 end

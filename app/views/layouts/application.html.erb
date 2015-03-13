@@ -15,11 +15,11 @@
   </div>
   <div id="menu">
     <span><%= link_to 'Calendar', calendar_path, class: 'button' %></span>
-    <% if session[:admin] %>
+    <% if user_in_group? :admin %>
         <span><%= link_to 'Students', students_path, class: 'button' %></span>
         <span><%= link_to 'Admins', administrators_path, class: 'button' %></span>
     <% end %>
-    <% if session[:registered] and not session[:admin] %>
+    <% if user_in_group? :students %>
         <span><%= link_to 'My Schedules', student_path(session[:user_id]), class: 'button' %></span>
         <span><%= link_to 'New Schedule', new_student_schedule_path(session[:user_id]), class: 'button' %></span>
     <% end %>

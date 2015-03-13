@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141114171228) do
+ActiveRecord::Schema.define(version: 20150312163848) do
 
   create_table "schedules", force: true do |t|
     t.time     "start_time"
@@ -34,18 +34,15 @@ ActiveRecord::Schema.define(version: 20141114171228) do
   end
 
   create_table "students", force: true do |t|
-    t.string   "username"
-    t.string   "first_name"
-    t.string   "last_name"
+    t.string   "umbcusername"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "campus_id"
-    t.string   "email"
-    t.string   "department"
-    t.string   "lims"
-    t.boolean  "admin"
+    t.string   "mail"
+    t.string   "umbcDepartment"
     t.string   "nickname"
     t.string   "color"
+    t.string   "group"
+    t.string   "displayName"
   end
 
 end

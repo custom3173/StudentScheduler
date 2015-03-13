@@ -12,12 +12,12 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :username %><br />
-    <%= f.text_field :username %>
+    <%= f.label :umbcusername %><br />
+    <%= f.text_field :umbcusername %>
   </div>
   <div class="field">
-    <%= f.label :admin, "Administrator" %><br />
-    <%= f.check_box :admin %>
+    <%= f.label :group %><br />
+    <%= f.select :group, options_for_select(Shibbolite.groups) %>
   </div>
   <div class="actions">
     <%= f.submit "Submit" %>
