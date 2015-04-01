@@ -47,34 +47,34 @@ $.fn.drawTimeline = (opts) ->
   d    = new Date
   timeOffset  = (d.getHours()*60 + d.getMinutes()) * opts.pxPerMin
 
-  top  = opts.offset.top + timeOffset
-  left = opts.offset.left
+  top  = Math.round( opts.offset.top + timeOffset )
+  left = Math.round( opts.offset.left )
 
-  newElem = $("<hr/>", {
-    class: opts.class
-  }).prependTo elem
+  # retreive and update the timeline's position
+  startPos = $.data(document.body, 'timelinePos') ? 0
+  $.data(document.body, 'timelinePos', top)
 
-  newElem.zIndex(999)
+  timeline = $("<hr/>", {class: opts.class}).prependTo elem
 
-  newElem.css {
+  timeline.zIndex(999)
+
+  timeline.css {
     position: 'absolute'
-    top:      0
-    left:     Math.round(left)
+    top:      startPos
+    left:     left
   }
 
-  # todo: refactor this
   setTimeout( ->
-   newElem.css {
-    top: Math.round(top)
-  }, 1)
+    timeline.css {
+      top: top
+  }, 100)
 
 $.fn.drawTimeline.options = {
   class:    'timeline'
   pxPerMin: 0.8
-  offset: {
+  offset:
     top:    0
     left:   0
-  }
 }
 
 # take a button and list and create a simple hover menu

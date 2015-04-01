@@ -1,5 +1,5 @@
 class SchedulesController < ApplicationController
-  before_action :use_attributes_if_available, only: [:show, :calendar]
+  before_action :require_login, only: [:show, :calendar]
   before_action :set_schedule, only: [:show, :edit, :update, :destroy]
   before_action :set_student, except: :calendar
   before_action(only: [:new, :create, :edit, :update, :destroy]) do |c|

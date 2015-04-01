@@ -1,19 +1,14 @@
 # handles sizing, positioning and coloring the schedules 
 class Calendar
   defaults = {
-    type:        'week'      # the display mode, may be day, week, or month
-    pxPerMin:    0.8         # controls the height of sized elements
-    gutter:      7           # width of the schedule separators (in px)
-    calDayClass: '.cal-day'  #
-    schedClass:  '.schedule' #
-    toggled:     '.off'      # schedules switched off by user
-    labelClass:  '.name'     # css classnames
-    timeClass:   '.time'     #
-    vDivClass:   '.v-div'    # vertical divider
-    todayClass:  '.td'       # id for current date
+    type:          'week'      # the display mode, may be day, week, or month
+    pxPerMin:      0.8         # controls the height of sized elements
+    gutter:        7           # width of the schedule separators (in px)
+    schedClass:    '.schedule' #
+    toggled:       '.off'      # schedules switched off by user
+    labelClass:    '.name'     # css classnames
     detailedClass: '.detailed-schedules'
     compactClass:  '.compact-scedules'
-
   }
   dayDefaults = { # default overrides for type: 'day' calendars
     gutter: 28
@@ -22,7 +17,7 @@ class Calendar
   }
 
   # calendar should the parent container of all the display elements
-  constructor: (calendar, opts={}) ->
+  constructor: (opts={}) ->
     # defaults, be cautious about using invalid options
     if opts.type == 'day'
       $.extend @, defaults, dayDefaults, opts
@@ -31,12 +26,14 @@ class Calendar
     else
       $.extend @, defaults, opts
 
+    @calendar = $('#calendar')
+
     # calendarDays are the schedule containers
-    @calendarDays = $(calendar).find(@calDayClass)
+    @calendarDays = @calendar.find('.cal-day')
 
     # various dimensions
     @labelHeight = @calendarDays.find(@labelClass).outerHeight(true)
-    @timeHeight  = @calendarDays.find(@timeClass).outerHeight(true)
+    @timeHeight  = @calendarDays.find('.time').outerHeight(true)
     @dayWidth    = @calendarDays.innerWidth()
 
     # all schedules in the calendar
@@ -76,16 +73,16 @@ class Calendar
 
   # visually mark current day and time
   markDateAndTime: ->
-    if $(@todayClass).length
-      timelineOffset = @labelHeight + @timeHeight - @offset * @pxPerMin
-      
+    todayContainer = @calendarDays.filter('.td')
+    if todayContainer.length
       # disable today button
       $('#today > a').button('disable')
 
-      $(@todayClass)
-      .mark()
-      .find(@detailedClass)
-      .drawTimeline( offset: {top: timelineOffset})
+      timelineOffset = @labelHeight + @timeHeight - @offset * @pxPerMin
+      todayContainer
+        .mark()
+        .find(@detailedClass)
+        .drawTimeline( offset: {top: timelineOffset} )
 
   # update the calendar view after elements are 
   #  changed/hidden in a way that doesn't require a
@@ -94,13 +91,13 @@ class Calendar
   if @type == 'week' || @type == 'day'
     @detailViewPosition()
   else
-    # placeholder for month change refactors
+    # todo: placeholder for month change refactors
 
 
   # Change the height and vertical positiong of each schedule
   detailViewPosition: ->
     # set the height of the vertical dividers
-    for divider in $(@vDivClass)
+    for divider in $('.v-div')
       duration = $(divider).data 'length'
       $(divider).height Math.round( duration*@pxPerMin - @timeHeight )
 
@@ -231,7 +228,7 @@ window.buildCalendar = () ->
       .addClass('forced-active')
 
   # draw the calendar display
-  calendar = new Calendar( '#display', type: type )
+  calendar = new Calendar( type: type )
   calendar.draw()
 
 
@@ -257,5 +254,9 @@ window.buildCalendar = () ->
 ############ doc ready ############
 jQuery ->
   # condition prevents processing this
-  # on other pages unnecessarily 
-  buildCalendar() if $('#calendar').length
+  # on other pages unnecessarily
+  if $('#calendar').length
+    buildCalendar()
+
+    # refresh calendar every 5 minutes
+    setInterval( (-> $.get( 'calendar' )), 300000)
