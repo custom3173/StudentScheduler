@@ -88,10 +88,11 @@ class Calendar
   #  changed/hidden in a way that doesn't require a
   #  complete redraw
   refreshDisplay: ->
-  if @type == 'week' || @type == 'day'
-    @detailViewPosition()
-  else
-    # todo: placeholder for month change refactors
+    console.log "though art a boil"
+    if @type == 'week' || @type == 'day'
+      @detailViewLayers()
+    else
+      # todo: placeholder for month change refactors
 
 
   # Change the height and vertical positiong of each schedule
@@ -120,6 +121,7 @@ class Calendar
     #  relative positions possible
     for day in @calendarDays
       dailySchedules = $(day).find(@schedClass).not(@toggled)
+      console.log dailySchedules
       group = [] # overlapping schedules
       console.log "DAY"
       for schedule, i in dailySchedules
@@ -258,5 +260,5 @@ jQuery ->
   if $('#calendar').length
     buildCalendar()
 
-    # refresh calendar every 5 minutes
-    setInterval( (-> $.get( 'calendar' )), 300000)
+    # refresh calendar every 10 minutes
+    setInterval( (-> $.get( 'calendar' )), 600000)
