@@ -57,19 +57,37 @@ class Calendar
       userId    = $(student).data 'user'
       color     = $(student).data 'color'
       contrast  = Colors.bgContrast color
-      schedules = $(@schedules).filter("[data-user=#{userId}]")
+      schedules = @schedules.filter("[data-user=#{userId}]")
 
-      # month schedules are their own labels
-      schedules = schedules.find(@labelClass) unless @type == 'month'
+      # month schedules are their own labels and have
+      # other style changes
+      if @type == 'month'
+        labels = schedules
+        borderReset = contrast
+      else
+        labels = schedules.find(@labelClass)
+        borderReset = 'transparent'
 
-      newStyle = {
+      studentColors = {
         color:       contrast
         background:  color
         borderColor: contrast
       }
 
-      schedules.css newStyle
-      $(student).find('.name').css newStyle
+      labels.css studentColors
+      $(student).find('.name').css studentColors
+
+      # avoid closure-in-loop issue
+      # bind onhover border color change handler
+      do (schedules, color, borderReset) ->
+        schedules.hover ->
+          $(this).css
+            boxShadow: "0 0 5px #{color}"
+            borderColor: color
+        , ->
+          $(this).css
+            borderColor: borderReset
+            boxShadow: ""
 
   # visually mark current day and time
   markDateAndTime: ->
@@ -121,7 +139,6 @@ class Calendar
     #  relative positions possible
     for day in @calendarDays
       dailySchedules = $(day).find(@schedClass).not(@toggled)
-      console.log dailySchedules
       group = [] # overlapping schedules
       console.log "DAY"
       for schedule, i in dailySchedules
@@ -132,6 +149,7 @@ class Calendar
         sd.index    = i
         sd.overlaps = []
         sd.col      = null
+        label = $(schedule).children(@labelClass)
 
         # keep a list of overlapping schedules and filter out non-overlaps
         #  this keeps the runtime well less than O(n^2) usually
@@ -139,16 +157,26 @@ class Calendar
         for prevSched, j in group 
           console.log "--group"
           prev_sd = $(prevSched).data()
+          prev_label = $(prevSched).children(@labelClass)
 
           if prevSched?
             # schedules overlap
             if overlapHeight schedule, prevSched
+
+              # sort out the overlap order
+              top  = sd
+              bottom = prev_sd
+              [ top, bottom ] = [ bottom, top ] if sd.col?
+
               if sd.col?
-                prev_sd.overlaps.push sd.index
                 console.log "---Schedule#{i} overlapped by #{prev_sd.index}"
               else
-                sd.overlaps.push prev_sd.index
                 console.log "---Schedule#{i} overlaps #{prev_sd.index}"
+
+              top.overlaps.push {
+                i: bottom.index
+                include_label: overlapHeight( label, prev_label )
+              }
 
             # schedules do not overlap
             else 
@@ -176,12 +204,15 @@ class Calendar
         for s1 in dailySchedules when $(s1).data().col == column
           sd1 = $(s1).data()
 
-          for i in $(s1).data().overlaps
+          for { i, include_label } in $(s1).data().overlaps
             s2 = $(dailySchedules)[i]
             sd2 = $(s2).data()
 
-            # todo: remove constants
-            sd1.left = Math.max widestLabel(s2, s1) + sd2.left, sd1.left
+            if include_label
+
+            else
+              overlap_margin = widestLabel(s2, s1, include_label) + sd2.left
+              sd1.left = overlap_margin if overlap_margin > sd1.left
 
           $(s1).zIndex sd1.col
           $(s1).css {
@@ -200,8 +231,13 @@ overlapHeight = (x1, x2) ->
 
 # returns the widest time label from schedule s1
 #  that schedule s2 overlaps (in px)
-widestLabel = (s1, s2) ->
-  Math.max.apply(Math, $(s1).children().not('.name').filter( -> overlapHeight(this, s2)).map( -> $(this).outerWidth(true)))
+widestLabel = (s1, s2, include_label) ->
+  s1_items = $(s1).children()
+  s1_items = s1_items.not('name') unless include_label
+  Math.max.apply( Math, s1_items
+    .filter -> overlapHeight(this, s2)
+    .map    -> $(this).outerWidth(true)
+  )
 
 window.buildCalendar = () ->
   # todo: this should be refactored into the Calendar class

@@ -4,19 +4,22 @@ class window.Colors
 
   # calculate a contrasting color in the same hue that is suitable
   #  as a background for text in the original color
-  @bgContrast: (hex) ->
+  @bgContrast: (hex, opts={}) ->
+    opts['low']  ?= 0.15
+    opts['high'] ?= 0.85
+
     [r, g, b] = @parseHex hex
     [r, g, b] = @normalizeRGB r, g, b
     [h, s, l] = @toHSL r, g, b
 
-    l = @contrastLuma [r, g, b]
-    @cssHSL h, s, l
+    l = @contrastLuma [r, g, b], opts['low'], opts['high']
+    @cssHSLa h, s, l, opts['opacity']
 
   # select an appropriately contrasting lightness from an
   #  evaluation of the color's luminance (apparent brightness)
-  @contrastLuma: (rgb) ->
+  @contrastLuma: (rgb, low, high) ->
     luma = 0.2126*rgb[0] + 0.7152*rgb[1] + 0.0722*rgb[2]
-    if luma >= 0.5 then 0.15 else 0.85
+    if luma >= 0.5 then low else high
 
   # convert 8bit RGB to linear [0,1]
   @normalizeRGB: (r, g, b) ->
@@ -58,6 +61,7 @@ class window.Colors
 
     [h, s, l]
 
-  # dump hsl output suitable for css
-  @cssHSL: (h, s, l) ->
-    "hsl(#{ Math.round(h) }, #{ Math.round(s*100) }%, #{ Math.round(l*100) }%)"
+  # dump hsla output suitable for css
+  #  with optional opacity
+  @cssHSLa: (h, s, l, a = 1) ->
+    "hsla(#{ Math.round(h) }, #{ Math.round(s*100) }%, #{ Math.round(l*100) }%, #{a})"
