@@ -177,15 +177,24 @@
       //  the schedule offsets. If it fails then the schedules
       //  will still be visible with relative positioning
       position: relative;
-
-      background-color: rgba(0, 0, 0, 0.05);
+      background: #eee;
+      background:
+        -webkit-linear-gradient( left,
+                                 rgba(238,238,238,1) 0%,
+                                 rgba(238,238,238,0.9) 20%,
+                                 rgba(19,19,19,0.05) 100% );
+      background:
+        linear-gradient( to right,
+                         rgba(238,238,238,1) 0%,
+                         rgba(238,238,238,0.9) 20%,
+                         rgba(19,19,19,0.05) 100% );
       border: 1px solid transparent;
+      background-clip: padding-box; // fix border transparency
       border-radius: 2px;
       overflow: hidden;
       outline: none;
       cursor: pointer;
 
-      // hover effects
       @include hover-highlight( $schedule-regular );
 
       .name {
@@ -225,11 +234,10 @@
       }
     }
 
-    // bring hovered schedules forward
+    // bring selected schedules forward
     .schedule.selected {
       z-index: 99;
       box-shadow: 0 0 5px $secondary-blue;
-      border: 1px solid $secondary-blue;
       background: rgb(240, 240, 240);
     }
 

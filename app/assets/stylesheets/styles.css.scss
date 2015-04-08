@@ -33,11 +33,10 @@ $md-red:             rgb(244, 67, 54);
   @include transition(
     background $speed,
     box-shadow $speed,
-    border     $speed ease-in-out
+    border     $speed ease-out
   );
 
   &:hover {
-    background: rgba(240, 240, 240, 0.95);
     box-shadow: 0 0 5px $color;
     border: 1px solid $color;
   }

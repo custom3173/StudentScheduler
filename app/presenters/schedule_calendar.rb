@@ -4,8 +4,8 @@
 
 class ScheduleCalendar
 
-  attr_reader   :schedules_by_date, :students, :type, :date, :offset,
-                  :cal_begin, :cal_end, :previous, :next, :date_label
+  attr_reader :schedules_by_date, :students, :type, :date, :offset,
+              :cal_begin, :cal_end, :previous, :next, :date_label
 
   # date: :today or string representation of date
   # type: string or sym in [day, week, month]
@@ -109,7 +109,7 @@ class ScheduleCalendar
     # wrap schedules into ScheduleGroups and group by date
     (@cal_begin..@cal_end).each do |date|
       grouped = ScheduleGroup.group( raw.select {|s| s.shift_on_date? date} )
-      @schedules_by_date[date] = grouped unless grouped.nil?
+      @schedules_by_date[date] = grouped || []
     end
   end
 end
