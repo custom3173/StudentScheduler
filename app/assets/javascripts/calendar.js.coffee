@@ -145,10 +145,11 @@ class Calendar
         console.log "-Schedule#{i}"
 
         sd = $(schedule).data()
-        sd.left     = 0
-        sd.index    = i
-        sd.overlaps = []
-        sd.col      = null
+        sd.left          = 0
+        sd.index         = i
+        sd.overlaps      = []
+        sd.col           = null
+        sd.width_divisor = 1
         label = $(schedule).children(@labelClass)
 
         # keep a list of overlapping schedules and filter out non-overlaps
@@ -173,9 +174,12 @@ class Calendar
               else
                 console.log "---Schedule#{i} overlaps #{prev_sd.index}"
 
+              labels_overlap = overlapHeight( label, prev_label )
+              bottom.width_divisor++ if labels_overlap
+              console.log "----and do labels overlap? #{labels_overlap}"
               top.overlaps.push {
                 i: bottom.index
-                include_label: overlapHeight( label, prev_label )
+                include_label: labels_overlap
               }
 
             # schedules do not overlap
@@ -207,17 +211,18 @@ class Calendar
           for { i, include_label } in $(s1).data().overlaps
             s2 = $(dailySchedules)[i]
             sd2 = $(s2).data()
-
             if include_label
-
+              sd1.left = sd2.left + sd2.width + @gutter
             else
-              overlap_margin = widestLabel(s2, s1, include_label) + sd2.left
+              overlap_margin = widestLabel(s2, s1, false) + sd2.left
               sd1.left = overlap_margin if overlap_margin > sd1.left
+
+          sd1.width = ((@dayWidth - sd1.left) - (max_column - column + 1) * @gutter) / sd1.width_divisor
 
           $(s1).zIndex sd1.col
           $(s1).css {
             left: sd1.left
-            width: @dayWidth - sd1.left - (max_column - column + 1) * @gutter
+            width: sd1.width
           }
 
 
@@ -233,7 +238,7 @@ overlapHeight = (x1, x2) ->
 #  that schedule s2 overlaps (in px)
 widestLabel = (s1, s2, include_label) ->
   s1_items = $(s1).children()
-  s1_items = s1_items.not('name') unless include_label
+  s1_items = s1_items.not('.name') unless include_label
   Math.max.apply( Math, s1_items
     .filter -> overlapHeight(this, s2)
     .map    -> $(this).outerWidth(true)
