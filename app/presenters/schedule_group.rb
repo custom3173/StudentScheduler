@@ -66,7 +66,7 @@ class ScheduleGroup
   #  in the final result
   def compact_shifts
     shifts = self.shifts
-    start, fin = nil, nil
+    start = nil
 
     shifts.reduce([]) do |compact, shift|
       if shift[:group] != 'absent' && shift[:type] != :end
@@ -167,7 +167,7 @@ class ScheduleGroup
 
     # replace structs with hash values and clean up output for display
     out.last.type = :end
-    out.each_with_index.map do |e, i|
+    out.map!.each_with_index do |e, i|
       time_format = (e.time.min == 0 ? :hour : :short)
       length = (e.type == :start ? (out[i+1].time - e.time) / 60 : 0)
 
@@ -179,5 +179,7 @@ class ScheduleGroup
         group: Schedule.groups.invert[e.group]
       }
     end
+    # eliminate zero-length start tags
+    out.reject { |e| e[:type] == :start && e[:length].zero? }
   end
 end
