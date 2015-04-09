@@ -68,18 +68,24 @@ class Calendar
         labels = schedules.find(@labelClass)
         borderReset = 'transparent'
 
+      # turn off transitions before color change
+      savedTransition = labels.css 'transition'
+      labels.css transition: 'none'
+      
+      # set the students' custom colors
       studentColors = {
         color:       contrast
         background:  color
         borderColor: contrast
       }
-
       labels.css studentColors
       $(student).find('.name').css studentColors
 
       # avoid closure-in-loop issue
       # bind onhover border color change handler
-      do (schedules, color, borderReset) ->
+      do (schedules, labels, color, borderReset) ->
+        # set transitions back on
+        setTimeout (-> labels.css transition: savedTransition ), 10
         schedules.hover ->
           $(this).css
             boxShadow: "0 0 5px #{color}"
