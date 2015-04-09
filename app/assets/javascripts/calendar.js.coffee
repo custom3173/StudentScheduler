@@ -112,7 +112,6 @@ class Calendar
   #  changed/hidden in a way that doesn't require a
   #  complete redraw
   refreshDisplay: ->
-    console.log "though art a boil"
     if @type == 'week' || @type == 'day'
       @detailViewLayers()
     else
@@ -146,9 +145,7 @@ class Calendar
     for day in @calendarDays
       dailySchedules = $(day).find(@schedClass).not(@toggled)
       group = [] # overlapping schedules
-      console.log "DAY"
       for schedule, i in dailySchedules
-        console.log "-Schedule#{i}"
 
         sd = $(schedule).data()
         sd.left          = 0
@@ -162,7 +159,6 @@ class Calendar
         #  this keeps the runtime well less than O(n^2) usually
         # todo: this could use further refactoring
         for prevSched, j in group 
-          console.log "--group"
           prev_sd = $(prevSched).data()
           prev_label = $(prevSched).children(@labelClass)
 
@@ -175,14 +171,8 @@ class Calendar
               bottom = prev_sd
               [ top, bottom ] = [ bottom, top ] if sd.col?
 
-              if sd.col?
-                console.log "---Schedule#{i} overlapped by #{prev_sd.index}"
-              else
-                console.log "---Schedule#{i} overlaps #{prev_sd.index}"
-
               labels_overlap = overlapHeight( label, prev_label )
               bottom.width_divisor++ if labels_overlap
-              console.log "----and do labels overlap? #{labels_overlap}"
               top.overlaps.push {
                 i: bottom.index
                 include_label: labels_overlap
@@ -190,10 +180,8 @@ class Calendar
 
             # schedules do not overlap
             else 
-              console.log "---Schedule#{i} doesn't overlap #{prev_sd.index}"
               group[j] = null
               unless sd.col?
-                console.log "----and it replaces #{prev_sd.index}"
                 sd.col = j
                 group[j] = schedule
 
@@ -201,7 +189,6 @@ class Calendar
           else if !sd.col?
             sd.col = j
             group[j] = schedule
-            console.log "---Schedule#{i} found gap in col #{sd.col}"
 
         # add schedule to end of array unless it was already inserted
         unless sd.col?
