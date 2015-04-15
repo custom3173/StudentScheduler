@@ -1,7 +1,7 @@
 class SchedulesController < ApplicationController
   before_action :load_schedules
 
-  before_action :require_login, only: [:show, :calendar]
+  before_action :require_login, only: [:index, :show, :calendar]
   before_action(only: [:new, :create, :edit, :update, :destroy]) do |c|
     c.require_group_or_id :admin, @student.id
   end
@@ -100,46 +100,6 @@ class SchedulesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to @student }
       format.json { head :no_content }
-    end
-  end
-
-  # post /students/1/mark_tomorrow_absent
-  # todo: complete overhaul of these
-  # fixme: need to have authentication replaced
-  def mark_tomorrow_absent_form
-    @student = Student.find(params[:id])
-    @schedule = @student.schedules.new
-  end
-
-  # post /students/1/mark_tomorrow_absent
-  def mark_tomorrow_absent
-    @student = Student.find(params[:id])
-    @schedule = @student.schedules.new(schedule_params)
-
-    # set the rest of the schedule accordingly
-    @schedule.start_date = Date.tomorrow
-    @schedule.end_date = Date.tomorrow
-    @schedule.start_time = DateTime.parse("8:00 am")
-    @schedule.end_time = DateTime.parse("8:00 pm")
-    @schedule.monday = true if Date.tomorrow.monday?
-    @schedule.tuesday = true if Date.tomorrow.tuesday?
-    @schedule.wednesday = true if Date.tomorrow.wednesday?
-    @schedule.thursday = true if Date.tomorrow.thursday?
-    @schedule.friday = true if Date.tomorrow.friday?
-    @schedule.saturday = true if Date.tomorrow.saturday?
-    @schedule.sunday = true if Date.tomorrow.sunday?
-    @schedule.absent = true
-
-    if @schedule.save
-
-      # send notification email
-      Student.where(group: 'admin').push(@student).each do |recipient|
-        ServiceMailer.called_out_tomorrow_email(recipient, @student, current_user, @schedule).deliver unless recipient.mail.nil?
-      end
-
-      redirect_to @student, notice: 'Your schedule has been updated.'
-    else
-      render action: 'mark_tomorrow_absent_form'
     end
   end
 

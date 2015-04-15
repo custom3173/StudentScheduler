@@ -14,16 +14,16 @@
     <h2>by David Bassett</h2>
   </div>
   <div id="menu">
-    <span><%= link_to 'Calendar', calendar_path, class: 'button' %></span>
+    <%= link_to 'Calendar', calendar_path, class: 'button' %>
     <% if user_in_group? :admin %>
-        <span><%= link_to 'Students', students_path, class: 'button' %></span>
-        <span><%= link_to 'Admins', administrators_students_path, class: 'button' %></span>
+        <%= link_to 'Students', students_path, class: 'button' %>
+        <%= link_to 'Admins', administrators_students_path, class: 'button' %>
     <% end %>
-    <% if user_in_group? :students %>
-        <span><%= link_to 'My Schedules', student_path(session[:user_id]), class: 'button' %></span>
-        <span><%= link_to 'New Schedule', new_student_schedule_path(session[:user_id]), class: 'button' %></span>
+    <% if user_in_group? :student %>
+        <%= link_to 'My Schedules', student_path(session[:user_id]), class: 'button' %>
+        <%= link_to 'New Schedule', new_student_schedule_path(session[:user_id]), class: 'button' %>
     <% end %>
-    <span><%= link_to 'Logout', shibbolite.logout_path, class: 'button' %></span>
+    <%= link_to 'Logout', shibbolite.logout_path, class: 'button' %>
   </div>
 </div>
 <!-- end header -->

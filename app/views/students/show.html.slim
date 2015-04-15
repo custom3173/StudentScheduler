@@ -1,12 +1,10 @@
+h1 = @student.displayName || @student.umbcusername
 #profile-info
   
   .links
     = link_to 'New Schedule', new_student_schedule_path(@student), class: 'button'
 
-    = link_to 'Call Out', "#{@student.id}/mark_tomorrow_absent",
-      :class => 'button'
-
-    = link_to 'Delete Expired', "#{@student.id}/purge",
+    = link_to 'Delete Old Schedules', "#{@student.id}/purge",
       data: {confirm: 'Delete all expired schedules?'},
       :class => 'button'
 
