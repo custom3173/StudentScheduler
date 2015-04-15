@@ -1,0 +1,4 @@
+= simple_form_for @student do |f|
+  = f.input :umbcusername, label: 'Username'
+  = f.input :group, collection: Shibbolite.groups
+  = f.button :submit
