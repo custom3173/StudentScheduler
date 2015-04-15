@@ -16,8 +16,9 @@ require 'capistrano/deploy'
 #
 # require 'capistrano/rbenv'
 # require 'capistrano/chruby'
-require 'capistrano/rails'
-require 'capistrano/rvm'
+require 'capistrano/rails/assets'
+require 'capistrano/rails/migrations'
+require 'rvm1/capistrano3'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }

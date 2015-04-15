@@ -20,8 +20,7 @@ gem 'jquery-ui-rails'
 group :development do
   gem 'capistrano', '~> 3.1'
   gem 'capistrano-rails', '~> 1.1'
-  gem 'capistrano-bundler', '~> 1.1.2'
-  gem 'capistrano-rvm'
+  gem 'rvm1-capistrano3', require: false
 end
 
 # shibboleth access control
