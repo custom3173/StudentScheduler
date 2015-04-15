@@ -5,5 +5,6 @@
     h4.day-label = date.strftime "%-m/%-d"
     - schedules.each do |schedule|
         - schedule.compact_shifts.each do |shift|
-          h5.schedule data-user=schedule.student.id
+          h5.schedule [ data-user=schedule.student.id
+                        href = student_schedules_path(schedule.student, ids: schedule.ids) ]
             = shift

@@ -12,7 +12,17 @@ $schedule-absent:    #f0827a;
 
 $md-red:             rgb(244, 67, 54);
 
-// effects
+// extendables
+%noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+// mixins
 @mixin transition($args...) {
   -webkit-transition: $args;
   -moz-transition: $args;

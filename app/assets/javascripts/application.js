@@ -20,5 +20,7 @@
 //= require jquery-ui/slider
 //= require jquery-ui/menu
 //= require jquery-ui/effect-blind
+//= require jquery.modal
+//= require jquery-ui-timepicker-addon
 //= turbolinks
 //= require_tree .

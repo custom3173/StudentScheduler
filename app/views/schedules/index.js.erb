@@ -1,0 +1,40 @@
+// render the schedules in a modal box
+var modal = $('.modal');
+if (!modal.length) {
+  modal = $('<div/>', {'class': 'modal'}).appendTo($('#page'));
+}
+
+content = '<h3><%= "Showing #{pluralize(@schedules.length, 'schedule')} for #{@student.displayName}" %></h3>' +
+  '<div class="schedule-index">' +
+  '<%= j (render @schedules) %>' +
+  '</div>' +
+  '<a rel="modal:close" class="close-modal">Close</a>'
+modal.html(content);
+
+modal
+  .modal({
+    fadeDuration: 200,
+    zIndex: 1000,
+    showClose: false
+  });
+
+// jqui-ify other modal elments
+modal.find('.schedule-index').accordion({
+  collapsible: true,
+  heightStyle: "content"
+});
+modal.find('a.edit').button({
+  icons: {
+    primary: "ui-icon-document"
+  }
+});
+modal.find('a.delete').button({
+  icons: {
+    primary: "ui-icon-trash"
+  }
+});
+modal.find('a.close-modal').button({
+  icons: {
+    primary: "ui-icon-close"
+  }
+});

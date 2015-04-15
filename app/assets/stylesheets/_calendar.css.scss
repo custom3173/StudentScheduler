@@ -1,8 +1,3 @@
-/* 
- * Design by David Bassett 2013 
- * updated 2014
- */
-
 %colorized-name {
   border-bottom: 2px solid $schedule-regular;
   white-space: nowrap;
@@ -85,6 +80,7 @@
 
 
   #display {
+    @extend %noselect;
     .cal-day {
       position: relative;
     }

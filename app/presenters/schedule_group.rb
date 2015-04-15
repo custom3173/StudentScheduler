@@ -79,6 +79,12 @@ class ScheduleGroup
     end
   end
 
+  # get an array of the ids from the schedules
+  # that make up the current group
+  def ids
+    @schedules.map(&:id)
+  end
+
   # append schedules like the group is an array
   def <<( other )
     case other

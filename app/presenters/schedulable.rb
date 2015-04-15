@@ -8,13 +8,13 @@ module Schedulable
 
   # human readable shift printouts
   def shift_begin
-    format = (@start_time.min == 0 ? :hour : :short)
-    @start_time.to_s(format)
+    format = (self.start_time.min == 0 ? :hour : :short)
+    self.start_time.to_s(format)
   end
 
   def shift_end
-    format = (@end_time.min == 0 ? :hour : :short)
-    @end_time.to_s(format)
+    format = (self.end_time.min == 0 ? :hour : :short)
+    self.end_time.to_s(format)
   end
 
   def shift_time
@@ -23,7 +23,7 @@ module Schedulable
 
   # minutes from the beginning of the day
   def offset
-    @start_time.hour*60 + @start_time.min
+    self.start_time.hour*60 + self.start_time.min
   end
 
   ### comparison / eval

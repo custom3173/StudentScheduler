@@ -1,6 +1,33 @@
 class Schedule < ActiveRecord::Base
   belongs_to :student
 
+  scope :current,  -> { in_date_range(Date.today) }
+  scope :upcoming, -> { where('start_date > ?', Date.today)}
+  scope :expired,  -> { where('end_date < ?', Date.today)}
+
+  # get schedules grouped by status (Current|Upcoming|Expired)
+  def self.group_by_status
+    today = Date.today
+    all.group_by do |schedule|
+      if schedule.start_date > today
+        'Upcoming'
+      elsif schedule.end_date < today
+        'Expired'
+      else
+        'Current'
+      end
+    end
+  end
+
+  # get active schedules in an arbitrary date range
+  #  ordered by start_time
+  def self.in_date_range (d_start, d_end=nil)
+    d_end ||= d_start
+    where("start_date <= ? AND end_date >= ?", d_end, d_start)
+      .where(active: true)
+      .order(:start_time)
+  end
+
   # important! maintain order
   enum group: [:regular, :temporary, :absent]
 
@@ -32,14 +59,6 @@ class Schedule < ActiveRecord::Base
     end
   end
 
-  # scope for active schedules in a date range
-  #  ordered by start_time
-  def self.in_date_range (d_start, d_end=nil)
-    d_end ||= d_start
-    where("start_date <= ? AND end_date >= ?", d_end, d_start)
-      .where(active: true)
-      .order(:start_time)
-  end
 
   # virtual attribute for cleaning up the days booleans
   # todo goes in the presenter

@@ -270,10 +270,10 @@ window.buildCalendar = () ->
 
   ### actions ###
 
-  # make schedules selectable
+  # clicking schedules gets their details in an
+  # ajax request that displays them in a modal window
   $('.schedule').click ->
-    $('.selected').removeClass('selected')
-    $(this).addClass('selected')
+    $.get $(this).attr('href')
 
   # control visibility of schedules per student
   $('#students li')

@@ -1,0 +1,15 @@
+h3.schedule-header
+  span class=schedule.group
+    => schedule.group.humanize
+  .time = schedule.shift_time
+  .dot &middot
+  .days = schedule.days_of_week
+.schedule-details
+  h5.dates = schedule.pretty_dates
+  .description = schedule.description
+
+  .links
+    = link_to 'Edit', edit_student_schedule_path(@student, schedule), class: 'edit'
+    = link_to 'Delete', student_schedule_path(@student, schedule),
+      method: :delete, data: { confirm: 'Permanently delete this schedule?' },
+      class: 'delete'

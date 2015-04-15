@@ -74,14 +74,11 @@ class StudentsController < ApplicationController
   end
 
   def load_student_schedules
-    load_student unless @student
+    # todo: can probably delete this
+    set_student unless @student
 
-    # todo: need scopes and to be a single db call
-    _d = Date.today
-    @schedules = {}
-    @schedules['Active']   = Schedule.where('student_id = ? AND start_date <= ? AND end_date >= ?', @student.id, _d, _d)
-    @schedules['Upcoming'] = Schedule.where('student_id = ? AND start_date > ?', @student.id, _d)
-    @schedules['Expired']  = Schedule.where('student_id = ? AND end_date < ?', @student.id, _d)
+    @schedules = @student.schedules.group_by_status
+    @schedules.each { |k, v| @schedules[k] = SchedulePresenter.wrap v }
   end
 
   # administrator permitted attributes

@@ -1,7 +1,7 @@
 class SchedulesController < ApplicationController
+  before_action :load_schedules
+
   before_action :require_login, only: [:show, :calendar]
-  before_action :set_schedule, only: [:show, :edit, :update, :destroy]
-  before_action :set_student, except: :calendar
   before_action(only: [:new, :create, :edit, :update, :destroy]) do |c|
     c.require_group_or_id :admin, @student.id
   end
@@ -20,11 +20,14 @@ class SchedulesController < ApplicationController
     end
   end
 
-  def show
+  def index
     respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @schedule }
+      format.js
+      format.html
     end
+  end
+
+  def show
   end
 
   def new
@@ -142,12 +145,16 @@ class SchedulesController < ApplicationController
 
   private
 
-  def set_schedule
-    @schedule = SchedulePresenter.new Schedule.find(params[:id])
-  end
-
-  def set_student
-    @student = Student.find params[:student_id]
+  def load_schedules
+      @student = Student.find(params[:student_id]) if params[:student_id]
+      if params[:id]
+        schedule = Schedule.find(params[:id])
+        @schedule = SchedulePresenter.new schedule
+      end
+      if params[:ids]
+        schedules = Schedule.find(params[:ids])
+        @schedules = SchedulePresenter.wrap schedules
+      end
   end
 
   def schedule_params

@@ -1,5 +1,3 @@
-p#notice = notice
-
 #profile-info
   
   .links
@@ -33,9 +31,8 @@ p#notice = notice
       = f.input :color, collection: Student::COLORS, as: :radio_buttons, label_method: ->(x) { raw '&nbsp;' }
       = f.button :submit, 'Save'
 
-.schedules
-  - @schedules.each do |type, scheds|
-    - unless scheds.empty?
-      h2 #{type} Schedules
-      .schedule-accordion
-        = render partial: 'students/schedule', collection: scheds
+.student-schedules
+  - @schedules.each do |type, schedules|
+    h2 #{type} Schedules
+    .schedule-accordion
+      = render schedules

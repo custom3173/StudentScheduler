@@ -48,9 +48,10 @@ $(function() {
     stepMinute: 5
   });
 
-  // accordionize the students' schedules lists
+  // accordionize the students' schedules
   $(".schedule-accordion").accordion({
     collapsible: true,
+    heightStyle: "content",
     active: false
   });
 

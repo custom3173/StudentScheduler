@@ -1,6 +1,70 @@
-// Place all the styles related to the Schedules controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+// schedule markup structured for jQuery
+//  accordion widget and solo display
+.schedule-accordion {
+  @extend .schedule-index;
+  margin-bottom: 3em;
+  word-wrap: break-word;
+
+  .schedule-header {
+    .time {
+      width: 160px;
+    }
+  }
+
+  .schedule-details {
+    background: #eee;
+  }
+}
+
+.schedule-index {
+  max-width: 600px;
+
+  .schedule-header {
+    clear: both;
+
+    // Schedule type colors
+    .regular   { color: $schedule-regular; }
+    .temporary { color: $schedule-temporary; }
+    .absent    { color: $schedule-absent; }
+
+    div {
+      display: inline-block;
+      float: right;
+    }
+
+    .dot {
+      margin: 0 0.6rem;
+    }
+  }
+
+  .schedule-details {
+    .dates { font-style: italic; }
+    .description {
+      margin: 1rem 0;
+      &:empty { margin: 0; }
+    }
+
+    .links {
+      float: right;
+
+      .edit {
+        margin-right: 1rem;
+      }
+
+      .ui-button-text {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  // override on hover to keep consistent with jqui
+  .ui-accordion-header:hover {
+    span.regular, span.temporary, span.absent { color: #fff; }
+    &.ui-state-active {
+      span.regular, span.temporary, span.absent { color: #000; }
+    }
+  }
+}
 
 #schedule-form {
   float: left;
