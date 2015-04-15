@@ -43,7 +43,7 @@ module Studentscheduler
     # config.active_record.schema_format = :sql
 
     # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.0'
+    config.assets.version = '1.1'
 
     # use rspec for tests
     config.generators do |g|

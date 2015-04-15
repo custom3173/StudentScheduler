@@ -27,16 +27,16 @@ ActiveRecord::Schema.define(version: 20150312163848) do
     t.boolean  "saturday"
     t.text     "description"
     t.integer  "student_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "group",       default: 0
     t.boolean  "active",      default: true
   end
 
   create_table "students", force: true do |t|
     t.string   "umbcusername"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "mail"
     t.string   "umbcDepartment"
     t.string   "nickname"
