@@ -1,9 +1,8 @@
 class StudentsController < ApplicationController
-  before_filter :set_student,
-    only: [:show, :edit, :update, :update_display_options,
-           :destroy, :purge_expired_schedules]
+  before_action :set_student
 
   before_action(except: [:show, :update_display_options, :purge_expired_schedules]) { |c| c.require_group :admin }
+  before_action(only: [:show, :update_display_options, :purge_expired_schedules]) { |c| c.require_group_or_id :admin, @student.id }
 
   # todo: replace with an AR scope
   def index
@@ -70,13 +69,10 @@ class StudentsController < ApplicationController
   private
 
   def set_student
-    @student = Student.find params[:id]
+    @student = Student.find params[:id] if params[:id]
   end
 
   def load_student_schedules
-    # todo: can probably delete this
-    set_student unless @student
-
     @schedules = @student.schedules.group_by_status
     @schedules.each { |k, v| @schedules[k] = SchedulePresenter.wrap v }
   end
