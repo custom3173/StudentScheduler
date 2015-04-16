@@ -20,8 +20,8 @@
         <%= link_to 'Admins', administrators_students_path, class: 'button' %>
     <% end %>
     <% if user_in_group? :student %>
-        <%= link_to 'My Schedules', student_path(session[:user_id]), class: 'button' %>
-        <%= link_to 'New Schedule', new_student_schedule_path(session[:user_id]), class: 'button' %>
+        <%= link_to 'My Schedules', student_path(current_user), class: 'button' %>
+        <%= link_to 'New Schedule', new_student_schedule_path(current_user), class: 'button' %>
     <% end %>
     <%= link_to 'Logout', shibbolite.logout_path, class: 'button' %>
   </div>
