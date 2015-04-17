@@ -1,0 +1,11 @@
+div#user-index-table
+  div#index-header
+    span Username
+    span Full Name
+  - @students.each do |student|
+      div.index-row
+        span = student.umbcusername
+        span = student.displayName
+        = link_to 'Profile', student, class: 'button'
+        = link_to 'New Schedule', new_student_schedule_path(student), class: 'button'
+        = link_to 'Delete User', student, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button'
