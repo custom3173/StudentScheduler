@@ -50,45 +50,38 @@ class SchedulesController < ApplicationController
   def create
     @schedule = @student.schedules.new(schedule_params)
 
-    respond_to do |format|
-      if @schedule.save
-
-        # send notification email
-        Student.where(group: 'admin').push(@student).each do |recipient|
-          ServiceMailer.created_schedule_email(recipient, @student, current_user, @schedule).deliver unless recipient.mail.nil?
-        end
-
-        format.html { redirect_to [@student, @schedule], notice: 'Schedule was successfully created.' }
-        format.json { render json: @schedule, status: :created, location: @schedule }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @schedule.errors, status: :unprocessable_entity }
+    if @schedule.save
+      # send notification email
+      Student.where(group: 'admin').push(@student).each do |recipient|
+        ServiceMailer.created_schedule_email(recipient, @student, current_user, @schedule).deliver unless recipient.mail.nil?
       end
+
+      redirect_to [@student, @schedule], notice: 'Schedule created!'
+    else
+      render action: "new"
     end
   end
 
   def update
-    old_schedule = @schedule.dup # save the old schedule before it updates to send it to the mailer
+    # save the old schedule before it updates 
+    #  and send it to the mailer
+    old_schedule = @schedule.dup
 
-    respond_to do |format|
-      if @schedule.update_attributes(schedule_params)
-
-        # send notification email
-        Student.where(group: 'admin').push(@student).each do |recipient|
-          ServiceMailer.updated_schedule_email(recipient, @student, current_user, old_schedule, @schedule).deliver unless recipient.mail.nil?
-        end
-
-        format.html { redirect_to [@student, @schedule], notice: 'Schedule was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @schedule.errors, status: :unprocessable_entity }
+    if @schedule.update_attributes(schedule_params)
+      # send notification email
+      Student.where(group: 'admin').push(@student).each do |recipient|
+        ServiceMailer.updated_schedule_email(recipient, @student, current_user, old_schedule, @schedule).deliver unless recipient.mail.nil?
       end
+
+      redirect_to [@student, @schedule], notice: 'Schedule updated!'
+    else
+      render action: "edit"
     end
   end
 
   def destroy
-    # save the old schedule before it is deleted to send it to the mailer
+    # save the old schedule before it is deleted 
+    #  and send it to the mailer
     old_schedule = @schedule.dup
     @schedule.destroy
 
@@ -97,10 +90,7 @@ class SchedulesController < ApplicationController
       ServiceMailer.deleted_schedule_email(recipient, @student, current_user, old_schedule).deliver unless recipient.mail.nil?
     end
 
-    respond_to do |format|
-      format.html { redirect_to @student }
-      format.json { head :no_content }
-    end
+    redirect_to @student, notice: 'Schedule deleted!'
   end
 
   private
