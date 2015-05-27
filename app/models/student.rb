@@ -16,6 +16,10 @@ class Student < ActiveRecord::Base
 
   has_many :schedules
 
+  # todo: stop being lazy and rename
+  #  this model 'User' already
+  scope :admins, -> { where(group: 'admin') }
+
   validates :nickname, uniqueness: true, length: { maximum: 10 },
             allow_nil: true, allow_blank: true
   validate :approved_color
