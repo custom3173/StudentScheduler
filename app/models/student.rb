@@ -30,20 +30,22 @@ class Student < ActiveRecord::Base
     end
   end
 
-  # todo: refactor name display into one method w/ options
-
-  # picks a user's displayname
-  def name
-    return nickname unless nickname.blank?
-    short_name
-  end
-
-  # shortened version of the name
-  #  Jeff Ross becomes Jeff R
-  def short_name
-    if displayName
+  # a nicely formatted name. Select the type with an optional code.
+  # The name will default sensibly when the selected name is blank
+  #  student.umbcusername #=> dbass
+  #  student.displayName  #=> David Bassett
+  #  student.nickname     #=> Alex
+  #
+  #  student.name :full     #=> David Bassett || umbcusername
+  #  student.name :short    #=> Alex || David B || umbcusername
+  def name(type=:short)
+    if type == :short && !nickname.blank?
+      nickname
+    elsif type == :short && displayName
       first, last = displayName.split
-      "#{first} #{last[0, 1]}"
+      "#{first} #{last[0]}"
+    elsif type == :long && displayName
+      displayName
     else
       umbcusername
     end
