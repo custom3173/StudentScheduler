@@ -20,7 +20,12 @@ class SchedulesController < ApplicationController
     end
   end
 
-  def index ; end
+  def index
+    respond_to do |format|
+      format.js
+      format.html
+    end
+  end
 
   def show ; end
 
