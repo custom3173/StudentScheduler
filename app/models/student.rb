@@ -44,7 +44,7 @@ class Student < ActiveRecord::Base
     elsif type == :short && displayName
       first, last = displayName.split
       "#{first} #{last[0]}"
-    elsif type == :long && displayName
+    elsif type == :full && displayName
       displayName
     else
       umbcusername

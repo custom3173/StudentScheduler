@@ -16,12 +16,11 @@ class ServiceMailer < ActionMailer::Base
       :updated
     end
 
-    # todo: better name display
     # did this update come from the schedule's owner?
     @subject = if @student == @editor
-      "#{@student.umbcusername} #{@action} a schedule"
+      "#{@student.name(:full)} #{@action} a schedule"
     else
-      "#{@editor.umbcusername} #{@action} a schedule for #{@student.umbcusername}"
+      "#{@editor.name(:full)} #{@action} a schedule for #{@student.name(:full)}"
     end
 
     # build robust array of email recipients (no nils or duplicates)
