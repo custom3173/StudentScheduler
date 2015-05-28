@@ -20,15 +20,11 @@ class SchedulesController < ApplicationController
     end
   end
 
-  def index
-    respond_to do |format|
-      format.js
-      format.html
-    end
-  end
+  def index ; end
 
-  def show
-  end
+  def show ; end
+
+  def edit ; end
 
   def new
     @schedule = @student.schedules.new
@@ -37,25 +33,13 @@ class SchedulesController < ApplicationController
     @schedule.start_date = Date.today
     @schedule.start_time = Time.new(2001,1,1,9) # 9:00 AM
     @schedule.end_time = Time.new(2001,1,1,12)  # 12:00 PM
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @schedule }
-    end
-  end
-
-  def edit
   end
 
   def create
     @schedule = @student.schedules.new(schedule_params)
 
     if @schedule.save
-      # send notification email
-      Student.where(group: 'admin').push(@student).each do |recipient|
-        ServiceMailer.created_schedule_email(recipient, @student, current_user, @schedule).deliver unless recipient.mail.nil?
-      end
-
+      send_email new: SchedulePresenter.new( @schedule )
       redirect_to [@student, @schedule], notice: 'Schedule created!'
     else
       render action: "new"
@@ -63,16 +47,10 @@ class SchedulesController < ApplicationController
   end
 
   def update
-    # save the old schedule before it updates 
-    #  and send it to the mailer
-    old_schedule = @schedule.dup
+    schedules = { new: @schedule, old: @schedule.dup }
 
     if @schedule.update_attributes(schedule_params)
-      # send notification email
-      Student.where(group: 'admin').push(@student).each do |recipient|
-        ServiceMailer.updated_schedule_email(recipient, @student, current_user, old_schedule, @schedule).deliver unless recipient.mail.nil?
-      end
-
+      send_email schedules
       redirect_to [@student, @schedule], notice: 'Schedule updated!'
     else
       render action: "edit"
@@ -80,17 +58,14 @@ class SchedulesController < ApplicationController
   end
 
   def destroy
-    # save the old schedule before it is deleted 
-    #  and send it to the mailer
-    old_schedule = @schedule.dup
-    @schedule.destroy
-
-    # send notification email
-    Student.where(group: 'admin').push(@student).each do |recipient|
-      ServiceMailer.deleted_schedule_email(recipient, @student, current_user, old_schedule).deliver unless recipient.mail.nil?
+    schedules = { old: @schedule.dup }
+    if @schedule.destroy
+      send_email schedules
+      message = { notice: 'Schedule deleted!' }
+    else
+      message = { notice: 'Schedule could not be deleted!' }
     end
-
-    redirect_to @student, notice: 'Schedule deleted!'
+    redirect_to @student, message
   end
 
   private
@@ -111,5 +86,16 @@ class SchedulesController < ApplicationController
     params.require(:schedule).permit(:description, :end_date, :end_time,
       :friday, :monday, :saturday, :start_date, :start_time, :group,
       :student_id, :sunday, :thursday, :tuesday, :wednesday)
+  end
+
+  def send_email(schedules)
+    options = {}
+    options[:new_sched] = schedules[:new]
+    options[:old_sched] = schedules[:old]
+    options[:student]   = @student
+    options[:admins]    = Student.admins
+    options[:editor]    = current_user
+
+    ServiceMailer.updated_schedule_email(options).deliver
   end
 end

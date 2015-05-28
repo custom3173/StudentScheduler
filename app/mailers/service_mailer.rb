@@ -1,57 +1,34 @@
 class ServiceMailer < ActionMailer::Base
   default from: "lits-notifications@umbc.edu"
 
-  def test_email(recipient)
-    @recipient = recipient
+  def updated_schedule_email(opts={})
+    @student      = opts[:student]
+    @editor       = opts[:editor]
+    @old_schedule = opts[:old_sched]
+    @new_schedule = opts[:new_sched]
 
-    mail(:to => recipient.mail, :subject => "Test email")
-  end
+    # decide what kind of update this is
+    @action = if @old_schedule.nil?
+      :created
+    elsif @new_schedule.nil?
+      :deleted
+    else
+      :updated
+    end
 
-  # recipient is the Student who should receive the email
-  # student is the Student that owns the schedule
-  # editor is the Student who created/updated the schedule
-  def updated_schedule_email(recipient, student, editor, old_schedule, new_schedule)
-    @recipient = recipient
-    @student = student
-    @editor = editor
-    @old_schedule = old_schedule
-    @new_schedule = new_schedule
-    @self_edited = editor.umbcusername == student.umbcusername
+    # todo: better name display
+    # did this update come from the schedule's owner?
+    @subject = if @student == @editor
+      "#{@student.umbcusername} #{@action} a schedule"
+    else
+      "#{@editor.umbcusername} #{@action} a schedule for #{@student.umbcusername}"
+    end
 
-    @self_edited ? subject = "#{student.umbcusername} updated a schedule" : subject = "#{editor.umbcusername} updated a schedule for #{student.umbcusername}"
-    mail(:to => recipient.mail, :subject => subject)
-  end
+    # build robust array of email recipients (no nils or duplicates)
+    receivers = Array(opts[:admin]).push(opts[:student]).compact
+    addresses = receivers.map { |rec| rec.mail }.compact.uniq
 
-  def created_schedule_email(recipient, student, editor, schedule)
-    @recipient = recipient
-    @student = student
-    @editor = editor
-    @schedule = schedule
-    @self_edited = editor.umbcusername == student.umbcusername
-
-    @self_edited ? subject = "#{student.umbcusername} created a new schedule" : subject = "#{editor.umbcusername} created a schedule for #{student.umbcusername}"
-    mail(:to => recipient.mail, :subject => subject)
-  end
-
-  def deleted_schedule_email(recipient, student, editor, schedule)
-    @recipient = recipient
-    @student = student
-    @editor = editor
-    @schedule = schedule
-    @self_edited = editor.umbcusername == student.umbcusername
-
-    @self_edited ? subject = "#{student.umbcusername} deleted a schedule" : subject = "#{editor.umbcusername} deleted a schedule for #{student.umbcusername}"
-    mail(:to => recipient.mail, :subject => subject)
-  end
-
-  def called_out_tomorrow_email(recipient, student, editor, schedule)
-    @recipient = recipient
-    @student = student
-    @editor = editor
-    @schedule = schedule
-    @self_edited = editor.umbcusername == student.umbcusername
-
-    @self_edited ? subject = "#{student.umbcusername} has called out of work tomorrow" : subject = "#{editor.umbcusername} has cancelled #{@student.umbcusername}'s shift tomorrow}"
-    mail(:to => recipient.mail, :subject => subject)
+    # send those emails!
+    addresses.each { |address| mail to: address, subject: @subject }
   end
 end

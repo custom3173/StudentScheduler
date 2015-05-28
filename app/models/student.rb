@@ -30,6 +30,8 @@ class Student < ActiveRecord::Base
     end
   end
 
+  # todo: refactor name display into one method w/ options
+
   # picks a user's displayname
   def name
     return nickname unless nickname.blank?

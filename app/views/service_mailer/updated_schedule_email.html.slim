@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    meta content="text/html; charset=UTF-8" http-equiv="Content-Type"
+
+  body
+    h2 = @subject
+
+    - if @new_schedule
+      h2 New Schedule
+      = render partial: 'schedule_email', locals: {schedule: @new_schedule}
+
+    - if @old_schedule
+      h2 Old Schedule
+      = render partial: 'schedule_email', locals: {schedule: @old_schedule}
+
+    p This email was automatically generated. Please do not reply.

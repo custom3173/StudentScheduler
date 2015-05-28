@@ -29,6 +29,6 @@ Studentscheduler::Application.configure do
   }
 
   # don't deliver in dev mode
-  config.action_mailer.perform_deliveries = false
+  config.action_mailer.perform_deliveries = true
 
 end
