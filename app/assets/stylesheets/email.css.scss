@@ -1,0 +1,61 @@
+@import "styles.css.scss";
+
+body {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #212121;
+}
+
+h1, h2, h3, h5 {
+  font-weight: normal;
+  color: #676767;
+}
+
+h1, h4, h5, h6 {
+  margin: 0;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5em;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin:  0 0 0.6rem 0;
+}
+
+h5 {
+  font-size: 0.9rem;
+}
+
+.schedule {
+  background-color: #e8e8e8;
+  display: inline-block;
+  border-radius: 3px;
+  padding: 0.5em;
+
+  .header {
+    padding-bottom: 0.2rem;
+    border-bottom: 1px dotted black;
+
+    .regular   { color: $schedule-regular; }
+    .temporary { color: $schedule-temporary; }
+    .absent    { color: $schedule-absent; }
+
+    .time, .days { margin-left: 5rem; }
+    .dot { margin: 0 0.6rem; }
+  }
+
+  .details {
+    .dates {
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+    .description {
+      margin-top: 0.5rem;
+      &:empty { margin: 0; }
+    }
+  }
+}

@@ -1,4 +1,6 @@
 class ServiceMailer < ActionMailer::Base
+  include Roadie::Rails::Automatic
+
   default from: "lits-notifications@umbc.edu"
 
   def updated_schedule_email(opts={})
@@ -24,10 +26,9 @@ class ServiceMailer < ActionMailer::Base
     end
 
     # build robust array of email recipients (no nils or duplicates)
-    receivers = Array(opts[:admin]).push(opts[:student]).compact
-    addresses = receivers.map { |rec| rec.mail }.compact.uniq
+    addresses = Student.admins.pluck(:mail).push(@student.mail).compact.uniq
 
     # send those emails!
-    addresses.each { |address| mail to: address, subject: @subject }
+    mail to: addresses, subject: @subject
   end
 end

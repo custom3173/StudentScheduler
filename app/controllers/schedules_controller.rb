@@ -98,7 +98,6 @@ class SchedulesController < ApplicationController
     options[:new_sched] = schedules[:new]
     options[:old_sched] = schedules[:old]
     options[:student]   = @student
-    options[:admins]    = Student.admins
     options[:editor]    = current_user
 
     ServiceMailer.updated_schedule_email(options).deliver

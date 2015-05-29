@@ -1,9 +1,8 @@
-h3.schedule-header
-  span class=schedule.group
-    => schedule.group.humanize
-  .time = schedule.shift_time
-  .dot &middot
-  .days = schedule.days_of_week
-.schedule-details
-  h5.dates = schedule.pretty_dates
-  .description = schedule.description
+.schedule
+  h3.header
+    span class=schedule.group => schedule.group.humanize
+    span.time = schedule.shift_time
+    span.days = schedule.days_of_week
+  .details
+    .description = schedule.description
+    h5.dates = schedule.pretty_dates

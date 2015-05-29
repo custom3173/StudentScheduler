@@ -13,9 +13,9 @@ gem 'slim-rails'
 gem 'simple_form'
 gem 'turbolinks'
 gem 'jquery-turbolinks'
-
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'roadie-rails'
 
 group :development do
   gem 'capistrano', '~> 3.1'
